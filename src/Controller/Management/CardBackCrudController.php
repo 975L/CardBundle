@@ -23,6 +23,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -88,9 +90,12 @@ class CardBackCrudController extends AbstractCrudController
         yield TextField::new('name', t('label.back_name', [], 'card'))
             ->setHelp(t('help.back_name', [], 'card'));
 
+        // Locked once created, as the pack: rewards, codes and the stores' product id all name the back by it
+        $isEdit = Crud::PAGE_EDIT === $pageName;
         yield SlugField::new('slug', t('label.back_slug', [], 'card'))
             ->setTargetFieldName('name')
-            ->setHelp(t('help.back_slug', [], 'card'))
+            ->setDisabled($isEdit)
+            ->setHelp(t($isEdit ? 'help.back_slug_locked' : 'help.back_slug', [], 'card'))
             ->onlyOnForms();
 
         yield Field::new('imageFile', t('label.back_image', [], 'card'))
@@ -106,8 +111,14 @@ class CardBackCrudController extends AbstractCrudController
         yield ChoiceField::new('effect', t('label.back_effect', [], 'card'))
             ->setHelp(t('help.back_effect', [], 'card'));
 
-        yield TextField::new('productId', t('label.back_product_id', [], 'card'))
-            ->setHelp(t('help.back_product_id', [], 'card'))
+        yield MoneyField::new('price', t('label.back_price', [], 'card'))
+            ->setCurrency($this->cardCatalog->currency())
+            ->setStoredAsCents()
+            ->setHelp(t('help.back_price', [], 'card'));
+
+        yield NumberField::new('vat', t('label.back_vat', [], 'card'))
+            ->setNumDecimals(1)
+            ->setHelp(t('help.back_vat', [], 'card'))
             ->hideOnIndex();
 
         yield IntegerField::new('position', t('label.back_position', [], 'card'))

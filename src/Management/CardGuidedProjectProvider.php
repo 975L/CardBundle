@@ -40,7 +40,7 @@ class CardGuidedProjectProvider implements GuidedProjectProviderInterface
     private function backProject(): array
     {
         $steps = [['key' => 'open', 'url' => $this->indexUrl(CardBackCrudController::class)]];
-        foreach (['new' => '.action-new', 'pack' => '#CardBack_pack', 'name' => '#CardBack_name', 'image' => '#CardBack_imageFile', 'tone' => '#CardBack_tone', 'effect' => '#CardBack_effect', 'published' => '#CardBack_published'] as $key => $highlight) {
+        foreach (['new' => '.action-new', 'pack' => '#CardBack_pack', 'name' => '#CardBack_name', 'image' => '#CardBack_imageFile_file', 'tone' => '#CardBack_tone', 'effect' => '#CardBack_effect', 'price' => '#CardBack_price', 'published' => '#CardBack_published'] as $key => $highlight) {
             $steps[] = ['key' => $key, 'highlight' => $highlight];
         }
         $steps[] = ['key' => 'done', 'highlight' => '.action-saveAndReturn'];

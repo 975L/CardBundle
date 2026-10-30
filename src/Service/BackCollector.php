@@ -25,10 +25,10 @@ class BackCollector
     ) {
     }
 
-    // Gives a back, and says whether it was given: false when already held or not published - the same gift sent twice at once included, the unique index refusing the second (Doctrine then closes the EntityManager, so nothing else is written in that request)
-    public function grant(string $holder, CardBack $back, string $source): bool
+    // Gives a back, and says whether it was given: false when already held or not published - the same gift sent twice at once included, the unique index refusing the second (Doctrine then closes the EntityManager, so nothing else is written in that request). A paid back is given even unpublished, a purchase being owed: it stays out of sight until republished (see chosen())
+    public function grant(string $holder, CardBack $back, string $source, bool $paid = false): bool
     {
-        if (!$back->isPublished() || null !== $this->collectedBackRepository->findOneBy(['holder' => $holder, 'back' => $back])) {
+        if ((!$paid && !$back->isPublished()) || null !== $this->collectedBackRepository->findOneBy(['holder' => $holder, 'back' => $back])) {
             return false;
         }
 
@@ -38,6 +38,20 @@ class BackCollector
         } catch (UniqueConstraintViolationException) {
             return false;
         }
+
+        return true;
+    }
+
+    // Takes back a back the given source gave, and says whether one was held: a refunded purchase. The same back earned another way stays, and a chosen one taken back leaves its pack to its own picture
+    public function revoke(string $holder, CardBack $back, string $source): bool
+    {
+        $collected = $this->collectedBackRepository->findOneBy(['holder' => $holder, 'back' => $back, 'source' => $source]);
+        if (null === $collected) {
+            return false;
+        }
+
+        $this->entityManager->remove($collected);
+        $this->entityManager->flush();
 
         return true;
     }

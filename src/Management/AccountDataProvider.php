@@ -48,8 +48,8 @@ class AccountDataProvider implements AccountDataProviderInterface
 
         $backs = $this->collectedBackRepository->findByHolder($holder);
         if ([] !== $backs) {
-            $data['backs'] = array_map(static fn (CollectedBack $collected): array => [
-                'back' => (string) $collected->getBack(),
+            $data['backs'] = array_map(fn (CollectedBack $collected): array => [
+                'back' => $this->cardCatalog->backName($collected->getBack()),
                 'chosen' => $collected->isChosen(),
                 'source' => $collected->getSource(),
                 'date' => $collected->getCreatedAt()->format(\DATE_ATOM),

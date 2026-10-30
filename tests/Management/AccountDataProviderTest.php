@@ -20,6 +20,7 @@ use c975L\CardBundle\Repository\CollectedBackRepository;
 use c975L\CardBundle\Repository\CollectedCardRepository;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Contract\UserInterface;
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 class AccountDataProviderTest extends TestCase
@@ -62,7 +63,7 @@ class AccountDataProviderTest extends TestCase
         $backRepository = $this->createStub(CollectedBackRepository::class);
         $backRepository->method('findByHolder')->willReturn($backs);
 
-        return new AccountDataProvider($cardRepository, $backRepository, new CardCatalog($catalogs, []));
+        return new AccountDataProvider($cardRepository, $backRepository, new CardCatalog($catalogs, [], $this->createStub(ConfigServiceInterface::class)));
     }
 
     private function user(int $id): UserInterface

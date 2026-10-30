@@ -15,11 +15,12 @@ use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\SignalableCommandInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 // The export from the terminal, the same run the dashboard tile queues: everything the site exports, only what changed since the last run - a target to try one card or one series, --force to shoot everything again
 #[AsCommand(name: 'card:export', description: 'Exporte les cartes (papier et réseaux sociaux), seulement ce qui a changé depuis le dernier export')]
-class CardExportCommand
+class CardExportCommand implements SignalableCommandInterface
 {
     public function __construct(
         private readonly CardExporter $cardExporter,
@@ -47,5 +48,19 @@ class CardExportCommand
         $io->success(\sprintf('%d produits, %d inchangés, %d retirés (%d s).', $counts['made'], $counts['kept'], $counts['removed'], (int) round(microtime(true) - $start)));
 
         return Command::SUCCESS;
+    }
+
+    // Ctrl+C or a kill, the only ways to stop the run from the terminal
+    public function getSubscribedSignals(): array
+    {
+        return \defined('SIGINT') ? [\SIGINT, \SIGTERM] : [];
+    }
+
+    // The run released before the process exits, the code being the one a shell gives a signalled process
+    public function handleSignal(int $signal, int | false $previousExitCode = 0): int | false
+    {
+        $this->cardExporter->abort('Interrupted.');
+
+        return 128 + $signal;
     }
 }

@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="iIWC3BD">
                 <source>description.guided_project_card_back</source>
-                <target>Create a variant of a pack's card back, which players can then win and choose.</target>
+                <target>Create a variant of a pack's card back, which players can win or buy, then choose, and put it on sale if you wish.</target>
             </trans-unit>
             <trans-unit id="uTfo64l">
                 <source>description.guided_project_card_export</source>
@@ -37,6 +37,10 @@
             <trans-unit id="yRCr_AU">
                 <source>description.guided_step_card_back_pack</source>
                 <target>The cards of this pack will wear this back once the player chooses it.</target>
+            </trans-unit>
+            <trans-unit id="42Qz7Vk">
+                <source>description.guided_step_card_back_price</source>
+                <target>The same price on the site and in the app, €1.00 or €2.00 for instance. VAT included, its rate just below (0 when exempt). Leave it empty for a back that is only given, won in a quest or by a code.</target>
             </trans-unit>
             <trans-unit id="fKPkQe5">
                 <source>description.guided_step_card_back_published</source>
@@ -94,9 +98,9 @@
                 <source>help.back_position</source>
                 <target>The order of a pack's variants.</target>
             </trans-unit>
-            <trans-unit id="PMnabJO">
-                <source>help.back_product_id</source>
-                <target>The product's identifier at Apple and Google, empty when the back is not on sale there.</target>
+            <trans-unit id="uckuSVZ">
+                <source>help.back_price</source>
+                <target>The price VAT included, the same on the site and in the app, where it sets the stores' price point (€1.00 is one). Empty for a back that is not for sale, only given.</target>
             </trans-unit>
             <trans-unit id="NPdfLtf">
                 <source>help.back_published</source>
@@ -106,9 +110,21 @@
                 <source>help.back_slug</source>
                 <target>What a reward, a purchase or a code names to give this back.</target>
             </trans-unit>
+            <trans-unit id="8NbWFto">
+                <source>help.back_slug_locked</source>
+                <target>Set on creation: rewards, codes and stores know it.</target>
+            </trans-unit>
             <trans-unit id="JefzzOt">
                 <source>help.back_tone</source>
                 <target>The light laid over the picture: dawn, sunset, snow, storm, wind, night or mist.</target>
+            </trans-unit>
+            <trans-unit id="E9GkcBn">
+                <source>help.back_vat</source>
+                <target>The VAT rate the price includes, 0 for a seller under the VAT franchise.</target>
+            </trans-unit>
+            <trans-unit id="uxioU5s">
+                <source>label.back_already_held</source>
+                <target>You already have this back.</target>
             </trans-unit>
             <trans-unit id=".Kew4lH">
                 <source>label.back_effect</source>
@@ -154,6 +170,10 @@
                 <source>label.back_name</source>
                 <target>Name</target>
             </trans-unit>
+            <trans-unit id="oNOnejJ">
+                <source>label.back_once</source>
+                <target>A back is bought only once.</target>
+            </trans-unit>
             <trans-unit id="XiPi2zM">
                 <source>label.back_pack</source>
                 <target>Pack</target>
@@ -162,9 +182,13 @@
                 <source>label.back_position</source>
                 <target>Order</target>
             </trans-unit>
-            <trans-unit id="KtVMqOU">
-                <source>label.back_product_id</source>
-                <target>Store product</target>
+            <trans-unit id="FsM2Tpr">
+                <source>label.back_price</source>
+                <target>Price</target>
+            </trans-unit>
+            <trans-unit id="1xkZvVV">
+                <source>label.back_product_description</source>
+                <target>A back for your %pack% cards</target>
             </trans-unit>
             <trans-unit id="oMHBw_6">
                 <source>label.back_published</source>
@@ -209,6 +233,14 @@
             <trans-unit id="11FxTXX">
                 <source>label.back_tone_wind</source>
                 <target>Wind</target>
+            </trans-unit>
+            <trans-unit id="_0O26Hm">
+                <source>label.back_unavailable</source>
+                <target>This back is no longer for sale.</target>
+            </trans-unit>
+            <trans-unit id="_yCUITt">
+                <source>label.back_vat</source>
+                <target>VAT (%)</target>
             </trans-unit>
             <trans-unit id="EIhguyB">
                 <source>label.card_back</source>
@@ -298,6 +330,10 @@
                 <source>label.guided_step_card_back_pack</source>
                 <target>Choose the pack</target>
             </trans-unit>
+            <trans-unit id="1uvf.r0">
+                <source>label.guided_step_card_back_price</source>
+                <target>Set its price, if it is for sale</target>
+            </trans-unit>
             <trans-unit id="c8kDmoG">
                 <source>label.guided_step_card_back_published</source>
                 <target>Publish it</target>
@@ -321,6 +357,10 @@
             <trans-unit id="jm7lrtY">
                 <source>label.info_card_backs</source>
                 <target>The variants of a pack's card back: a player wins or buys them, then chooses the one the pack's cards wear. With none chosen, a card keeps its pack's own back.</target>
+            </trans-unit>
+            <trans-unit id="yGOxphS">
+                <source>label.sign_in_required</source>
+                <target>Sign in to receive this back on your account.</target>
             </trans-unit>
             <trans-unit id="XUNDdCp">
                 <source>message.back_layers_clash</source>

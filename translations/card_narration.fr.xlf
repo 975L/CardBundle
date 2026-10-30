@@ -34,6 +34,10 @@
                 <source>narration.guided_step_card_back_pack</source>
                 <target>Choisissez le pack dont les cartes porteront ce dos.</target>
             </trans-unit>
+            <trans-unit id="JNYDLpx">
+                <source>narration.guided_step_card_back_price</source>
+                <target>Si ce dos est en vente, indiquez son prix dans le champ Prix ; laissez-le vide s'il est seulement offert.</target>
+            </trans-unit>
             <trans-unit id="vW0_tsF">
                 <source>narration.guided_step_card_back_published</source>
                 <target>Cochez Publié : sans cela, le dos ne peut être ni donné ni choisi.</target>

@@ -34,6 +34,10 @@
                 <source>narration.guided_step_card_back_pack</source>
                 <target>Elija el pack cuyas cartas llevarán este reverso.</target>
             </trans-unit>
+            <trans-unit id="JNYDLpx">
+                <source>narration.guided_step_card_back_price</source>
+                <target>Si este reverso está a la venta, escriba su precio en el campo Precio; déjelo vacío si solo se regala.</target>
+            </trans-unit>
             <trans-unit id="vW0_tsF">
                 <source>narration.guided_step_card_back_published</source>
                 <target>Marque Publicado: si no, el reverso no puede darse ni elegirse.</target>

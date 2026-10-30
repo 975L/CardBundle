@@ -1,6 +1,6 @@
 ---
 name: c975l-card
-description: "Use this skill when working with collectible cards in a Symfony application built on the c975L ecosystem with c975l/card-bundle. Covers the collection held under a device token then an account, the three finishes, the card backs given and chosen per pack, and the plumbing of a mobile app's card api. Triggers on: cards, card collection, collectible cards, album, CollectedCard, CardCollector, grant a card, CardFinish, finish, shiny, magic, CardHolder, holder, device token, connect a device, CardBack, CollectedBack, BackCollector, card back, choose a back, pack, BackTone, BackEffect, CardDemoFixtureProvider, demo dataset, demo backs, CardRequest, app api, /app/api/cards, HolderStoreInterface, CardCatalogInterface, CardPackProviderInterface, Plumes, UserAnonymizedEvent, account export."
+description: "Use this skill when working with collectible cards in a Symfony application built on the c975L ecosystem with c975l/card-bundle. Covers the collection held under a device token then an account, the three finishes, the card backs given and chosen per pack, and the plumbing of a mobile app's card api. Triggers on: cards, card collection, collectible cards, album, CollectedCard, CardCollector, grant a card, CardFinish, finish, shiny, magic, CardHolder, holder, device token, connect a device, CardBack, CollectedBack, BackCollector, card back, choose a back, pack, sell a back, back price, BackInAppProductProvider, BackBasketItemProvider, revoke, BackTone, BackEffect, CardDemoFixtureProvider, demo dataset, demo backs, CardRequest, app api, /app/api/cards, HolderStoreInterface, CardCatalogInterface, CardPackProviderInterface, Plumes, UserAnonymizedEvent, account export."
 ---
 
 # c975L CardBundle
@@ -41,8 +41,10 @@ if (null !== $holder) {
 - `CardCollector::grant()` refuses only a finish already held, a gift sent twice at once included: the unique index refuses the second and Doctrine then closes the EntityManager, so grant last in a request. A site whose finishes form a ladder checks `CardFinish::requires()` first.
 - The source passed to `grant()` is the site's own short word (20 characters at most).
 - Never change the values of `CardFinish`, `BackTone` or `BackEffect`: they are stored.
-- A back is given only published, through `BackCollector::grant()`, and chosen through `BackCollector::choose()`, which refuses a back unpublished or of another pack: never set `chosen` by hand. Unpublishing a back withdraws it from `BackCollector::chosen()` without clearing the choice.
+- A back is given only published, through `BackCollector::grant()` — except a paid one (`paid: true`, as the two Payment providers pass it), given even unpublished since, a purchase being owed — and chosen through `BackCollector::choose()`, which refuses a back unpublished or of another pack: never set `chosen` by hand. Unpublishing a back withdraws it from `BackCollector::chosen()` without clearing the choice.
 - Never move a back to another pack: the back office locks it once created, its holders' choices being by pack.
+- A back is on sale once priced and published (`CardBack::isForSale()`), at one price in the app and on the site. Never type or store a store product id: it is `CardBack::getProductId()`, derived from the slug, which is lowercase words joined by hyphens and locked once created (the back office disables it on edit).
+- Never write a site provider to sell backs: `BackInAppProductProvider` (the stores) and `BackBasketItemProvider` (the basket, kind `cardback`) are the bundle's. A refund goes through `BackCollector::revoke($holder, $back, $source)`, which removes only what that source gave.
 - Never change a site's app route nor its JSON when moving it onto this bundle: the published apps are built against them.
 
 ## What the site plugs in

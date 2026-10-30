@@ -32,6 +32,7 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 - A collection held under a key rather than an account: the token a device made up, then `u<id>` once a member connects it — a player collects on the first evening, before anyone signs up, and nothing is lost when they do
 - Three finishes (`CardFinish`: normal ●, shiny ◆, magic ✦), the finish being no other card; the ladder (shiny only over normal) is offered, never imposed
 - Card backs: variants of a pack's back, with a picture, a tone and an effect, given by a reward, a purchase or a code, and chosen one per pack
+- Card backs for sale, in the app stores and on the site, through PaymentBundle (`InAppProductProviderInterface` and `BasketItemProviderInterface`), at one price
 - A device's collection handed over to the account on its first connected call, the account keeping its own where both hold the same card
 - Everything erased with the account (ConfigBundle's `UserAnonymizedEvent`), the site's own stores included
 - Every card and back in the member's data export (ConfigBundle's `/account/export`, through `AccountDataProviderInterface`)
@@ -92,7 +93,14 @@ Which card and which finish is the site's decision, taken before calling: a site
 
 ## Card backs
 
-A `CardBack` belongs to a pack — the site's own key: a castle's prefix, a set's slug — and only a published one is ever given. `BackCollector::grant($holder, $back, $source)` gives it, `BackCollector::choose($holder, $pack, $back)` makes it the one that pack's cards wear (`null` for the pack's own picture), refusing a back not held, unpublished or of another pack, and `BackCollector::chosen($holder)` lists the choices by pack. Unpublishing a back withdraws it: it is no longer worn, the choice being kept so that republishing it puts it back. A back's pack is set on creation and locked afterwards, and a pack's backs are read by position, those given none last. How a tone or an effect is drawn is the site's stylesheet and its app's: the bundle only names them (`BackTone`, `BackEffect`) and refuses the two drawn on the same layer. The back office lists each back by its uploaded picture; a site drawing its backs there as its app does overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig`.
+A `CardBack` belongs to a pack — the site's own key: a castle's prefix, a set's slug — and only a published one is ever given. `BackCollector::grant($holder, $back, $source)` gives it, `BackCollector::choose($holder, $pack, $back)` makes it the one that pack's cards wear (`null` for the pack's own picture), refusing a back not held, unpublished or of another pack, and `BackCollector::chosen($holder)` lists the choices by pack. Unpublishing a back withdraws it: it is no longer worn, the choice being kept so that republishing it puts it back. A back's pack and slug are set on creation and locked afterwards, the slug being lowercase words joined by hyphens, and a pack's backs are read by position, those given none last. How a tone or an effect is drawn is the site's stylesheet and its app's: the bundle only names them (`BackTone`, `BackEffect`) and refuses the two drawn on the same layer. The back office lists each back by its uploaded picture; a site drawing its backs there as its app does overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig`.
+
+### Selling a back
+
+A back given a price (in cents, VAT included, with its own VAT rate, none under the VAT franchise) and published is on sale, at that one price in the app and on the site: 1,00 € and 2,00 € are both price points of the stores. Its store product id is derived from its slug, `back.<slug>` with underscores for hyphens (`CardBack::getProductId()`, see PaymentBundle's `InAppProduct::idFor()`), never typed, which is why the slug never changes once created. A purchase is owed: `BackCollector::grant(..., paid: true)` gives a bought back even one unpublished since, and a basket paid for a back the account earned in the meantime is logged as a warning for the admin to refund.
+
+- **In the app**, `BackInAppProductProvider` is PaymentBundle's `InAppProductProviderInterface`: `c975l:payment:store:publish` creates the products from it, named « pack - variant » in each language (the variant alone past Apple's 30 characters), and a verified purchase gives the back through `BackCollector::grant()` under the store's name, `apple` or `google`. A refund takes it back through `BackCollector::revoke()`, which removes only what that store gave: the same back won in a quest stays. The site's own app endpoints still ask for the account token and send the proofs (see PaymentBundle's *selling in a mobile app*).
+- **On the site**, `BackBasketItemProvider` puts a back in PaymentBundle's basket under the `cardback` kind: once per back, refused when the account already holds it, the visitor asked to sign in at the checkout (`AccountBasketItemProviderInterface`). It is digital content supplied at once (`Basket::CONTENT_FLAG_DIGITAL`), which asks for the waiver of the right of withdrawal, and once paid it is given as `shop`. Where the site shows the button is its own: a back is bought where its collection shows it, adding `{kind: cardback, id}` to the basket.
 
 ## The app's api
 
@@ -145,11 +153,11 @@ Everything the back office shows is in the `card` domain, its spoken narrations 
 
 ## Guided projects
 
-The bundle contributes two guided projects, in the 11000 block `GuidedProjectProviderInterface` reserves it. `card-back` makes a variant of a pack's back: it opens on the card backs' listing, then walks the form field by field — the pack, the name, the picture, the tone, the effect — then the box that publishes it, a back being given only once published, and ends on the save button. It is offered to `site-role-editor`, the role the screen itself asks for.
+The bundle contributes two guided projects, in the 11000 block `GuidedProjectProviderInterface` reserves it. `card-back` makes a variant of a pack's back: it opens on the card backs' listing, then walks the form field by field — the pack, the name, the picture, the tone, the effect, the price and its VAT when it is for sale — then the box that publishes it, a back being given only once published, and ends on the save button. It is offered to `site-role-editor`, the role the screen itself asks for.
 
 `card-export` opens on the dashboard, highlights the export tile, then tells how to follow the run on the tile. Like the tile, it is offered only where the export can run, to `ROLE_SUPER_ADMIN`.
 
-The ways a back is then *had* — a reward, a purchase, a code — are not walked: they are the site's own code calling `BackCollector::grant()`, with nothing to do in the back office.
+The ways a back is then *had* — a reward, a purchase, a code — are not walked: a reward and a code are the site's own code calling `BackCollector::grant()`, a purchase PaymentBundle's, with nothing to do in the back office beyond the price.
 
 ---
 
@@ -169,7 +177,6 @@ ConfigBundle and UiBundle expose a long list of contribution points, and not bra
 | Emails, sitemap, feeds | no public page and nothing to announce of its own |
 | Content translation | a back's name is short and the site's; translated catalogues are the site's |
 | Content import / export | a collection is what players did, not content |
-| Sales of backs | planned, through PaymentBundle's basket and the app stores (`CardBack::productId`) |
 
 ---
 

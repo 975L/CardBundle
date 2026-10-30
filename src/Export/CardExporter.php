@@ -38,6 +38,9 @@ class CardExporter
 
     private ?ChromeSession $chrome = null;
 
+    // Set while this process holds the run, so an interruption only releases a run of its own
+    private bool $running = false;
+
     /** @param iterable<CardExportSourceInterface> $sources */
     public function __construct(
         #[AutowireIterator('c975l.card_export_source')]
@@ -74,8 +77,9 @@ class CardExporter
 
         $items = $this->items($target);
         $this->status->step(ExportStatus::PREPARING);
+        $this->running = true;
         $stateFile = $this->absolute(self::STATE_FILE);
-        $workDir = \sprintf('%s/var/%s/%s', $this->projectDir, $this->environment, self::WORK_DIR);
+        $workDir = $this->workDir();
 
         $counts = ['made' => 0, 'kept' => 0, 'removed' => 0];
         try {
@@ -105,13 +109,39 @@ class CardExporter
             $this->writeManifests($state);
             $state->save($stateFile);
         } finally {
-            $this->chrome?->close();
-            $this->chrome = null;
-            $this->filesystem->remove($workDir);
+            $this->release();
             $this->status->finish();
         }
 
         return $counts;
+    }
+
+    // A run cut short by a signal, which exits without reaching the finally above: Chrome closed, the work folder removed and the failure left in place of the step, so the next run is not refused as one already under way
+    public function abort(string $message): void
+    {
+        if (!$this->running) {
+            return;
+        }
+        try {
+            $this->release();
+        } finally {
+            $this->status->fail($message);
+        }
+    }
+
+    // What a run holds, given back whichever way it ends
+    private function release(): void
+    {
+        $this->chrome?->close();
+        $this->chrome = null;
+        $this->filesystem->remove($this->workDir());
+        $this->running = false;
+    }
+
+    // The frames, the pages and Chrome's profile, under the environment's own var/ folder
+    private function workDir(): string
+    {
+        return \sprintf('%s/var/%s/%s', $this->projectDir, $this->environment, self::WORK_DIR);
     }
 
     // The items of every source, by the path they write to - two items writing the same file being a mistake of the site's

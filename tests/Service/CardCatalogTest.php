@@ -12,7 +12,9 @@ namespace c975L\CardBundle\Tests\Service;
 
 use c975L\CardBundle\Contract\CardCatalogInterface;
 use c975L\CardBundle\Contract\CardPackProviderInterface;
+use c975L\CardBundle\Entity\CardBack;
 use c975L\CardBundle\Service\CardCatalog;
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 class CardCatalogTest extends TestCase
@@ -20,10 +22,11 @@ class CardCatalogTest extends TestCase
     // A site that has not said stands for its raw keys rather than for an error
     public function testWithoutAnyImplementationTheKeysStandIn(): void
     {
-        $catalog = new CardCatalog([], []);
+        $catalog = new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class));
 
         $this->assertSame('GUE 02', $catalog->cardName('GUE 02'));
         $this->assertSame([], $catalog->packs());
+        $this->assertSame('hur - À l\'aube', $catalog->backName(new CardBack()->setPack('hur')->setName('À l\'aube')));
     }
 
     // The first catalogue knowing the card names it, and the packs of every provider are listed, the first one's name winning on a shared key
@@ -38,9 +41,35 @@ class CardCatalogTest extends TestCase
         $more = $this->createStub(CardPackProviderInterface::class);
         $more->method('getPacks')->willReturn(['hur' => 'Ignored', 'gob' => 'Gobelins']);
 
-        $catalog = new CardCatalog([$silent, $knowing], [$castles, $more]);
+        $catalog = new CardCatalog([$silent, $knowing], [$castles, $more], $this->createStub(ConfigServiceInterface::class));
 
         $this->assertSame('Athelleen', $catalog->cardName('GUE 02'));
         $this->assertSame(['hur' => 'Hurlton', 'gob' => 'Gobelins'], $catalog->packs());
+        $this->assertSame('Hurlton', $catalog->packName('hur'));
+        $this->assertSame('zzz', $catalog->packName('zzz'));
+        $this->assertSame('Hurlton - À l\'aube', $catalog->backName(new CardBack()->setPack('hur')->setName('À l\'aube')), 'a back is named by its pack as the site calls it, not by its key');
+    }
+
+    // The providers are asked once, however many backs are named
+    public function testThePacksAreAskedOnce(): void
+    {
+        $castles = $this->createMock(CardPackProviderInterface::class);
+        $castles->expects($this->once())->method('getPacks')->willReturn(['hur' => 'Hurlton']);
+        $catalog = new CardCatalog([], [$castles], $this->createStub(ConfigServiceInterface::class));
+
+        $catalog->packName('hur');
+        $catalog->packName('gob');
+        $this->assertSame(['hur' => 'Hurlton'], $catalog->packs());
+    }
+
+    // The shop's currency, euros when the site set none
+    public function testTheCurrencyFallsBackToEuros(): void
+    {
+        $configService = $this->createStub(ConfigServiceInterface::class);
+        $configService->method('get')->willReturnOnConsecutiveCalls('USD', null);
+        $catalog = new CardCatalog([], [], $configService);
+
+        $this->assertSame('USD', $catalog->currency());
+        $this->assertSame('EUR', $catalog->currency());
     }
 }

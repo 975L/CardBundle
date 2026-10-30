@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.2.0
+
+Card backs for sale, in the app stores and on the site
+
+- `CardBack::$price` and `$vat`: a back priced and published is on sale, the same price in the app and on the site; `productId` is now derived from the slug, `back.<slug>`, and no longer stored (30/10/2026) **Needs db update**
+- `BackInAppProductProvider`: PaymentBundle's `InAppProductProviderInterface`, the backs on sale as the stores sell them, given under the store's name and taken back on a refund (30/10/2026)
+- `BackBasketItemProvider`: PaymentBundle's basket, a back sold once to an account as digital content, given as `shop` once paid (30/10/2026)
+- `BackCollector::revoke()`: takes back a back only the given source gave (30/10/2026)
+- `CardBackRepository::findForSale()` and `findByProductId()` (30/10/2026)
+- `CardCatalog::packName()` and `backName()`: the account export names a back by its pack as the site calls it, « Hurlton - À l'aube » rather than « hur - À l'aube » (30/10/2026)
+- Back office: the price and the VAT replace the store product field, and the `card-back` guided project walks the price and its VAT (30/10/2026)
+- `CardBack::$slug`: lowercase words joined by hyphens, locked once created (30/10/2026)
+- `BackCollector::grant()` takes `paid`: a bought back is given even if unpublished since (30/10/2026)
+- `BackBasketItemProvider` logs a paid back it could not give (30/10/2026)
+- `CardCatalog::currency()`, and the packs read once per request (30/10/2026)
+- `card:export` stopped by Ctrl+C or a kill releases its run, the next one no longer refused (30/10/2026)
+- The `card-back` guided project highlights the picture's file input, `#CardBack_imageFile_file`, the Vich field itself carrying no id (30/10/2026)
+- Requires `c975l/core-bundle` ^1.82 and `c975l/payment-bundle` ^6.22 (30/10/2026)
+
 ## v1.1.0
 
 One export of the cards, paper and social networks, redoing only what changed

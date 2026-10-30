@@ -65,6 +65,16 @@ class CardBackCrudControllerTest extends TestCase
         }
     }
 
+    // The slug is typed on creation and locked afterwards, as the pack: rewards, codes and the stores name the back by it
+    public function testTheSlugIsLockedOnceCreated(): void
+    {
+        $this->assertFalse($this->fields([], Crud::PAGE_NEW)['slug']->getAsDto()->getFormTypeOption('disabled'));
+
+        $slug = $this->fields([], Crud::PAGE_EDIT)['slug']->getAsDto();
+        $this->assertTrue($slug->getFormTypeOption('disabled'));
+        $this->assertEquals(t('help.back_slug_locked', [], 'card'), $slug->getHelp());
+    }
+
     // No choices are given for the tone and the effect: EasyAdmin then reads the enum off the mapping and stores a case, never a string the setter would refuse
     public function testToneAndEffectAreLeftToTheirEnum(): void
     {
@@ -95,7 +105,7 @@ class CardBackCrudControllerTest extends TestCase
     {
         $provider = $this->createStub(CardPackProviderInterface::class);
         $provider->method('getPacks')->willReturn($packs);
-        $controller = new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [$provider]));
+        $controller = new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [$provider], $this->createStub(ConfigServiceInterface::class)));
 
         $fields = [];
         foreach ($controller->configureFields($pageName) as $field) {

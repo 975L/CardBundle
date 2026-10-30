@@ -16,6 +16,7 @@ use c975L\CardBundle\Enum\BackTone;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class CardBackTest extends TestCase
@@ -32,6 +33,30 @@ class CardBackTest extends TestCase
     public function testTheMediaPathIsNamedAfterTheSlug(): void
     {
         $this->assertSame(CardBack::MEDIA_DIRECTORY . '/hurlton-aube', new CardBack()->setSlug('hurlton-aube')->getVichMediaPath());
+    }
+
+    // On sale once published and priced, its store product id derived from its slug - and none without a price
+    public function testItsProductIdIsDerivedFromItsSlugOncePriced(): void
+    {
+        $back = new CardBack()->setSlug('chateau-hurlton-orage')->setPublished(true);
+        $this->assertNull($back->getProductId());
+        $this->assertFalse($back->isForSale());
+
+        $back->setPrice(100);
+        $this->assertSame('back.chateau_hurlton_orage', $back->getProductId());
+        $this->assertTrue($back->isForSale());
+        $this->assertFalse($back->setPublished(false)->isForSale());
+    }
+
+    // Lowercase words joined by hyphens only: the store id is read back from it (see CardBackRepository::findByProductId()), and stores refuse capitals and accents
+    public function testTheSlugIsLowercaseWordsJoinedByHyphens(): void
+    {
+        $validator = Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
+
+        $this->assertCount(0, $validator->validateProperty(new CardBack()->setSlug('chateau-hurlton-2'), 'slug'));
+        foreach (['night_sky', 'Orage', 'château', 'a--b', '-a'] as $slug) {
+            $this->assertCount(1, $validator->validateProperty(new CardBack()->setSlug($slug), 'slug'), $slug);
+        }
     }
 
     public function testItIsNamedByItsPackAndItsName(): void

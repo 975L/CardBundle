@@ -54,7 +54,7 @@ class CardGuidedProjectProviderTest extends TestCase
     // A highlighted field the form no longer shows leaves the step pointing at nothing, which no other test would see
     public function testEveryHighlightedFieldIsOnTheForm(): void
     {
-        $controller = new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], []));
+        $controller = new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class)));
         $properties = array_map(
             static fn (FieldInterface $field): string => $field->getAsDto()->getProperty(),
             array_filter([...$controller->configureFields(Crud::PAGE_NEW)], static fn (FieldInterface $field): bool => $field->getAsDto()->isDisplayedOn(Crud::PAGE_NEW)),
@@ -62,7 +62,8 @@ class CardGuidedProjectProviderTest extends TestCase
 
         $highlighted = 0;
         foreach ($this->project()['steps'] as $step) {
-            if (1 === preg_match('/^#CardBack_(\w+)$/', $step['highlight'] ?? '', $matches)) {
+            // A Vich upload carries no id of its own, its file input being "<property>_file"
+            if (1 === preg_match('/^#CardBack_([a-zA-Z]+)(?:_file)?$/', $step['highlight'] ?? '', $matches)) {
                 $this->assertContains($matches[1], $properties, $step['label']);
                 ++$highlighted;
             }

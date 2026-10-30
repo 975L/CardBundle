@@ -76,6 +76,30 @@ class CardExporterTest extends TestCase
         $this->exporter()->export();
     }
 
+    // A run cut short leaves a failure rather than its step, so the next one is not refused, and its work folder is gone
+    public function testAnAbortedRunFreesTheNextOne(): void
+    {
+        $this->items = [new PdfItem('Construction/Export/a.pdf', 'A')];
+        $exporter = $this->exporter();
+        $exporter->export(notify: static fn () => $exporter->abort('Interrupted.'));
+
+        $status = new ExportStatus($this->createStub(ConfigServiceInterface::class), $this->project, 'test');
+        $this->assertSame('failed', $status->current()['state'] ?? null);
+        $this->assertStringEndsWith('Interrupted.', $status->current()['detail'] ?? '');
+        $this->assertDirectoryDoesNotExist($this->project . '/var/test/card-export');
+        $this->assertSame(['made' => 0, 'kept' => 1, 'removed' => 0], $this->exporter()->export());
+    }
+
+    // An abort outside a run of its own leaves another process's run alone
+    public function testAnAbortWithoutARunTouchesNothing(): void
+    {
+        $status = new ExportStatus($this->createStub(ConfigServiceInterface::class), $this->project, 'test');
+        $status->step('heros.pdf');
+        $this->exporter()->abort('Interrupted.');
+
+        $this->assertSame(['state' => 'running', 'detail' => 'heros.pdf'], $status->current());
+    }
+
     // A file removed by hand is made again even though nothing changed
     public function testAMissingFileIsMadeAgain(): void
     {

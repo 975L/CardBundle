@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="iIWC3BD">
                 <source>description.guided_project_card_back</source>
-                <target>Créez une variante du dos des cartes d'un pack, que les joueurs pourront gagner puis choisir.</target>
+                <target>Créez une variante du dos des cartes d'un pack, que les joueurs pourront gagner ou acheter, puis choisir, et mettez-la en vente si vous le souhaitez.</target>
             </trans-unit>
             <trans-unit id="uTfo64l">
                 <source>description.guided_project_card_export</source>
@@ -37,6 +37,10 @@
             <trans-unit id="yRCr_AU">
                 <source>description.guided_step_card_back_pack</source>
                 <target>Les cartes de ce pack porteront ce dos une fois que le joueur l'aura choisi.</target>
+            </trans-unit>
+            <trans-unit id="42Qz7Vk">
+                <source>description.guided_step_card_back_price</source>
+                <target>Le même prix sur le site et dans l'app, 1,00 € ou 2,00 € par exemple. TVA comprise, son taux juste en dessous (0 en franchise). Laissez vide pour un dos seulement offert, gagné dans un parcours ou par un code.</target>
             </trans-unit>
             <trans-unit id="fKPkQe5">
                 <source>description.guided_step_card_back_published</source>
@@ -94,9 +98,9 @@
                 <source>help.back_position</source>
                 <target>L'ordre des variantes d'un même pack.</target>
             </trans-unit>
-            <trans-unit id="PMnabJO">
-                <source>help.back_product_id</source>
-                <target>L'identifiant du produit chez Apple et Google, vide si le dos n'y est pas en vente.</target>
+            <trans-unit id="uckuSVZ">
+                <source>help.back_price</source>
+                <target>Le prix TVA comprise, le même sur le site et dans l'app, où il donne le palier de prix des stores (1,00 € en est un). Vide pour un dos qui n'est pas en vente, seulement offert.</target>
             </trans-unit>
             <trans-unit id="NPdfLtf">
                 <source>help.back_published</source>
@@ -106,9 +110,21 @@
                 <source>help.back_slug</source>
                 <target>Ce que nomment une récompense, un achat ou un code pour donner ce dos.</target>
             </trans-unit>
+            <trans-unit id="8NbWFto">
+                <source>help.back_slug_locked</source>
+                <target>Fixé à la création : récompenses, codes et stores le connaissent.</target>
+            </trans-unit>
             <trans-unit id="JefzzOt">
                 <source>help.back_tone</source>
                 <target>La lumière posée sur l'image : aube, coucher de soleil, neige, orage, vent, nuit ou brume.</target>
+            </trans-unit>
+            <trans-unit id="E9GkcBn">
+                <source>help.back_vat</source>
+                <target>Le taux de TVA compris dans le prix, 0 pour un vendeur en franchise de TVA.</target>
+            </trans-unit>
+            <trans-unit id="uxioU5s">
+                <source>label.back_already_held</source>
+                <target>Vous avez déjà ce dos.</target>
             </trans-unit>
             <trans-unit id=".Kew4lH">
                 <source>label.back_effect</source>
@@ -154,6 +170,10 @@
                 <source>label.back_name</source>
                 <target>Nom</target>
             </trans-unit>
+            <trans-unit id="oNOnejJ">
+                <source>label.back_once</source>
+                <target>Un dos ne s'achète qu'une fois.</target>
+            </trans-unit>
             <trans-unit id="XiPi2zM">
                 <source>label.back_pack</source>
                 <target>Pack</target>
@@ -162,9 +182,13 @@
                 <source>label.back_position</source>
                 <target>Ordre</target>
             </trans-unit>
-            <trans-unit id="KtVMqOU">
-                <source>label.back_product_id</source>
-                <target>Produit des stores</target>
+            <trans-unit id="FsM2Tpr">
+                <source>label.back_price</source>
+                <target>Prix</target>
+            </trans-unit>
+            <trans-unit id="1xkZvVV">
+                <source>label.back_product_description</source>
+                <target>Un dos pour vos cartes %pack%</target>
             </trans-unit>
             <trans-unit id="oMHBw_6">
                 <source>label.back_published</source>
@@ -209,6 +233,14 @@
             <trans-unit id="11FxTXX">
                 <source>label.back_tone_wind</source>
                 <target>Vent</target>
+            </trans-unit>
+            <trans-unit id="_0O26Hm">
+                <source>label.back_unavailable</source>
+                <target>Ce dos n'est plus en vente.</target>
+            </trans-unit>
+            <trans-unit id="_yCUITt">
+                <source>label.back_vat</source>
+                <target>TVA (%)</target>
             </trans-unit>
             <trans-unit id="EIhguyB">
                 <source>label.card_back</source>
@@ -298,6 +330,10 @@
                 <source>label.guided_step_card_back_pack</source>
                 <target>Choisissez le pack</target>
             </trans-unit>
+            <trans-unit id="1uvf.r0">
+                <source>label.guided_step_card_back_price</source>
+                <target>Fixez son prix, s'il est en vente</target>
+            </trans-unit>
             <trans-unit id="c8kDmoG">
                 <source>label.guided_step_card_back_published</source>
                 <target>Publiez-le</target>
@@ -321,6 +357,10 @@
             <trans-unit id="jm7lrtY">
                 <source>label.info_card_backs</source>
                 <target>Les variantes du dos des cartes d'un pack : un joueur les gagne ou les achète, puis choisit celle que portent les cartes de ce pack. Sans variante choisie, une carte garde le dos de son pack.</target>
+            </trans-unit>
+            <trans-unit id="yGOxphS">
+                <source>label.sign_in_required</source>
+                <target>Connectez-vous pour recevoir ce dos sur votre compte.</target>
             </trans-unit>
             <trans-unit id="XUNDdCp">
                 <source>message.back_layers_clash</source>

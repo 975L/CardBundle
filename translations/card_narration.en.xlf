@@ -34,6 +34,10 @@
                 <source>narration.guided_step_card_back_pack</source>
                 <target>Choose the pack whose cards will wear this back.</target>
             </trans-unit>
+            <trans-unit id="JNYDLpx">
+                <source>narration.guided_step_card_back_price</source>
+                <target>If this back is for sale, type its price in the Price field; leave it empty if it is only given.</target>
+            </trans-unit>
             <trans-unit id="vW0_tsF">
                 <source>narration.guided_step_card_back_published</source>
                 <target>Tick Published: otherwise the back can be neither given nor chosen.</target>

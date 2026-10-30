@@ -44,6 +44,17 @@ class CardExportCommandTest extends TestCase
         $this->assertStringContainsString('An export is already running.', $output->fetch());
     }
 
+    // Ctrl+C or a kill release the run before the process exits with the shell's code for a signal
+    public function testASignalAbortsTheRun(): void
+    {
+        $cardExporter = $this->createMock(CardExporter::class);
+        $cardExporter->expects($this->once())->method('abort')->with('Interrupted.');
+        $command = new CardExportCommand($cardExporter);
+
+        $this->assertSame([\SIGINT, \SIGTERM], $command->getSubscribedSignals());
+        $this->assertSame(130, $command->handleSignal(\SIGINT));
+    }
+
     private function io(?BufferedOutput &$output): SymfonyStyle
     {
         $output = new BufferedOutput();

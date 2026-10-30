@@ -66,17 +66,18 @@ class BackCollectorTest extends TestCase
         $this->assertFalse($held[0]->isChosen());
     }
 
-    // Only a published back not already held is given
+    // Only a published back not already held is given - or a paid one even unpublished since, a purchase being owed
     public function testGrantGivesOnlyAPublishedBackNotHeld(): void
     {
         $repository = $this->createStub(CollectedBackRepository::class);
         $repository->method('findOneBy')->willReturn(null);
         $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager->expects($this->once())->method('persist');
+        $entityManager->expects($this->exactly(2))->method('persist');
         $collector = new BackCollector($repository, $entityManager);
 
         $this->assertFalse($collector->grant('u1', $this->back('hur', 'draft', false), 'quiz'));
         $this->assertTrue($collector->grant('u1', $this->back('hur', 'dawn'), 'quiz'));
+        $this->assertTrue($collector->grant('u1', $this->back('hur', 'draft', false), 'apple', paid: true));
     }
 
     // The same back sent twice at once passes the check twice: the unique index refuses the second, which is "already held" and never a 500
@@ -86,6 +87,20 @@ class BackCollectorTest extends TestCase
         $repository->method('findOneBy')->willReturn(null);
 
         $this->assertFalse(new BackCollector($repository, $this->entityManagerRefusingADuplicate())->grant('u1', $this->back('hur', 'dawn'), 'quiz'));
+    }
+
+    // A refund takes back what its source gave, and says so; nothing held from that source, nothing is removed
+    public function testRevokeRemovesOnlyWhatTheSourceGave(): void
+    {
+        $back = $this->back('hur', 'dawn');
+        $repository = $this->createStub(CollectedBackRepository::class);
+        $repository->method('findOneBy')->willReturnCallback(static fn (array $criteria): ?CollectedBack => 'apple' === $criteria['source'] ? new CollectedBack('u1', $back, 'apple') : null);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->once())->method('remove');
+        $collector = new BackCollector($repository, $entityManager);
+
+        $this->assertTrue($collector->revoke('u1', $back, 'apple'));
+        $this->assertFalse($collector->revoke('u1', $back, 'google'));
     }
 
     // The chosen backs by pack, a pack with none chosen absent

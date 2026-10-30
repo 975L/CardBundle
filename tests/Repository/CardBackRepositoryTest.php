@@ -24,6 +24,42 @@ class CardBackRepositoryTest extends TestCase
     // A back given no position comes after those given one, as the back office's numbering means
     public function testTheBacksGivenNoPositionComeLast(): void
     {
+        try {
+            $this->stoppedRepository()->findPublishedOfPack('hur');
+            $this->fail('The query was never written.');
+        } catch (\LogicException $exception) {
+            $this->assertStringContainsString('CASE WHEN b.position IS NULL THEN 1 ELSE 0 END AS HIDDEN unpositioned', $exception->getMessage());
+            $this->assertStringEndsWith('ORDER BY unpositioned ASC, b.position ASC, b.id ASC', $exception->getMessage());
+        }
+    }
+
+    // The backs on sale are the published and priced ones, pack by pack, those given no position last
+    public function testTheBacksOnSaleArePublishedAndPriced(): void
+    {
+        try {
+            $this->stoppedRepository()->findForSale();
+            $this->fail('The query was never written.');
+        } catch (\LogicException $exception) {
+            $this->assertStringContainsString('b.published = true AND b.price IS NOT NULL', $exception->getMessage());
+            $this->assertStringEndsWith('ORDER BY b.pack ASC, unpositioned ASC, b.position ASC, b.id ASC', $exception->getMessage());
+        }
+    }
+
+    // A store product id is read back into the slug it was derived from; anything else names no back
+    public function testAProductIdIsReadBackIntoItsSlug(): void
+    {
+        $back = new CardBack()->setSlug('chateau-hurlton-orage');
+        $repository = $this->getMockBuilder(CardBackRepository::class)->disableOriginalConstructor()->onlyMethods(['findOneBy'])->getMock();
+        $repository->expects($this->exactly(2))->method('findOneBy')->willReturnCallback(static fn (array $criteria): ?CardBack => 'chateau-hurlton-orage' === $criteria['slug'] ? $back : null);
+
+        $this->assertSame($back, $repository->findByProductId('back.chateau_hurlton_orage'));
+        $this->assertNull($repository->findByProductId('credits.chateau_hurlton_orage'));
+        $this->assertNull($repository->findByProductId('back.unknown'));
+    }
+
+    // A repository whose queries stop once written, their DQL in the exception
+    private function stoppedRepository(): CardBackRepository
+    {
         $entityManager = $this->createStub(EntityManagerInterface::class);
         $entityManager->method('getClassMetadata')->willReturn(new ClassMetadata(CardBack::class));
         $entityManager->method('createQueryBuilder')->willReturnCallback(static fn (): QueryBuilder => new QueryBuilder($entityManager));
@@ -33,12 +69,6 @@ class CardBackRepositoryTest extends TestCase
         $registry = $this->createStub(ManagerRegistry::class);
         $registry->method('getManagerForClass')->willReturn($entityManager);
 
-        try {
-            new CardBackRepository($registry)->findPublishedOfPack('hur');
-            $this->fail('The query was never written.');
-        } catch (\LogicException $exception) {
-            $this->assertStringContainsString('CASE WHEN b.position IS NULL THEN 1 ELSE 0 END AS HIDDEN unpositioned', $exception->getMessage());
-            $this->assertStringEndsWith('ORDER BY unpositioned ASC, b.position ASC, b.id ASC', $exception->getMessage());
-        }
+        return new CardBackRepository($registry);
     }
 }

@@ -13,6 +13,7 @@ namespace c975L\CardBundle\Entity;
 use c975L\CardBundle\Enum\BackEffect;
 use c975L\CardBundle\Enum\BackTone;
 use c975L\CardBundle\Repository\CardBackRepository;
+use c975L\PaymentBundle\Contract\InAppProduct;
 use c975L\UiBundle\Contract\VichMediaNamableInterface;
 use c975L\UiBundle\Contract\VichMultiSizeImageInterface;
 use Doctrine\DBAL\Types\Types;
@@ -35,6 +36,9 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     // Where the uploads land, under UiBundle's own "block_media" mapping rather than a mapping of this bundle's
     public const string MEDIA_DIRECTORY = 'medias/cards/backs';
 
+    // What a back's store product id starts with (see getProductId())
+    public const string PRODUCT_PREFIX = 'back';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -52,6 +56,7 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
 
     #[ORM\Column(length: 80, unique: true)]
     #[Assert\NotBlank]
+    #[Assert\Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
     private ?string $slug = null;
 
     // Its own illustration, none drawing its pack's picture in its tone
@@ -68,9 +73,15 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     #[ORM\Column(length: 10, enumType: BackTone::class, options: ['default' => 'none'])]
     private BackTone $tone = BackTone::None;
 
-    // The product the app stores sell it as, null for a back that is not for sale there
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $productId = null;
+    // What it sells for, in cents and VAT included, the same in the app stores and on the site; null for a back that is not for sale, only ever given
+    #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
+    private ?int $price = null;
+
+    // The VAT rate its price includes, none for a seller under the VAT franchise
+    #[ORM\Column(options: ['default' => 0])]
+    #[Assert\PositiveOrZero]
+    private float $vat = 0.0;
 
     // Only a published back is ever given or shown
     #[ORM\Column(options: ['default' => false])]
@@ -207,16 +218,40 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
         return $this;
     }
 
-    public function getProductId(): ?string
+    public function getPrice(): ?int
     {
-        return $this->productId;
+        return $this->price;
     }
 
-    public function setProductId(?string $productId): static
+    public function setPrice(?int $price): static
     {
-        $this->productId = $productId;
+        $this->price = $price;
 
         return $this;
+    }
+
+    public function getVat(): float
+    {
+        return $this->vat;
+    }
+
+    public function setVat(float $vat): static
+    {
+        $this->vat = $vat;
+
+        return $this;
+    }
+
+    // Whether it can be bought: published and priced
+    public function isForSale(): bool
+    {
+        return $this->published && null !== $this->price && null !== $this->slug;
+    }
+
+    // The product the app stores sell it as, derived from its slug and never typed (see InAppProduct::idFor()), null for a back that is not for sale
+    public function getProductId(): ?string
+    {
+        return null !== $this->price && null !== $this->slug ? InAppProduct::idFor(self::PRODUCT_PREFIX, $this->slug) : null;
     }
 
     public function isPublished(): bool

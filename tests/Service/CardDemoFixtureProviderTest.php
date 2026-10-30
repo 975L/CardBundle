@@ -14,6 +14,7 @@ use c975L\CardBundle\Contract\CardPackProviderInterface;
 use c975L\CardBundle\Entity\CardBack;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\CardBundle\Service\CardDemoFixtureProvider;
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\UiBundle\Registry\PlaceholderMediaRegistry;
 use c975L\UiBundle\Service\DemoFixtureMediaCopier;
 use PHPUnit\Framework\TestCase;
@@ -90,7 +91,7 @@ class CardDemoFixtureProviderTest extends TestCase
             $translator,
             $registry ?? new PlaceholderMediaRegistry(),
             new DemoFixtureMediaCopier($projectDir),
-            new CardCatalog([], $packProviders),
+            new CardCatalog([], $packProviders, $this->createStub(ConfigServiceInterface::class)),
         );
 
         return iterator_to_array($provider->getDemoFixtures(), false);
