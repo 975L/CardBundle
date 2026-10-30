@@ -198,6 +198,18 @@
                 <source>label.cards</source>
                 <target>Cartes</target>
             </trans-unit>
+            <trans-unit id="iF__m.e">
+                <source>label.demo_back_dawn</source>
+                <target>À l'aube</target>
+            </trans-unit>
+            <trans-unit id="Y0U1sDV">
+                <source>label.demo_back_night</source>
+                <target>Nuit étoilée</target>
+            </trans-unit>
+            <trans-unit id="TUwgZJ9">
+                <source>label.demo_back_storm</source>
+                <target>Sous l'orage</target>
+            </trans-unit>
             <trans-unit id="cXttzl_">
                 <source>label.guided_project_card_back</source>
                 <target>Créer un dos de carte</target>

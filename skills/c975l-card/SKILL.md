@@ -1,6 +1,6 @@
 ---
 name: c975l-card
-description: "Use this skill when working with collectible cards in a Symfony application built on the c975L ecosystem with c975l/card-bundle. Covers the collection held under a device token then an account, the three finishes, the card backs given and chosen per pack, and the plumbing of a mobile app's card api. Triggers on: cards, card collection, collectible cards, album, CollectedCard, CardCollector, grant a card, CardFinish, finish, shiny, magic, CardHolder, holder, device token, connect a device, CardBack, CollectedBack, BackCollector, card back, choose a back, pack, BackTone, BackEffect, CardRequest, app api, /app/api/cards, HolderStoreInterface, CardCatalogInterface, CardPackProviderInterface, Plumes, UserAnonymizedEvent, account export."
+description: "Use this skill when working with collectible cards in a Symfony application built on the c975L ecosystem with c975l/card-bundle. Covers the collection held under a device token then an account, the three finishes, the card backs given and chosen per pack, and the plumbing of a mobile app's card api. Triggers on: cards, card collection, collectible cards, album, CollectedCard, CardCollector, grant a card, CardFinish, finish, shiny, magic, CardHolder, holder, device token, connect a device, CardBack, CollectedBack, BackCollector, card back, choose a back, pack, BackTone, BackEffect, CardDemoFixtureProvider, demo dataset, demo backs, CardRequest, app api, /app/api/cards, HolderStoreInterface, CardCatalogInterface, CardPackProviderInterface, Plumes, UserAnonymizedEvent, account export."
 ---
 
 # c975L CardBundle
@@ -56,3 +56,5 @@ Each interface is tagged by autoconfiguration, so implementing it is all it take
 ## Back office
 
 One screen, the card backs (`CardBackCrudController`), behind `site-role-editor`, with its guided project (`CardGuidedProjectProvider`). Its listing shows the uploaded picture only: how a tone or an effect is drawn is the site's stylesheet, and a site showing it there overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig` rather than replacing the controller.
+
+The demo dataset (`CardDemoFixtureProvider`, UiBundle's `DemoFixtureProviderInterface`) seeds three published backs, slugs `demo-dawn`, `demo-storm` and `demo-night`, over the site's first two packs (raw `north`/`south` when it lists none), each illustrated by its `keyed_images['card/<slug>']` placeholder or one of the generic pool — no catalogue and no collection. They are sample rows, not content to build on.

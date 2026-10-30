@@ -198,6 +198,18 @@
                 <source>label.cards</source>
                 <target>Cartas</target>
             </trans-unit>
+            <trans-unit id="iF__m.e">
+                <source>label.demo_back_dawn</source>
+                <target>Al alba</target>
+            </trans-unit>
+            <trans-unit id="Y0U1sDV">
+                <source>label.demo_back_night</source>
+                <target>Noche estrellada</target>
+            </trans-unit>
+            <trans-unit id="TUwgZJ9">
+                <source>label.demo_back_storm</source>
+                <target>Bajo la tormenta</target>
+            </trans-unit>
             <trans-unit id="cXttzl_">
                 <source>label.guided_project_card_back</source>
                 <target>Crear un reverso de carta</target>

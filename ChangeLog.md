@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.0.1
+
+Demo card backs
+
+- `CardDemoFixtureProvider`: three published backs over the site's first two packs, for the bundles' demo (30/10/2026)
+- Demo backs illustrated by their `card/<slug>` placeholder, else one of the pool picked by slug (30/10/2026)
+- Demo backs copied through UiBundle's `DemoFixtureMediaCopier` (30/10/2026)
+- Requires `c975l/core-bundle` ^1.81.3 (30/10/2026)
+- README and skill `c975l-card`: the demo dataset (30/10/2026)
+
 ## v1.0.0
 
 Create the bundle: card collection, card backs and app api plumbing

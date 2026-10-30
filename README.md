@@ -37,6 +37,7 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 - Every card and back in the member's data export (ConfigBundle's `/account/export`, through `AccountDataProviderInterface`)
 - One back-office screen contributed to the EasyAdmin dashboard (`MenuProviderInterface`): the card backs
 - A guided project (`GuidedProjectProviderInterface`): making a card back
+- A demo dataset (UiBundle's `DemoFixtureProviderInterface`): three card backs over the site's first two packs, each illustrated by its own placeholder when the site declares one under `keyed_images['card/<slug>']` (`demo-dawn`, `demo-storm`, `demo-night`), one of the generic pool otherwise — no catalogue and no collection, both being a site's own
 - Its own `card` translation catalogue, in English, French and Spanish
 - **A skill for coding agents**, shipped in the package and read straight from `vendor/` — see [AI agent skills](#ai-agent-skills)
 
