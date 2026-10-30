@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.1.0
+
+One export of the cards, paper and social networks, redoing only what changed
+
+- Added `card:export [target] [--force]` and its dashboard tile, run by the Messenger worker (30/10/2026)
+- Added `CardExportSourceInterface`, the site handing over `PdfItem` and `SocialItem` pages (30/10/2026)
+- Added `PageRenderer` and `ChromeSession`, moved from Papa Câlin and La Guilde (30/10/2026)
+- Added `ExportState`, keeping each item's fingerprint so an unchanged one is not shot again (30/10/2026)
+- Added `ExportStatus`, where the tile reads an export under way, waiting or failed (30/10/2026)
+- Added the `card-export` guided project, offered where the export can run (30/10/2026)
+- Requires `symfony/console`, `symfony/filesystem`, `symfony/messenger` and `symfony/process` (30/10/2026)
+
 ## v1.0.1
 
 Demo card backs

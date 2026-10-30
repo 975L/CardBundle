@@ -12,11 +12,13 @@ namespace c975L\CardBundle\Tests\Translation;
 
 use c975L\CardBundle\Enum\BackEffect;
 use c975L\CardBundle\Enum\BackTone;
+use c975L\CardBundle\Export\CardExporter;
 use c975L\CardBundle\Management\CardGuidedProjectProvider;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 // Every key the code names is shipped in the three languages - read off the code itself, the enums and the guided project building theirs from a value, which a search of the sources for literal keys would never see
 class TranslationKeysTest extends TestCase
@@ -55,7 +57,7 @@ class TranslationKeysTest extends TestCase
     {
         $keys = [];
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(\dirname(__DIR__, 2) . '/src', \FilesystemIterator::SKIP_DOTS)) as $file) {
-            preg_match_all("/'((?:label|help|description|narration|message)\.[a-z_]+[a-z])'/", (string) file_get_contents((string) $file), $matches);
+            preg_match_all("/'((?:label|help|description|narration|message|flash)\.[a-z_]+[a-z])'/", (string) file_get_contents((string) $file), $matches);
             $keys = [...$keys, ...$matches[1]];
         }
         foreach ([...BackTone::cases(), ...BackEffect::cases()] as $case) {
@@ -66,7 +68,10 @@ class TranslationKeysTest extends TestCase
         foreach (['unsetAll', 'setController', 'setAction'] as $method) {
             $adminUrlGenerator->method($method)->willReturnSelf();
         }
-        foreach (new CardGuidedProjectProvider($adminUrlGenerator, $this->createStub(ConfigServiceInterface::class))->getGuidedProjects() as $project) {
+        // The export project only shows where the export can run
+        $cardExporter = $this->createStub(CardExporter::class);
+        $cardExporter->method('isAvailable')->willReturn(true);
+        foreach (new CardGuidedProjectProvider($adminUrlGenerator, $this->createStub(ConfigServiceInterface::class), $this->createStub(UrlGeneratorInterface::class), $cardExporter)->getGuidedProjects() as $project) {
             $keys[] = $project['label'];
             $keys[] = $project['description'];
             foreach ($project['steps'] as $step) {

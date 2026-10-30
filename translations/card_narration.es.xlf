@@ -42,6 +42,18 @@
                 <source>narration.guided_step_card_back_tone</source>
                 <target>Elija la luz sobre la imagen.</target>
             </trans-unit>
+            <trans-unit id="MCT0d76">
+                <source>narration.guided_step_card_export_follow</source>
+                <target>Recargue la página para seguir la exportación en el mosaico, hasta que muestre la fecha de la última exportación.</target>
+            </trans-unit>
+            <trans-unit id="aS9ond5">
+                <source>narration.guided_step_card_export_open</source>
+                <target>Abra el panel: el mosaico Exportar las cartas está entre los accesos directos.</target>
+            </trans-unit>
+            <trans-unit id="UiTq7q1">
+                <source>narration.guided_step_card_export_run</source>
+                <target>Haga clic en el mosaico Exportar las cartas. La exportación se ejecuta en segundo plano.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

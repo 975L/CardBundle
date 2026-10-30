@@ -2,7 +2,13 @@
     "name": "c975l/card-bundle",
     "type": "symfony-bundle",
     "description": "Symfony bundle for collectible cards on the c975L core — what each player holds and in which finish, kept on the device before any account exists, card backs to win or choose, and the plumbing of the mobile app's API. The catalogue stays the site's own.",
-    "keywords": ["symfony", "bundle", "cards", "collection", "collectible"],
+    "keywords": [
+        "symfony",
+        "bundle",
+        "cards",
+        "collection",
+        "collectible"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -22,8 +28,12 @@
         "doctrine/dbal": "^4.4",
         "doctrine/orm": "^3.7",
         "easycorp/easyadmin-bundle": "^5.7",
+        "symfony/console": "^8.0",
+        "symfony/filesystem": "^8.0",
         "symfony/framework-bundle": "^8.0",
         "symfony/http-foundation": "^8.0",
+        "symfony/messenger": "^8.0",
+        "symfony/process": "^8.0",
         "symfony/rate-limiter": "^8.1",
         "symfony/routing": "^8.0",
         "symfony/security-bundle": "^8.0",

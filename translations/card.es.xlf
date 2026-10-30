@@ -6,6 +6,10 @@
                 <source>description.guided_project_card_back</source>
                 <target>Cree una variante del reverso de las cartas de un pack, que los jugadores podrán ganar y elegir.</target>
             </trans-unit>
+            <trans-unit id="uTfo64l">
+                <source>description.guided_project_card_export</source>
+                <target>Generar los PDF, las imágenes y los vídeos de las cartas desde el mosaico del panel: solo se rehace lo que ha cambiado desde la última exportación.</target>
+            </trans-unit>
             <trans-unit id="1lnvqC.">
                 <source>description.guided_step_card_back_done</source>
                 <target>El reverso está listo: una recompensa, una compra o un código lo dan por su slug.</target>
@@ -41,6 +45,26 @@
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
                 <target>La luz sobre la imagen. Un efecto dibujado en la misma capa se rechaza.</target>
+            </trans-unit>
+            <trans-unit id="BFeTy4P">
+                <source>description.guided_step_card_export_follow</source>
+                <target>Recargue el panel: el mosaico indica el paso en curso, el error y su mensaje, o la fecha de la última exportación. Para una sola serie, el comando card:export en un terminal hace el mismo trabajo.</target>
+            </trans-unit>
+            <trans-unit id="0C_qfFQ">
+                <source>description.guided_step_card_export_open</source>
+                <target>El mosaico de exportación está entre los accesos directos del panel, en la máquina donde están instalados Chrome y Ghostscript.</target>
+            </trans-unit>
+            <trans-unit id="gGRXzN8">
+                <source>description.guided_step_card_export_run</source>
+                <target>Haga clic en el mosaico: la exportación pasa al worker de Messenger y recupera el control enseguida.</target>
+            </trans-unit>
+            <trans-unit id="3DW3sx7">
+                <source>flash.export_running</source>
+                <target>Ya hay una exportación en curso o en espera. No se ha lanzado nada nuevo.</target>
+            </trans-unit>
+            <trans-unit id="qZXs66x">
+                <source>flash.export_started</source>
+                <target>Exportación lanzada: solo se rehace lo que ha cambiado desde la última. Recargue la página para seguir el mosaico.</target>
             </trans-unit>
             <trans-unit id="ii3aJ0K">
                 <source>help.back_effect</source>
@@ -210,9 +234,41 @@
                 <source>label.demo_back_storm</source>
                 <target>Bajo la tormenta</target>
             </trans-unit>
+            <trans-unit id="qvaZjdW">
+                <source>label.export_cards</source>
+                <target>Exportar las cartas</target>
+            </trans-unit>
+            <trans-unit id="fXR3caG">
+                <source>label.export_failed</source>
+                <target>error %detail%</target>
+            </trans-unit>
+            <trans-unit id="7UgDMlN">
+                <source>label.export_last</source>
+                <target>última: %date%</target>
+            </trans-unit>
+            <trans-unit id="di2k6UM">
+                <source>label.export_preparing</source>
+                <target>preparación</target>
+            </trans-unit>
+            <trans-unit id="wGev2dJ">
+                <source>label.export_requested</source>
+                <target>pedida a las %detail%, aún no tomada - ¿funciona el worker de Messenger?</target>
+            </trans-unit>
+            <trans-unit id="662xQ7R">
+                <source>label.export_running</source>
+                <target>en curso: %detail%</target>
+            </trans-unit>
+            <trans-unit id="jCyZK2Q">
+                <source>label.export_stale</source>
+                <target>interrumpida, nada desde las %time%</target>
+            </trans-unit>
             <trans-unit id="cXttzl_">
                 <source>label.guided_project_card_back</source>
                 <target>Crear un reverso de carta</target>
+            </trans-unit>
+            <trans-unit id="IzejoBX">
+                <source>label.guided_project_card_export</source>
+                <target>Exportar las cartas</target>
             </trans-unit>
             <trans-unit id="MavYpWS">
                 <source>label.guided_step_card_back_done</source>
@@ -249,6 +305,18 @@
             <trans-unit id="Ou7jNu4">
                 <source>label.guided_step_card_back_tone</source>
                 <target>Elija el tono</target>
+            </trans-unit>
+            <trans-unit id="q6Ygcsn">
+                <source>label.guided_step_card_export_follow</source>
+                <target>Siga la exportación</target>
+            </trans-unit>
+            <trans-unit id="WzLb9z3">
+                <source>label.guided_step_card_export_open</source>
+                <target>Abra el panel</target>
+            </trans-unit>
+            <trans-unit id="XTkwIIT">
+                <source>label.guided_step_card_export_run</source>
+                <target>Lance la exportación</target>
             </trans-unit>
             <trans-unit id="jm7lrtY">
                 <source>label.info_card_backs</source>

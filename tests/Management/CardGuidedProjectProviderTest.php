@@ -11,6 +11,8 @@
 namespace c975L\CardBundle\Tests\Management;
 
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
+use c975L\CardBundle\Controller\Management\CardExportController;
+use c975L\CardBundle\Export\CardExporter;
 use c975L\CardBundle\Management\CardGuidedProjectProvider;
 use c975L\CardBundle\Management\MenuProvider;
 use c975L\CardBundle\Service\CardCatalog;
@@ -19,6 +21,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CardGuidedProjectProviderTest extends TestCase
@@ -67,6 +70,19 @@ class CardGuidedProjectProviderTest extends TestCase
         $this->assertGreaterThan(0, $highlighted);
     }
 
+    // The export project follows its tile: offered where the export can run, to whoever the tile lets in, and nowhere else
+    public function testTheExportProjectFollowsTheTile(): void
+    {
+        $this->assertCount(1, $this->projects(false));
+
+        $project = $this->projects(true)[1];
+        $this->assertSame('card-export', $project['slug']);
+        $this->assertSame(11020, $project['order']);
+        $this->assertSame(CardExportController::ROLE, $project['role']);
+        $this->assertSame(['label.guided_step_card_export_open', 'label.guided_step_card_export_run', 'label.guided_step_card_export_follow'], array_column($project['steps'], 'label'));
+        $this->assertSame('/management', $project['steps'][0]['url']);
+    }
+
     // The menu entry asks for the very role the screen and the project ask for
     public function testTheMenuEntryAsksForTheEditorsRole(): void
     {
@@ -79,16 +95,24 @@ class CardGuidedProjectProviderTest extends TestCase
     /** @return array<string, mixed> */
     private function project(): array
     {
+        return $this->projects(false)[0];
+    }
+
+    /** @return list<array<string, mixed>> */
+    private function projects(bool $exportAvailable): array
+    {
         $adminUrlGenerator = $this->createStub(AdminUrlGeneratorInterface::class);
         $adminUrlGenerator->method('unsetAll')->willReturnSelf();
         $adminUrlGenerator->method('setController')->willReturnSelf();
         $adminUrlGenerator->method('setAction')->willReturnSelf();
         $adminUrlGenerator->method('generateUrl')->willReturn('/management/card-back');
 
-        $projects = new CardGuidedProjectProvider($adminUrlGenerator, $this->configService())->getGuidedProjects();
-        $this->assertCount(1, $projects);
+        $urlGenerator = $this->createStub(UrlGeneratorInterface::class);
+        $urlGenerator->method('generate')->willReturn('/management');
+        $cardExporter = $this->createStub(CardExporter::class);
+        $cardExporter->method('isAvailable')->willReturn($exportAvailable);
 
-        return $projects[0];
+        return new CardGuidedProjectProvider($adminUrlGenerator, $this->configService(), $urlGenerator, $cardExporter)->getGuidedProjects();
     }
 
     private function configService(): ConfigServiceInterface

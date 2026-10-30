@@ -42,6 +42,18 @@
                 <source>narration.guided_step_card_back_tone</source>
                 <target>Choose the light laid over the picture.</target>
             </trans-unit>
+            <trans-unit id="MCT0d76">
+                <source>narration.guided_step_card_export_follow</source>
+                <target>Reload the page to follow the export on the tile, until it shows the date of the last export.</target>
+            </trans-unit>
+            <trans-unit id="aS9ond5">
+                <source>narration.guided_step_card_export_open</source>
+                <target>Open the dashboard: the Export the cards tile is among the shortcuts.</target>
+            </trans-unit>
+            <trans-unit id="UiTq7q1">
+                <source>narration.guided_step_card_export_run</source>
+                <target>Click the Export the cards tile. The export runs in the background.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

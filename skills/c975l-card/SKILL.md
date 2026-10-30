@@ -53,8 +53,18 @@ Each interface is tagged by autoconfiguration, so implementing it is all it take
 - `CardCatalogInterface`: `getCardName()`, the name of a card from its reference, read by the account export.
 - `CardPackProviderInterface`: `getPacks()`, the packs a back can be made for (key => name), turning the back office's pack field into a list.
 
+- `CardExportSourceInterface`: `getExportItems(?string $target)`, the pages to export as `PdfItem` and `SocialItem`, rendered by the site's Twig and passed through `PageRenderer::onDisk()`.
+
+## Exports
+
+- One command, `card:export [target] [--force]`, and one dashboard tile: never write a site command or a site exporter around Chrome, Ghostscript or ffmpeg, hand the pages to `CardExportSourceInterface`.
+- A page must render the same twice: no date, random id or token in it, or its fingerprint moves at every run and the export redoes it every time.
+- Paths are relative to the project, outside `public/`; two items never write the same file.
+- A social page exposes `still()` and `frame(t)` (seconds, 7 s at 30 fps).
+- The site routes `c975L\CardBundle\Message\ExportCardsMessage` to its async transport.
+
 ## Back office
 
-One screen, the card backs (`CardBackCrudController`), behind `site-role-editor`, with its guided project (`CardGuidedProjectProvider`). Its listing shows the uploaded picture only: how a tone or an effect is drawn is the site's stylesheet, and a site showing it there overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig` rather than replacing the controller.
+One screen, the card backs (`CardBackCrudController`), behind `site-role-editor`, with its guided project (`CardGuidedProjectProvider`, `card-back`); the export tile has its own, `card-export`, offered only where the export can run. Its listing shows the uploaded picture only: how a tone or an effect is drawn is the site's stylesheet, and a site showing it there overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig` rather than replacing the controller.
 
 The demo dataset (`CardDemoFixtureProvider`, UiBundle's `DemoFixtureProviderInterface`) seeds three published backs, slugs `demo-dawn`, `demo-storm` and `demo-night`, over the site's first two packs (raw `north`/`south` when it lists none), each illustrated by its `keyed_images['card/<slug>']` placeholder or one of the generic pool — no catalogue and no collection. They are sample rows, not content to build on.

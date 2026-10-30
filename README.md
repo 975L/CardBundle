@@ -25,7 +25,7 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 ## Contents
 
 - **Setup** — [requirements](#requirements) · [installation](#installation)
-- **Using it** — [the collection](#the-collection) · [card backs](#card-backs) · [the app's api](#the-apps-api) · [what the site plugs in](#what-the-site-plugs-in) · [translations](#translations) · [guided project](#guided-project) · [what it does not contribute](#what-this-bundle-deliberately-does-not-contribute) · [AI agent skills](#ai-agent-skills)
+- **Using it** — [the collection](#the-collection) · [card backs](#card-backs) · [the app's api](#the-apps-api) · [exports](#exports) · [what the site plugs in](#what-the-site-plugs-in) · [translations](#translations) · [guided projects](#guided-projects) · [what it does not contribute](#what-this-bundle-deliberately-does-not-contribute) · [AI agent skills](#ai-agent-skills)
 
 ## Features
 
@@ -35,8 +35,9 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 - A device's collection handed over to the account on its first connected call, the account keeping its own where both hold the same card
 - Everything erased with the account (ConfigBundle's `UserAnonymizedEvent`), the site's own stores included
 - Every card and back in the member's data export (ConfigBundle's `/account/export`, through `AccountDataProviderInterface`)
+- One export of the cards, paper and social networks alike, that only redoes what changed since the last run (`card:export`, or a dashboard tile where Chrome is installed)
 - One back-office screen contributed to the EasyAdmin dashboard (`MenuProviderInterface`): the card backs
-- A guided project (`GuidedProjectProviderInterface`): making a card back
+- Guided projects (`GuidedProjectProviderInterface`): making a card back, exporting the cards
 - A demo dataset (UiBundle's `DemoFixtureProviderInterface`): three card backs over the site's first two packs, each illustrated by its own placeholder when the site declares one under `keyed_images['card/<slug>']` (`demo-dawn`, `demo-storm`, `demo-night`), one of the generic pool otherwise — no catalogue and no collection, both being a site's own
 - Its own `card` translation catalogue, in English, French and Spanish
 - **A skill for coding agents**, shipped in the package and read straight from `vendor/` — see [AI agent skills](#ai-agent-skills)
@@ -69,7 +70,7 @@ Three tables: `card_collected`, `card_back` and `card_collected_back`. No foreig
 
 ### Nothing to register by hand
 
-No route to import, no config key: the menu entry, the guided project, the account export, the anonymization listener and the site's own implementations (see [what the site plugs in](#what-the-site-plugs-in)) are picked up by autoconfiguration. A back's picture goes through UiBundle's `block_media` upload mapping, under `public/medias/cards/backs/`.
+No route to import, no config key: the menu entry, the guided projects, the account export, the anonymization listener and the site's own implementations (see [what the site plugs in](#what-the-site-plugs-in)) are picked up by autoconfiguration. A back's picture goes through UiBundle's `block_media` upload mapping, under `public/medias/cards/backs/`.
 
 ---
 
@@ -114,15 +115,27 @@ public function collection(Request $request, CardRequest $cardRequest): Response
 
 `CardRequest::body($request)` is the json body, empty when it does not parse.
 
+## Exports
+
+One export, `php bin/console card:export [target] [--force]` or the dashboard tile (shown only where Chrome and Ghostscript are installed — the local machine, not a managed server — and run by the Messenger worker). The site hands its pages over through `CardExportSourceInterface`, rendered by its own Twig under its own stylesheets, the bundle only shooting them:
+
+- `PdfItem($path, $html, $faces)`: a document Chrome prints to PDF — a booklet, a plate, a series of printer-ready cards — and, with faces, one image per page at 600 dpi (Ghostscript) in the folder named after it, a face left `null` being a page dropped
+- `SocialItem($path, $postHtml, $reelHtml, $manifest, $entry)`: one card in one finish, a 1080x1350 image and a 7-second 1080x1920 video (Chrome held open, ffmpeg), the page exposing `still()` and `frame(t)`; the manifest lists every card for the posts' drafts
+
+`PageRenderer` gives the source what a page opened from disk needs: `stylesheets($paths, $screen)` (urls put onto the disk, the print rules dropped on screen) and `onDisk($html)` (images loaded eagerly, site and AssetMapper paths put onto the disk).
+
+It is idempotent: each item's fingerprint — its pages, and the date and size of every file they read — is kept in `Construction/card-export.json`, and an item whose fingerprint has not moved, its files still there, is left as it is. The first run shoots everything; the next one only what was edited. A full run also removes the files of what the site no longer exports; a target (read by the site: a series, a card) never removes anything. The site routes `c975L\CardBundle\Message\ExportCardsMessage` to its async transport, or the tile runs inside the request, with no time limit. Only one run at a time: a second, from the tile or the terminal, is refused while one is under way.
+
 ## What the site plugs in
 
-Three interfaces, each tagged by autoconfiguration — implementing one is all it takes:
+Four interfaces, each tagged by autoconfiguration — implementing one is all it takes:
 
 | Interface | What for | Without it |
 | --- | --- | --- |
 | `HolderStoreInterface` | whatever else the site keeps under a holder's key (a child's Plumes), moved and erased with the cards | only the cards and the backs move |
 | `CardCatalogInterface` | the name of a card, from its reference | the reference is shown |
 | `CardPackProviderInterface` | the packs a back can be made for | the pack is typed in the back office |
+| `CardExportSourceInterface` | the pages to export, paper and social (see [exports](#exports)) | no tile, `card:export` has nothing to do |
 
 ## Translations
 
@@ -130,9 +143,11 @@ Everything the back office shows is in the `card` domain, its spoken narrations 
 
 ---
 
-## Guided project
+## Guided projects
 
-The bundle contributes one guided project, in the 11000 block `GuidedProjectProviderInterface` reserves it: `card-back`, making a variant of a pack's back. It opens on the card backs' listing, then walks the form field by field — the pack, the name, the picture, the tone, the effect — then the box that publishes it, a back being given only once published, and ends on the save button. It is offered to `site-role-editor`, the role the screen itself asks for.
+The bundle contributes two guided projects, in the 11000 block `GuidedProjectProviderInterface` reserves it. `card-back` makes a variant of a pack's back: it opens on the card backs' listing, then walks the form field by field — the pack, the name, the picture, the tone, the effect — then the box that publishes it, a back being given only once published, and ends on the save button. It is offered to `site-role-editor`, the role the screen itself asks for.
+
+`card-export` opens on the dashboard, highlights the export tile, then tells how to follow the run on the tile. Like the tile, it is offered only where the export can run, to `ROLE_SUPER_ADMIN`.
 
 The ways a back is then *had* — a reward, a purchase, a code — are not walked: they are the site's own code calling `BackCollector::grant()`, with nothing to do in the back office.
 
@@ -145,16 +160,15 @@ ConfigBundle and UiBundle expose a long list of contribution points, and not bra
 | Point | Why not |
 | --- | --- |
 | Config keys (`configs.json`) | it reads only the core's `site-role-editor`, and the limit is UiBundle's favorites one |
-| "What's new" (`whatsnew.json`) | prose to be written when the bundle is actually deployed somewhere, not before — its guided project is written, see above |
+| "What's new" (`whatsnew.json`) | prose to be written when the bundle is actually deployed somewhere, not before — its guided projects are written, see above |
 | Maintenance task | nothing here runs on a schedule: a card is given by the site's own call, and a collection only goes with its account |
 | The catalogue | the cards are the site's own entities, named here by reference |
-| Routes | an app's api is the site's own: its payload is what the app was built against |
+| Routes | an app's api is the site's own: its payload is what the app was built against — the only route is the export tile's |
 | Account section | "My collection" counts and links to the site's own collection page |
 | Blocks | a collection is shown by the site's own pages and app |
 | Emails, sitemap, feeds | no public page and nothing to announce of its own |
 | Content translation | a back's name is short and the site's; translated catalogues are the site's |
-| Import / export | a collection is what players did, not content |
-| Paper and social exports | planned for v1.1, against `CardCatalogInterface` |
+| Content import / export | a collection is what players did, not content |
 | Sales of backs | planned, through PaymentBundle's basket and the app stores (`CardBack::productId`) |
 
 ---

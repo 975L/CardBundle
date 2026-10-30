@@ -6,6 +6,10 @@
                 <source>description.guided_project_card_back</source>
                 <target>Create a variant of a pack's card back, which players can then win and choose.</target>
             </trans-unit>
+            <trans-unit id="uTfo64l">
+                <source>description.guided_project_card_export</source>
+                <target>Produce the cards' PDFs, images and videos from the dashboard tile: only what changed since the last export is made again.</target>
+            </trans-unit>
             <trans-unit id="1lnvqC.">
                 <source>description.guided_step_card_back_done</source>
                 <target>The back is ready: a reward, a purchase or a code gives it by its slug.</target>
@@ -41,6 +45,26 @@
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
                 <target>The light laid over the picture. An effect drawn on the same layer is refused.</target>
+            </trans-unit>
+            <trans-unit id="BFeTy4P">
+                <source>description.guided_step_card_export_follow</source>
+                <target>Reload the dashboard: the tile shows the current step, the failure and its message, or the date of the last export. For a single series, the card:export command in a terminal does the same job.</target>
+            </trans-unit>
+            <trans-unit id="0C_qfFQ">
+                <source>description.guided_step_card_export_open</source>
+                <target>The export tile sits among the dashboard shortcuts, on the machine where Chrome and Ghostscript are installed.</target>
+            </trans-unit>
+            <trans-unit id="gGRXzN8">
+                <source>description.guided_step_card_export_run</source>
+                <target>Click the tile: the export goes to the Messenger worker and you get the hand back at once.</target>
+            </trans-unit>
+            <trans-unit id="3DW3sx7">
+                <source>flash.export_running</source>
+                <target>An export is already running or waiting. Nothing new was started.</target>
+            </trans-unit>
+            <trans-unit id="qZXs66x">
+                <source>flash.export_started</source>
+                <target>Export started: only what changed since the last one is redone. Reload the page to follow the tile.</target>
             </trans-unit>
             <trans-unit id="ii3aJ0K">
                 <source>help.back_effect</source>
@@ -210,9 +234,41 @@
                 <source>label.demo_back_storm</source>
                 <target>Under the storm</target>
             </trans-unit>
+            <trans-unit id="qvaZjdW">
+                <source>label.export_cards</source>
+                <target>Export the cards</target>
+            </trans-unit>
+            <trans-unit id="fXR3caG">
+                <source>label.export_failed</source>
+                <target>failed %detail%</target>
+            </trans-unit>
+            <trans-unit id="7UgDMlN">
+                <source>label.export_last</source>
+                <target>last: %date%</target>
+            </trans-unit>
+            <trans-unit id="di2k6UM">
+                <source>label.export_preparing</source>
+                <target>preparing</target>
+            </trans-unit>
+            <trans-unit id="wGev2dJ">
+                <source>label.export_requested</source>
+                <target>asked at %detail%, not yet taken - is the Messenger worker running?</target>
+            </trans-unit>
+            <trans-unit id="662xQ7R">
+                <source>label.export_running</source>
+                <target>running: %detail%</target>
+            </trans-unit>
+            <trans-unit id="jCyZK2Q">
+                <source>label.export_stale</source>
+                <target>interrupted, nothing since %time%</target>
+            </trans-unit>
             <trans-unit id="cXttzl_">
                 <source>label.guided_project_card_back</source>
                 <target>Create a card back</target>
+            </trans-unit>
+            <trans-unit id="IzejoBX">
+                <source>label.guided_project_card_export</source>
+                <target>Export the cards</target>
             </trans-unit>
             <trans-unit id="MavYpWS">
                 <source>label.guided_step_card_back_done</source>
@@ -249,6 +305,18 @@
             <trans-unit id="Ou7jNu4">
                 <source>label.guided_step_card_back_tone</source>
                 <target>Choose the tone</target>
+            </trans-unit>
+            <trans-unit id="q6Ygcsn">
+                <source>label.guided_step_card_export_follow</source>
+                <target>Follow the export</target>
+            </trans-unit>
+            <trans-unit id="WzLb9z3">
+                <source>label.guided_step_card_export_open</source>
+                <target>Open the dashboard</target>
+            </trans-unit>
+            <trans-unit id="XTkwIIT">
+                <source>label.guided_step_card_export_run</source>
+                <target>Start the export</target>
             </trans-unit>
             <trans-unit id="jm7lrtY">
                 <source>label.info_card_backs</source>
