@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    c975L\CardBundle\:
+        resource: '../src/'
+        exclude: '../src/{Entity,Enum}'
+
+    # UiBundle's favorites limiter, optional: a site that does not declare it calls unlimited. Wired here because the "@?" of an optional reference only exists in this format, #[Autowire] reading it as a service id
+    c975L\CardBundle\Service\CardRequest:
+        arguments:
+            $limiterFactory: '@?limiter.ui_favorite'

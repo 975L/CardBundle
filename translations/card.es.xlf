@@ -1,0 +1,251 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="es" datatype="plaintext" original="card.en.xlf">
+        <body>
+            <trans-unit id="iIWC3BD">
+                <source>description.guided_project_card_back</source>
+                <target>Cree una variante del reverso de las cartas de un pack, que los jugadores podrán ganar y elegir.</target>
+            </trans-unit>
+            <trans-unit id="1lnvqC.">
+                <source>description.guided_step_card_back_done</source>
+                <target>El reverso está listo: una recompensa, una compra o un código lo dan por su slug.</target>
+            </trans-unit>
+            <trans-unit id="zWKy_oI">
+                <source>description.guided_step_card_back_effect</source>
+                <target>El movimiento del reverso: un zoom lento, estrellas… Se rechaza si se dibuja en la misma capa que el tono.</target>
+            </trans-unit>
+            <trans-unit id="JB9Dqrj">
+                <source>description.guided_step_card_back_image</source>
+                <target>Del tamaño de una carta, en vertical. Sin imagen, el reverso usa la del pack.</target>
+            </trans-unit>
+            <trans-unit id="oUvgEpU">
+                <source>description.guided_step_card_back_name</source>
+                <target>Su propio nombre, pues el del pack ya figura en el reverso. El slug se deriva de él.</target>
+            </trans-unit>
+            <trans-unit id="ZMGIO0U">
+                <source>description.guided_step_card_back_new</source>
+                <target>Una nueva variante para las cartas de un pack.</target>
+            </trans-unit>
+            <trans-unit id="HJJbJh0">
+                <source>description.guided_step_card_back_open</source>
+                <target>La lista de variantes, pack por pack.</target>
+            </trans-unit>
+            <trans-unit id="yRCr_AU">
+                <source>description.guided_step_card_back_pack</source>
+                <target>Las cartas de este pack llevarán este reverso una vez que el jugador lo elija.</target>
+            </trans-unit>
+            <trans-unit id="fKPkQe5">
+                <source>description.guided_step_card_back_published</source>
+                <target>Solo un reverso publicado puede darse y elegirse.</target>
+            </trans-unit>
+            <trans-unit id="U2U4GGg">
+                <source>description.guided_step_card_back_tone</source>
+                <target>La luz sobre la imagen. Un efecto dibujado en la misma capa se rechaza.</target>
+            </trans-unit>
+            <trans-unit id="ii3aJ0K">
+                <source>help.back_effect</source>
+                <target>La animación del reverso, dibujada por el sitio y su aplicación.</target>
+            </trans-unit>
+            <trans-unit id="Fsv4oD6">
+                <source>help.back_image</source>
+                <target>Del tamaño de una carta, en vertical. Sin imagen, el reverso usa la de su pack, con su tono.</target>
+            </trans-unit>
+            <trans-unit id="WgS5NsT">
+                <source>help.back_name</source>
+                <target>El nombre de la variante, pues el del pack ya figura en el reverso: «Al alba», «Puesta de sol».</target>
+            </trans-unit>
+            <trans-unit id="3FgP2nj">
+                <source>help.back_pack</source>
+                <target>Las cartas de este pack llevan este reverso una vez elegido.</target>
+            </trans-unit>
+            <trans-unit id="Y1neHMB">
+                <source>help.back_pack_locked</source>
+                <target>Fijado al crearlo: un reverso nunca cambia de pack, sus jugadores lo perderían. Para otro pack, cree un nuevo reverso.</target>
+            </trans-unit>
+            <trans-unit id="CV05C_b">
+                <source>help.back_pack_typed</source>
+                <target>La clave del pack tal como la nombra el sitio (el prefijo de un castillo, el slug de una serie): las cartas de este pack llevan este reverso una vez elegido.</target>
+            </trans-unit>
+            <trans-unit id="iQyCGJQ">
+                <source>help.back_position</source>
+                <target>El orden de las variantes de un mismo pack.</target>
+            </trans-unit>
+            <trans-unit id="PMnabJO">
+                <source>help.back_product_id</source>
+                <target>El identificador del producto en Apple y Google, vacío si el reverso no está a la venta allí.</target>
+            </trans-unit>
+            <trans-unit id="NPdfLtf">
+                <source>help.back_published</source>
+                <target>Solo un reverso publicado puede darse y elegirse.</target>
+            </trans-unit>
+            <trans-unit id="Tpik29q">
+                <source>help.back_slug</source>
+                <target>Lo que nombran una recompensa, una compra o un código para dar este reverso.</target>
+            </trans-unit>
+            <trans-unit id="JefzzOt">
+                <source>help.back_tone</source>
+                <target>La luz sobre la imagen: alba, puesta de sol, nieve, tormenta, viento, noche o niebla.</target>
+            </trans-unit>
+            <trans-unit id=".Kew4lH">
+                <source>label.back_effect</source>
+                <target>Efecto</target>
+            </trans-unit>
+            <trans-unit id="MQ.xF7B">
+                <source>label.back_effect_embers</source>
+                <target>Brasas</target>
+            </trans-unit>
+            <trans-unit id="TVAaThq">
+                <source>label.back_effect_lightning</source>
+                <target>Relámpagos</target>
+            </trans-unit>
+            <trans-unit id="UweWsvM">
+                <source>label.back_effect_mist</source>
+                <target>Niebla</target>
+            </trans-unit>
+            <trans-unit id="0LjkTmi">
+                <source>label.back_effect_none</source>
+                <target>Ninguno</target>
+            </trans-unit>
+            <trans-unit id="B.Ol5cV">
+                <source>label.back_effect_snow</source>
+                <target>Nieve</target>
+            </trans-unit>
+            <trans-unit id="uBa4i8R">
+                <source>label.back_effect_stars</source>
+                <target>Estrellas</target>
+            </trans-unit>
+            <trans-unit id="T480EBI">
+                <source>label.back_effect_wind</source>
+                <target>Viento</target>
+            </trans-unit>
+            <trans-unit id="tVtJ_K9">
+                <source>label.back_effect_zoom</source>
+                <target>Zoom lento</target>
+            </trans-unit>
+            <trans-unit id="PUQJ_3g">
+                <source>label.back_image</source>
+                <target>Imagen</target>
+            </trans-unit>
+            <trans-unit id="EKXhi3O">
+                <source>label.back_name</source>
+                <target>Nombre</target>
+            </trans-unit>
+            <trans-unit id="XiPi2zM">
+                <source>label.back_pack</source>
+                <target>Pack</target>
+            </trans-unit>
+            <trans-unit id="NQfNncO">
+                <source>label.back_position</source>
+                <target>Orden</target>
+            </trans-unit>
+            <trans-unit id="KtVMqOU">
+                <source>label.back_product_id</source>
+                <target>Producto de las tiendas</target>
+            </trans-unit>
+            <trans-unit id="oMHBw_6">
+                <source>label.back_published</source>
+                <target>Publicado</target>
+            </trans-unit>
+            <trans-unit id="iuOHX.5">
+                <source>label.back_slug</source>
+                <target>Slug</target>
+            </trans-unit>
+            <trans-unit id="sz35eBo">
+                <source>label.back_tone</source>
+                <target>Tono</target>
+            </trans-unit>
+            <trans-unit id="cf0GMRw">
+                <source>label.back_tone_dawn</source>
+                <target>Alba</target>
+            </trans-unit>
+            <trans-unit id="LyjDpHt">
+                <source>label.back_tone_mist</source>
+                <target>Niebla</target>
+            </trans-unit>
+            <trans-unit id="RmXVj1e">
+                <source>label.back_tone_night</source>
+                <target>Noche</target>
+            </trans-unit>
+            <trans-unit id="pUcrr9a">
+                <source>label.back_tone_none</source>
+                <target>Ninguno</target>
+            </trans-unit>
+            <trans-unit id="AQ66pSH">
+                <source>label.back_tone_snow</source>
+                <target>Nieve</target>
+            </trans-unit>
+            <trans-unit id="2QNVkQ3">
+                <source>label.back_tone_storm</source>
+                <target>Tormenta</target>
+            </trans-unit>
+            <trans-unit id="20F9ysN">
+                <source>label.back_tone_sunset</source>
+                <target>Puesta de sol</target>
+            </trans-unit>
+            <trans-unit id="11FxTXX">
+                <source>label.back_tone_wind</source>
+                <target>Viento</target>
+            </trans-unit>
+            <trans-unit id="EIhguyB">
+                <source>label.card_back</source>
+                <target>Reverso de carta</target>
+            </trans-unit>
+            <trans-unit id="u6Tx7Tp">
+                <source>label.card_backs</source>
+                <target>Reversos de las cartas</target>
+            </trans-unit>
+            <trans-unit id="gTzWFQi">
+                <source>label.cards</source>
+                <target>Cartas</target>
+            </trans-unit>
+            <trans-unit id="cXttzl_">
+                <source>label.guided_project_card_back</source>
+                <target>Crear un reverso de carta</target>
+            </trans-unit>
+            <trans-unit id="MavYpWS">
+                <source>label.guided_step_card_back_done</source>
+                <target>Guarde</target>
+            </trans-unit>
+            <trans-unit id="IUWI87y">
+                <source>label.guided_step_card_back_effect</source>
+                <target>Elija el efecto</target>
+            </trans-unit>
+            <trans-unit id="44AmozW">
+                <source>label.guided_step_card_back_image</source>
+                <target>Añada la imagen</target>
+            </trans-unit>
+            <trans-unit id="DPZSu2K">
+                <source>label.guided_step_card_back_name</source>
+                <target>Nombre la variante</target>
+            </trans-unit>
+            <trans-unit id="HXzE0EF">
+                <source>label.guided_step_card_back_new</source>
+                <target>Cree un reverso</target>
+            </trans-unit>
+            <trans-unit id="KmG1y8.">
+                <source>label.guided_step_card_back_open</source>
+                <target>Abra los reversos de las cartas</target>
+            </trans-unit>
+            <trans-unit id="a9sNeeA">
+                <source>label.guided_step_card_back_pack</source>
+                <target>Elija el pack</target>
+            </trans-unit>
+            <trans-unit id="c8kDmoG">
+                <source>label.guided_step_card_back_published</source>
+                <target>Publíquelo</target>
+            </trans-unit>
+            <trans-unit id="Ou7jNu4">
+                <source>label.guided_step_card_back_tone</source>
+                <target>Elija el tono</target>
+            </trans-unit>
+            <trans-unit id="jm7lrtY">
+                <source>label.info_card_backs</source>
+                <target>Las variantes del reverso de las cartas de un pack: un jugador las gana o las compra y luego elige la que llevan las cartas de ese pack. Sin variante elegida, una carta conserva el reverso de su pack.</target>
+            </trans-unit>
+            <trans-unit id="XUNDdCp">
+                <source>message.back_layers_clash</source>
+                <target>Este tono y este efecto se dibujan en la misma capa: elija otro efecto.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

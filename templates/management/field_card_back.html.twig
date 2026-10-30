@@ -1,0 +1,5 @@
+{# The back's own picture, the thumbnail UiBundle cuts beside every upload (see CardBack::getThumbnailSize), nothing for a back drawn from its pack's picture: how a tone or an effect is drawn is the site's own, which overrides this template to show it #}
+{% set back = entity.instance %}
+{% if back.image %}
+    <img src="{{ asset(back.image|replace({'.webp': '-thumb.webp'})) }}" alt="{{ back.name }}" loading="lazy" width="60">
+{% endif %}

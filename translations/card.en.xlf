@@ -1,0 +1,251 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="card.en.xlf">
+        <body>
+            <trans-unit id="iIWC3BD">
+                <source>description.guided_project_card_back</source>
+                <target>Create a variant of a pack's card back, which players can then win and choose.</target>
+            </trans-unit>
+            <trans-unit id="1lnvqC.">
+                <source>description.guided_step_card_back_done</source>
+                <target>The back is ready: a reward, a purchase or a code gives it by its slug.</target>
+            </trans-unit>
+            <trans-unit id="zWKy_oI">
+                <source>description.guided_step_card_back_effect</source>
+                <target>How the back moves: a slow zoom, stars… Refused when drawn on the same layer as the tone.</target>
+            </trans-unit>
+            <trans-unit id="JB9Dqrj">
+                <source>description.guided_step_card_back_image</source>
+                <target>Card-sized, in portrait. Without one, the back takes the pack's picture.</target>
+            </trans-unit>
+            <trans-unit id="oUvgEpU">
+                <source>description.guided_step_card_back_name</source>
+                <target>Its own name, the pack's being on the back already. The slug is drawn from it.</target>
+            </trans-unit>
+            <trans-unit id="ZMGIO0U">
+                <source>description.guided_step_card_back_new</source>
+                <target>A new variant for a pack's cards.</target>
+            </trans-unit>
+            <trans-unit id="HJJbJh0">
+                <source>description.guided_step_card_back_open</source>
+                <target>The list of variants, pack by pack.</target>
+            </trans-unit>
+            <trans-unit id="yRCr_AU">
+                <source>description.guided_step_card_back_pack</source>
+                <target>The cards of this pack will wear this back once the player chooses it.</target>
+            </trans-unit>
+            <trans-unit id="fKPkQe5">
+                <source>description.guided_step_card_back_published</source>
+                <target>Only a published back can be given and chosen.</target>
+            </trans-unit>
+            <trans-unit id="U2U4GGg">
+                <source>description.guided_step_card_back_tone</source>
+                <target>The light laid over the picture. An effect drawn on the same layer is refused.</target>
+            </trans-unit>
+            <trans-unit id="ii3aJ0K">
+                <source>help.back_effect</source>
+                <target>The back's animation, drawn by the site and its app.</target>
+            </trans-unit>
+            <trans-unit id="Fsv4oD6">
+                <source>help.back_image</source>
+                <target>Card-sized, in portrait. Without one, the back takes its pack's picture, in its tone.</target>
+            </trans-unit>
+            <trans-unit id="WgS5NsT">
+                <source>help.back_name</source>
+                <target>The variant's own name, the pack's being on the back already: “At dawn”, “Sunset”.</target>
+            </trans-unit>
+            <trans-unit id="3FgP2nj">
+                <source>help.back_pack</source>
+                <target>The cards of this pack wear this back once it is chosen.</target>
+            </trans-unit>
+            <trans-unit id="Y1neHMB">
+                <source>help.back_pack_locked</source>
+                <target>Set on creation: a back never moves to another pack, its players would lose it. For another pack, create a new back.</target>
+            </trans-unit>
+            <trans-unit id="CV05C_b">
+                <source>help.back_pack_typed</source>
+                <target>The pack's key as the site names it (a castle's prefix, a set's slug): the cards of this pack wear this back once it is chosen.</target>
+            </trans-unit>
+            <trans-unit id="iQyCGJQ">
+                <source>help.back_position</source>
+                <target>The order of a pack's variants.</target>
+            </trans-unit>
+            <trans-unit id="PMnabJO">
+                <source>help.back_product_id</source>
+                <target>The product's identifier at Apple and Google, empty when the back is not on sale there.</target>
+            </trans-unit>
+            <trans-unit id="NPdfLtf">
+                <source>help.back_published</source>
+                <target>Only a published back can be given and chosen.</target>
+            </trans-unit>
+            <trans-unit id="Tpik29q">
+                <source>help.back_slug</source>
+                <target>What a reward, a purchase or a code names to give this back.</target>
+            </trans-unit>
+            <trans-unit id="JefzzOt">
+                <source>help.back_tone</source>
+                <target>The light laid over the picture: dawn, sunset, snow, storm, wind, night or mist.</target>
+            </trans-unit>
+            <trans-unit id=".Kew4lH">
+                <source>label.back_effect</source>
+                <target>Effect</target>
+            </trans-unit>
+            <trans-unit id="MQ.xF7B">
+                <source>label.back_effect_embers</source>
+                <target>Embers</target>
+            </trans-unit>
+            <trans-unit id="TVAaThq">
+                <source>label.back_effect_lightning</source>
+                <target>Lightning</target>
+            </trans-unit>
+            <trans-unit id="UweWsvM">
+                <source>label.back_effect_mist</source>
+                <target>Mist</target>
+            </trans-unit>
+            <trans-unit id="0LjkTmi">
+                <source>label.back_effect_none</source>
+                <target>None</target>
+            </trans-unit>
+            <trans-unit id="B.Ol5cV">
+                <source>label.back_effect_snow</source>
+                <target>Snow</target>
+            </trans-unit>
+            <trans-unit id="uBa4i8R">
+                <source>label.back_effect_stars</source>
+                <target>Stars</target>
+            </trans-unit>
+            <trans-unit id="T480EBI">
+                <source>label.back_effect_wind</source>
+                <target>Wind</target>
+            </trans-unit>
+            <trans-unit id="tVtJ_K9">
+                <source>label.back_effect_zoom</source>
+                <target>Slow zoom</target>
+            </trans-unit>
+            <trans-unit id="PUQJ_3g">
+                <source>label.back_image</source>
+                <target>Image</target>
+            </trans-unit>
+            <trans-unit id="EKXhi3O">
+                <source>label.back_name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="XiPi2zM">
+                <source>label.back_pack</source>
+                <target>Pack</target>
+            </trans-unit>
+            <trans-unit id="NQfNncO">
+                <source>label.back_position</source>
+                <target>Order</target>
+            </trans-unit>
+            <trans-unit id="KtVMqOU">
+                <source>label.back_product_id</source>
+                <target>Store product</target>
+            </trans-unit>
+            <trans-unit id="oMHBw_6">
+                <source>label.back_published</source>
+                <target>Published</target>
+            </trans-unit>
+            <trans-unit id="iuOHX.5">
+                <source>label.back_slug</source>
+                <target>Slug</target>
+            </trans-unit>
+            <trans-unit id="sz35eBo">
+                <source>label.back_tone</source>
+                <target>Tone</target>
+            </trans-unit>
+            <trans-unit id="cf0GMRw">
+                <source>label.back_tone_dawn</source>
+                <target>Dawn</target>
+            </trans-unit>
+            <trans-unit id="LyjDpHt">
+                <source>label.back_tone_mist</source>
+                <target>Mist</target>
+            </trans-unit>
+            <trans-unit id="RmXVj1e">
+                <source>label.back_tone_night</source>
+                <target>Night</target>
+            </trans-unit>
+            <trans-unit id="pUcrr9a">
+                <source>label.back_tone_none</source>
+                <target>None</target>
+            </trans-unit>
+            <trans-unit id="AQ66pSH">
+                <source>label.back_tone_snow</source>
+                <target>Snow</target>
+            </trans-unit>
+            <trans-unit id="2QNVkQ3">
+                <source>label.back_tone_storm</source>
+                <target>Storm</target>
+            </trans-unit>
+            <trans-unit id="20F9ysN">
+                <source>label.back_tone_sunset</source>
+                <target>Sunset</target>
+            </trans-unit>
+            <trans-unit id="11FxTXX">
+                <source>label.back_tone_wind</source>
+                <target>Wind</target>
+            </trans-unit>
+            <trans-unit id="EIhguyB">
+                <source>label.card_back</source>
+                <target>Card back</target>
+            </trans-unit>
+            <trans-unit id="u6Tx7Tp">
+                <source>label.card_backs</source>
+                <target>Card backs</target>
+            </trans-unit>
+            <trans-unit id="gTzWFQi">
+                <source>label.cards</source>
+                <target>Cards</target>
+            </trans-unit>
+            <trans-unit id="cXttzl_">
+                <source>label.guided_project_card_back</source>
+                <target>Create a card back</target>
+            </trans-unit>
+            <trans-unit id="MavYpWS">
+                <source>label.guided_step_card_back_done</source>
+                <target>Save</target>
+            </trans-unit>
+            <trans-unit id="IUWI87y">
+                <source>label.guided_step_card_back_effect</source>
+                <target>Choose the effect</target>
+            </trans-unit>
+            <trans-unit id="44AmozW">
+                <source>label.guided_step_card_back_image</source>
+                <target>Add the picture</target>
+            </trans-unit>
+            <trans-unit id="DPZSu2K">
+                <source>label.guided_step_card_back_name</source>
+                <target>Name the variant</target>
+            </trans-unit>
+            <trans-unit id="HXzE0EF">
+                <source>label.guided_step_card_back_new</source>
+                <target>Create a back</target>
+            </trans-unit>
+            <trans-unit id="KmG1y8.">
+                <source>label.guided_step_card_back_open</source>
+                <target>Open the card backs</target>
+            </trans-unit>
+            <trans-unit id="a9sNeeA">
+                <source>label.guided_step_card_back_pack</source>
+                <target>Choose the pack</target>
+            </trans-unit>
+            <trans-unit id="c8kDmoG">
+                <source>label.guided_step_card_back_published</source>
+                <target>Publish it</target>
+            </trans-unit>
+            <trans-unit id="Ou7jNu4">
+                <source>label.guided_step_card_back_tone</source>
+                <target>Choose the tone</target>
+            </trans-unit>
+            <trans-unit id="jm7lrtY">
+                <source>label.info_card_backs</source>
+                <target>The variants of a pack's card back: a player wins or buys them, then chooses the one the pack's cards wear. With none chosen, a card keeps its pack's own back.</target>
+            </trans-unit>
+            <trans-unit id="XUNDdCp">
+                <source>message.back_layers_clash</source>
+                <target>This tone and this effect are drawn on the same layer: choose another effect.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

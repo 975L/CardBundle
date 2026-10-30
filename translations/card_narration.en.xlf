@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="card_narration.en.xlf">
+        <body>
+            <trans-unit id="1ie_jNt">
+                <source>narration.card_backs</source>
+                <target>The card backs: the variants players win, then choose for a pack's cards.</target>
+            </trans-unit>
+            <trans-unit id="riJ7JSH">
+                <source>narration.guided_step_card_back_done</source>
+                <target>Save. A reward, a purchase or a code will give this back by its slug.</target>
+            </trans-unit>
+            <trans-unit id="c5hRw6a">
+                <source>narration.guided_step_card_back_effect</source>
+                <target>Now choose how it moves: a slow zoom, stars, embers.</target>
+            </trans-unit>
+            <trans-unit id="PYMC1S_">
+                <source>narration.guided_step_card_back_image</source>
+                <target>Add the back's picture, card-sized, in portrait.</target>
+            </trans-unit>
+            <trans-unit id="9HS.uSj">
+                <source>narration.guided_step_card_back_name</source>
+                <target>Give the variant a name, for instance At dawn.</target>
+            </trans-unit>
+            <trans-unit id=".sq5eP_">
+                <source>narration.guided_step_card_back_new</source>
+                <target>Click the create button, at the top right of the list.</target>
+            </trans-unit>
+            <trans-unit id="nxpv766">
+                <source>narration.guided_step_card_back_open</source>
+                <target>Open the Card backs menu, in the Cards section of the left-hand column.</target>
+            </trans-unit>
+            <trans-unit id="ewxlc7q">
+                <source>narration.guided_step_card_back_pack</source>
+                <target>Choose the pack whose cards will wear this back.</target>
+            </trans-unit>
+            <trans-unit id="vW0_tsF">
+                <source>narration.guided_step_card_back_published</source>
+                <target>Tick Published: otherwise the back can be neither given nor chosen.</target>
+            </trans-unit>
+            <trans-unit id="BCB.qLq">
+                <source>narration.guided_step_card_back_tone</source>
+                <target>Choose the light laid over the picture.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

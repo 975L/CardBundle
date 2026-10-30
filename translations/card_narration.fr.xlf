@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="fr" datatype="plaintext" original="card_narration.en.xlf">
+        <body>
+            <trans-unit id="1ie_jNt">
+                <source>narration.card_backs</source>
+                <target>Les dos des cartes : les variantes que les joueurs gagnent, puis choisissent pour les cartes d'un pack.</target>
+            </trans-unit>
+            <trans-unit id="riJ7JSH">
+                <source>narration.guided_step_card_back_done</source>
+                <target>Enregistrez. Une récompense, un achat ou un code donneront ce dos par son slug.</target>
+            </trans-unit>
+            <trans-unit id="c5hRw6a">
+                <source>narration.guided_step_card_back_effect</source>
+                <target>Choisissez maintenant son mouvement : un zoom lent, des étoiles, des braises.</target>
+            </trans-unit>
+            <trans-unit id="PYMC1S_">
+                <source>narration.guided_step_card_back_image</source>
+                <target>Ajoutez l'image du dos, au format d'une carte, en portrait.</target>
+            </trans-unit>
+            <trans-unit id="9HS.uSj">
+                <source>narration.guided_step_card_back_name</source>
+                <target>Donnez un nom à la variante, par exemple À l'aube.</target>
+            </trans-unit>
+            <trans-unit id=".sq5eP_">
+                <source>narration.guided_step_card_back_new</source>
+                <target>Cliquez sur le bouton de création, en haut à droite de la liste.</target>
+            </trans-unit>
+            <trans-unit id="nxpv766">
+                <source>narration.guided_step_card_back_open</source>
+                <target>Ouvrez le menu Dos des cartes, dans la section Cartes de la colonne de gauche.</target>
+            </trans-unit>
+            <trans-unit id="ewxlc7q">
+                <source>narration.guided_step_card_back_pack</source>
+                <target>Choisissez le pack dont les cartes porteront ce dos.</target>
+            </trans-unit>
+            <trans-unit id="vW0_tsF">
+                <source>narration.guided_step_card_back_published</source>
+                <target>Cochez Publié : sans cela, le dos ne peut être ni donné ni choisi.</target>
+            </trans-unit>
+            <trans-unit id="BCB.qLq">
+                <source>narration.guided_step_card_back_tone</source>
+                <target>Choisissez la lumière posée sur l'image.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

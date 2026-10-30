@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="es" datatype="plaintext" original="card_narration.en.xlf">
+        <body>
+            <trans-unit id="1ie_jNt">
+                <source>narration.card_backs</source>
+                <target>Los reversos de las cartas: las variantes que los jugadores ganan y luego eligen para las cartas de un pack.</target>
+            </trans-unit>
+            <trans-unit id="riJ7JSH">
+                <source>narration.guided_step_card_back_done</source>
+                <target>Guarde. Una recompensa, una compra o un código darán este reverso por su slug.</target>
+            </trans-unit>
+            <trans-unit id="c5hRw6a">
+                <source>narration.guided_step_card_back_effect</source>
+                <target>Elija ahora su movimiento: un zoom lento, estrellas, brasas.</target>
+            </trans-unit>
+            <trans-unit id="PYMC1S_">
+                <source>narration.guided_step_card_back_image</source>
+                <target>Añada la imagen del reverso, del tamaño de una carta, en vertical.</target>
+            </trans-unit>
+            <trans-unit id="9HS.uSj">
+                <source>narration.guided_step_card_back_name</source>
+                <target>Dé un nombre a la variante, por ejemplo Al alba.</target>
+            </trans-unit>
+            <trans-unit id=".sq5eP_">
+                <source>narration.guided_step_card_back_new</source>
+                <target>Haga clic en el botón de creación, arriba a la derecha de la lista.</target>
+            </trans-unit>
+            <trans-unit id="nxpv766">
+                <source>narration.guided_step_card_back_open</source>
+                <target>Abra el menú Reversos de las cartas, en la sección Cartas de la columna izquierda.</target>
+            </trans-unit>
+            <trans-unit id="ewxlc7q">
+                <source>narration.guided_step_card_back_pack</source>
+                <target>Elija el pack cuyas cartas llevarán este reverso.</target>
+            </trans-unit>
+            <trans-unit id="vW0_tsF">
+                <source>narration.guided_step_card_back_published</source>
+                <target>Marque Publicado: si no, el reverso no puede darse ni elegirse.</target>
+            </trans-unit>
+            <trans-unit id="BCB.qLq">
+                <source>narration.guided_step_card_back_tone</source>
+                <target>Elija la luz sobre la imagen.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,251 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="fr" datatype="plaintext" original="card.en.xlf">
+        <body>
+            <trans-unit id="iIWC3BD">
+                <source>description.guided_project_card_back</source>
+                <target>Créez une variante du dos des cartes d'un pack, que les joueurs pourront gagner puis choisir.</target>
+            </trans-unit>
+            <trans-unit id="1lnvqC.">
+                <source>description.guided_step_card_back_done</source>
+                <target>Le dos est prêt : une récompense, un achat ou un code le donnent par son slug.</target>
+            </trans-unit>
+            <trans-unit id="zWKy_oI">
+                <source>description.guided_step_card_back_effect</source>
+                <target>Le mouvement du dos : un zoom lent, des étoiles… Refusé s'il se dessine sur la même couche que le ton.</target>
+            </trans-unit>
+            <trans-unit id="JB9Dqrj">
+                <source>description.guided_step_card_back_image</source>
+                <target>Au format d'une carte, en portrait. Sans image, le dos reprend celle du pack.</target>
+            </trans-unit>
+            <trans-unit id="oUvgEpU">
+                <source>description.guided_step_card_back_name</source>
+                <target>Son nom à elle, celui du pack étant déjà sur le dos. Le slug en est tiré.</target>
+            </trans-unit>
+            <trans-unit id="ZMGIO0U">
+                <source>description.guided_step_card_back_new</source>
+                <target>Une nouvelle variante pour les cartes d'un pack.</target>
+            </trans-unit>
+            <trans-unit id="HJJbJh0">
+                <source>description.guided_step_card_back_open</source>
+                <target>La liste des variantes, pack par pack.</target>
+            </trans-unit>
+            <trans-unit id="yRCr_AU">
+                <source>description.guided_step_card_back_pack</source>
+                <target>Les cartes de ce pack porteront ce dos une fois que le joueur l'aura choisi.</target>
+            </trans-unit>
+            <trans-unit id="fKPkQe5">
+                <source>description.guided_step_card_back_published</source>
+                <target>Seul un dos publié peut être donné et choisi.</target>
+            </trans-unit>
+            <trans-unit id="U2U4GGg">
+                <source>description.guided_step_card_back_tone</source>
+                <target>La lumière posée sur l'image. Un effet dessiné au même endroit est refusé.</target>
+            </trans-unit>
+            <trans-unit id="ii3aJ0K">
+                <source>help.back_effect</source>
+                <target>L'animation du dos, dessinée par le site et son application.</target>
+            </trans-unit>
+            <trans-unit id="Fsv4oD6">
+                <source>help.back_image</source>
+                <target>Au format d'une carte, en portrait. Sans image, le dos reprend celle de son pack, dans son rendu.</target>
+            </trans-unit>
+            <trans-unit id="WgS5NsT">
+                <source>help.back_name</source>
+                <target>Le nom de la variante, celui du pack étant déjà sur le dos : « À l'aube », « Coucher de soleil ».</target>
+            </trans-unit>
+            <trans-unit id="3FgP2nj">
+                <source>help.back_pack</source>
+                <target>Les cartes de ce pack portent ce dos une fois choisi.</target>
+            </trans-unit>
+            <trans-unit id="Y1neHMB">
+                <source>help.back_pack_locked</source>
+                <target>Fixé à la création : un dos ne change jamais de pack, ses joueurs le perdraient. Pour un autre pack, créez un nouveau dos.</target>
+            </trans-unit>
+            <trans-unit id="CV05C_b">
+                <source>help.back_pack_typed</source>
+                <target>La clé du pack telle que le site la nomme (le préfixe d'un château, le slug d'une série) : les cartes de ce pack portent ce dos une fois choisi.</target>
+            </trans-unit>
+            <trans-unit id="iQyCGJQ">
+                <source>help.back_position</source>
+                <target>L'ordre des variantes d'un même pack.</target>
+            </trans-unit>
+            <trans-unit id="PMnabJO">
+                <source>help.back_product_id</source>
+                <target>L'identifiant du produit chez Apple et Google, vide si le dos n'y est pas en vente.</target>
+            </trans-unit>
+            <trans-unit id="NPdfLtf">
+                <source>help.back_published</source>
+                <target>Seul un dos publié peut être donné et choisi.</target>
+            </trans-unit>
+            <trans-unit id="Tpik29q">
+                <source>help.back_slug</source>
+                <target>Ce que nomment une récompense, un achat ou un code pour donner ce dos.</target>
+            </trans-unit>
+            <trans-unit id="JefzzOt">
+                <source>help.back_tone</source>
+                <target>La lumière posée sur l'image : aube, coucher de soleil, neige, orage, vent, nuit ou brume.</target>
+            </trans-unit>
+            <trans-unit id=".Kew4lH">
+                <source>label.back_effect</source>
+                <target>Effet</target>
+            </trans-unit>
+            <trans-unit id="MQ.xF7B">
+                <source>label.back_effect_embers</source>
+                <target>Braises</target>
+            </trans-unit>
+            <trans-unit id="TVAaThq">
+                <source>label.back_effect_lightning</source>
+                <target>Éclairs</target>
+            </trans-unit>
+            <trans-unit id="UweWsvM">
+                <source>label.back_effect_mist</source>
+                <target>Brume</target>
+            </trans-unit>
+            <trans-unit id="0LjkTmi">
+                <source>label.back_effect_none</source>
+                <target>Aucun</target>
+            </trans-unit>
+            <trans-unit id="B.Ol5cV">
+                <source>label.back_effect_snow</source>
+                <target>Neige</target>
+            </trans-unit>
+            <trans-unit id="uBa4i8R">
+                <source>label.back_effect_stars</source>
+                <target>Étoiles</target>
+            </trans-unit>
+            <trans-unit id="T480EBI">
+                <source>label.back_effect_wind</source>
+                <target>Vent</target>
+            </trans-unit>
+            <trans-unit id="tVtJ_K9">
+                <source>label.back_effect_zoom</source>
+                <target>Zoom lent</target>
+            </trans-unit>
+            <trans-unit id="PUQJ_3g">
+                <source>label.back_image</source>
+                <target>Image</target>
+            </trans-unit>
+            <trans-unit id="EKXhi3O">
+                <source>label.back_name</source>
+                <target>Nom</target>
+            </trans-unit>
+            <trans-unit id="XiPi2zM">
+                <source>label.back_pack</source>
+                <target>Pack</target>
+            </trans-unit>
+            <trans-unit id="NQfNncO">
+                <source>label.back_position</source>
+                <target>Ordre</target>
+            </trans-unit>
+            <trans-unit id="KtVMqOU">
+                <source>label.back_product_id</source>
+                <target>Produit des stores</target>
+            </trans-unit>
+            <trans-unit id="oMHBw_6">
+                <source>label.back_published</source>
+                <target>Publié</target>
+            </trans-unit>
+            <trans-unit id="iuOHX.5">
+                <source>label.back_slug</source>
+                <target>Slug</target>
+            </trans-unit>
+            <trans-unit id="sz35eBo">
+                <source>label.back_tone</source>
+                <target>Rendu</target>
+            </trans-unit>
+            <trans-unit id="cf0GMRw">
+                <source>label.back_tone_dawn</source>
+                <target>Aube</target>
+            </trans-unit>
+            <trans-unit id="LyjDpHt">
+                <source>label.back_tone_mist</source>
+                <target>Brume</target>
+            </trans-unit>
+            <trans-unit id="RmXVj1e">
+                <source>label.back_tone_night</source>
+                <target>Nuit</target>
+            </trans-unit>
+            <trans-unit id="pUcrr9a">
+                <source>label.back_tone_none</source>
+                <target>Aucun</target>
+            </trans-unit>
+            <trans-unit id="AQ66pSH">
+                <source>label.back_tone_snow</source>
+                <target>Neige</target>
+            </trans-unit>
+            <trans-unit id="2QNVkQ3">
+                <source>label.back_tone_storm</source>
+                <target>Orage</target>
+            </trans-unit>
+            <trans-unit id="20F9ysN">
+                <source>label.back_tone_sunset</source>
+                <target>Coucher de soleil</target>
+            </trans-unit>
+            <trans-unit id="11FxTXX">
+                <source>label.back_tone_wind</source>
+                <target>Vent</target>
+            </trans-unit>
+            <trans-unit id="EIhguyB">
+                <source>label.card_back</source>
+                <target>Dos de carte</target>
+            </trans-unit>
+            <trans-unit id="u6Tx7Tp">
+                <source>label.card_backs</source>
+                <target>Dos des cartes</target>
+            </trans-unit>
+            <trans-unit id="gTzWFQi">
+                <source>label.cards</source>
+                <target>Cartes</target>
+            </trans-unit>
+            <trans-unit id="cXttzl_">
+                <source>label.guided_project_card_back</source>
+                <target>Créer un dos de carte</target>
+            </trans-unit>
+            <trans-unit id="MavYpWS">
+                <source>label.guided_step_card_back_done</source>
+                <target>Enregistrez</target>
+            </trans-unit>
+            <trans-unit id="IUWI87y">
+                <source>label.guided_step_card_back_effect</source>
+                <target>Choisissez l'effet</target>
+            </trans-unit>
+            <trans-unit id="44AmozW">
+                <source>label.guided_step_card_back_image</source>
+                <target>Ajoutez l'image</target>
+            </trans-unit>
+            <trans-unit id="DPZSu2K">
+                <source>label.guided_step_card_back_name</source>
+                <target>Nommez la variante</target>
+            </trans-unit>
+            <trans-unit id="HXzE0EF">
+                <source>label.guided_step_card_back_new</source>
+                <target>Créez un dos</target>
+            </trans-unit>
+            <trans-unit id="KmG1y8.">
+                <source>label.guided_step_card_back_open</source>
+                <target>Ouvrez les dos des cartes</target>
+            </trans-unit>
+            <trans-unit id="a9sNeeA">
+                <source>label.guided_step_card_back_pack</source>
+                <target>Choisissez le pack</target>
+            </trans-unit>
+            <trans-unit id="c8kDmoG">
+                <source>label.guided_step_card_back_published</source>
+                <target>Publiez-le</target>
+            </trans-unit>
+            <trans-unit id="Ou7jNu4">
+                <source>label.guided_step_card_back_tone</source>
+                <target>Choisissez le ton</target>
+            </trans-unit>
+            <trans-unit id="jm7lrtY">
+                <source>label.info_card_backs</source>
+                <target>Les variantes du dos des cartes d'un pack : un joueur les gagne ou les achète, puis choisit celle que portent les cartes de ce pack. Sans variante choisie, une carte garde le dos de son pack.</target>
+            </trans-unit>
+            <trans-unit id="XUNDdCp">
+                <source>message.back_layers_clash</source>
+                <target>Ce rendu et cet effet se dessinent au même endroit : choisissez un autre effet.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
