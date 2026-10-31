@@ -14,28 +14,21 @@ use c975L\CardBundle\Enum\BackEffect;
 use c975L\CardBundle\Enum\BackTone;
 use c975L\CardBundle\Repository\CardBackRepository;
 use c975L\PaymentBundle\Contract\InAppProduct;
-use c975L\UiBundle\Contract\VichMediaNamableInterface;
-use c975L\UiBundle\Contract\VichMultiSizeImageInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
-// A variant of a pack's card back - a castle at dawn, at sunset, under the storm - worn by the cards of that pack once its holder chooses it. Only the variants are stored: with none chosen, a card's back is whatever the site draws for its pack. The pack is the site's own key (see CardPackProviderInterface), and how a back is had is none of its columns: a reward, a purchase or a code each give it through BackCollector
+// A variant of the card backs - at dawn, at sunset, under the storm - held once for every pack and worn by all the holder's cards once chosen. Only the variants are stored: with none chosen, a card's back is whatever the site draws for its pack. Each pack's picture of it is a CardBackPicture, and how a back is had is none of its columns: a reward, a purchase or a code each give it through BackCollector
 #[ORM\Entity(repositoryClass: CardBackRepository::class)]
 #[ORM\Table(name: 'card_back')]
-#[ORM\Index(name: 'idx_card_back_pack', columns: ['pack'])]
 #[ORM\HasLifecycleCallbacks]
 #[UniqueEntity(fields: ['slug'])]
-#[Vich\Uploadable]
-class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface, \Stringable
+class CardBack implements \Stringable
 {
-    // Where the uploads land, under UiBundle's own "block_media" mapping rather than a mapping of this bundle's
-    public const string MEDIA_DIRECTORY = 'medias/cards/backs';
-
     // What a back's store product id starts with (see getProductId())
     public const string PRODUCT_PREFIX = 'back';
 
@@ -44,12 +37,7 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    // The pack whose cards wear it - a back is never moved to another pack
-    #[ORM\Column(length: 40)]
-    #[Assert\NotBlank]
-    private ?string $pack = null;
-
-    // The variant's own name, the pack's being on the back already: « À l'aube », « Coucher de soleil »
+    // The variant's own name, the same for every pack: « À l'aube », « Coucher de soleil »
     #[ORM\Column(length: 60)]
     #[Assert\NotBlank]
     private ?string $name = null;
@@ -58,14 +46,6 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     #[Assert\NotBlank]
     #[Assert\Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
     private ?string $slug = null;
-
-    // Its own illustration, none drawing its pack's picture in its tone
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $image = null;
-
-    // Never persisted: Vich converts the upload to webp and UiBundle cuts its "-thumb"/"-highres" siblings
-    #[Vich\UploadableField(mapping: 'block_media', fileNameProperty: 'image')]
-    private ?File $imageFile = null;
 
     #[ORM\Column(length: 10, enumType: BackEffect::class, options: ['default' => 'none'])]
     private BackEffect $effect = BackEffect::None;
@@ -90,6 +70,11 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $position = null;
 
+    // Removed with it one by one rather than by the foreign key alone, so that Vich deletes their files too
+    /** @var Collection<int, CardBackPicture> */
+    #[ORM\OneToMany(targetEntity: CardBackPicture::class, mappedBy: 'back', cascade: ['remove'], orphanRemoval: true)]
+    private Collection $pictures;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $creation;
 
@@ -98,6 +83,7 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
 
     public function __construct()
     {
+        $this->pictures = new ArrayCollection();
         $this->creation = new \DateTimeImmutable();
         $this->modification = $this->creation;
     }
@@ -105,18 +91,6 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getPack(): ?string
-    {
-        return $this->pack;
-    }
-
-    public function setPack(?string $pack): static
-    {
-        $this->pack = $pack;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -143,55 +117,10 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
         return $this;
     }
 
-    public function getImage(): ?string
+    /** @return Collection<int, CardBackPicture> */
+    public function getPictures(): Collection
     {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): static
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    // Stamping the modification date is what makes Doctrine see a change at all, $imageFile being no column
-    public function setImageFile(?File $imageFile): static
-    {
-        $this->imageFile = $imageFile;
-
-        if (null !== $imageFile) {
-            $this->modification = new \DateTimeImmutable();
-        }
-
-        return $this;
-    }
-
-    // One file per variant, named after its slug
-    public function getVichMediaPath(): string
-    {
-        return self::MEDIA_DIRECTORY . '/' . ($this->slug ?? uniqid());
-    }
-
-    // A back is drawn no wider than a card
-    public function getImageWidth(): int
-    {
-        return 800;
-    }
-
-    public function getThumbnailSize(): int
-    {
-        return 500;
-    }
-
-    public function getHighresWidth(): int
-    {
-        return 1200;
+        return $this->pictures;
     }
 
     public function getEffect(): BackEffect
@@ -310,6 +239,6 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     // What the back office and a reward's message name it by
     public function __toString(): string
     {
-        return trim(($this->pack ?? '') . ' - ' . ($this->name ?? ''), ' -');
+        return (string) $this->name;
     }
 }

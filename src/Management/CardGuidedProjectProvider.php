@@ -11,6 +11,7 @@
 namespace c975L\CardBundle\Management;
 
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
+use c975L\CardBundle\Controller\Management\CardBackPictureCrudController;
 use c975L\CardBundle\Controller\Management\CardExportController;
 use c975L\CardBundle\Export\CardExporter;
 use c975L\ConfigBundle\Management\GuidedProjectProviderInterface;
@@ -33,19 +34,42 @@ class CardGuidedProjectProvider implements GuidedProjectProviderInterface
     public function getGuidedProjects(): array
     {
         // The export follows its tile, shown only where Chrome and Ghostscript are installed: elsewhere it would highlight nothing
-        return [$this->backProject(), ...($this->cardExporter->isAvailable() ? [$this->exportProject()] : [])];
+        return [$this->backProject(), $this->pictureProject(), ...($this->cardExporter->isAvailable() ? [$this->exportProject()] : [])];
     }
 
-    // Making a variant of a pack's back, which a player then wins and chooses for the cards of that pack
+    // Making a variant of the backs, which a player then wins or buys for all the packs and chooses for all their cards
     private function backProject(): array
     {
-        $steps = [['key' => 'open', 'url' => $this->indexUrl(CardBackCrudController::class)]];
-        foreach (['new' => '.action-new', 'pack' => '#CardBack_pack', 'name' => '#CardBack_name', 'image' => '#CardBack_imageFile_file', 'tone' => '#CardBack_tone', 'effect' => '#CardBack_effect', 'price' => '#CardBack_price', 'published' => '#CardBack_published'] as $key => $highlight) {
+        return self::project('card_back', 11010, (string) $this->configService->get('site-role-editor'), self::formSteps(
+            $this->indexUrl(CardBackCrudController::class),
+            ['name' => '#CardBack_name', 'tone' => '#CardBack_tone', 'effect' => '#CardBack_effect', 'price' => '#CardBack_price', 'published' => '#CardBack_published'],
+        ));
+    }
+
+    // Giving a back its picture for one pack, the pack's own being drawn in its tone otherwise
+    private function pictureProject(): array
+    {
+        return self::project('card_back_picture', 11015, (string) $this->configService->get('site-role-editor'), self::formSteps(
+            $this->indexUrl(CardBackPictureCrudController::class),
+            ['back' => '#CardBackPicture_back', 'pack' => '#CardBackPicture_pack', 'image' => '#CardBackPicture_imageFile_file'],
+        ));
+    }
+
+    // A form's parcours: open the listing, create, each field in turn, save
+    /**
+     * @param array<string, string> $fields
+     *
+     * @return list<array<string, string>>
+     */
+    private static function formSteps(string $url, array $fields): array
+    {
+        $steps = [['key' => 'open', 'url' => $url], ['key' => 'new', 'highlight' => '.action-new']];
+        foreach ($fields as $key => $highlight) {
             $steps[] = ['key' => $key, 'highlight' => $highlight];
         }
         $steps[] = ['key' => 'done', 'highlight' => '.action-saveAndReturn'];
 
-        return self::project('card_back', 11010, (string) $this->configService->get('site-role-editor'), $steps);
+        return $steps;
     }
 
     // Exporting the cards from the dashboard tile, the run going on in the Messenger worker while the tile tells where it stands

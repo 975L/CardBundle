@@ -2,21 +2,21 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" target-language="es" datatype="plaintext" original="card_narration.en.xlf">
         <body>
+            <trans-unit id="wsw_C4A">
+                <source>narration.card_back_pictures</source>
+                <target>Las imágenes de reversos: la imagen de cada reverso para cada pack.</target>
+            </trans-unit>
             <trans-unit id="1ie_jNt">
                 <source>narration.card_backs</source>
-                <target>Los reversos de las cartas: las variantes que los jugadores ganan y luego eligen para las cartas de un pack.</target>
+                <target>Los reversos de las cartas: las variantes que los jugadores ganan o compran para todos los packs, y luego eligen para todas sus cartas.</target>
             </trans-unit>
             <trans-unit id="riJ7JSH">
                 <source>narration.guided_step_card_back_done</source>
-                <target>Guarde. Una recompensa, una compra o un código darán este reverso por su slug.</target>
+                <target>Guarde. Una recompensa, una compra o un código darán este reverso por su slug. Luego dele sus imágenes pack por pack con Ilustrar un reverso para un pack.</target>
             </trans-unit>
             <trans-unit id="c5hRw6a">
                 <source>narration.guided_step_card_back_effect</source>
                 <target>Elija ahora su movimiento: un zoom lento, estrellas, brasas.</target>
-            </trans-unit>
-            <trans-unit id="PYMC1S_">
-                <source>narration.guided_step_card_back_image</source>
-                <target>Añada la imagen del reverso, del tamaño de una carta, en vertical.</target>
             </trans-unit>
             <trans-unit id="9HS.uSj">
                 <source>narration.guided_step_card_back_name</source>
@@ -30,9 +30,29 @@
                 <source>narration.guided_step_card_back_open</source>
                 <target>Abra el menú Reversos de las cartas, en la sección Cartas de la columna izquierda.</target>
             </trans-unit>
-            <trans-unit id="ewxlc7q">
-                <source>narration.guided_step_card_back_pack</source>
-                <target>Elija el pack cuyas cartas llevarán este reverso.</target>
+            <trans-unit id="zkrhW_W">
+                <source>narration.guided_step_card_back_picture_back</source>
+                <target>Elija el reverso que ilustra la imagen.</target>
+            </trans-unit>
+            <trans-unit id="sKhQjul">
+                <source>narration.guided_step_card_back_picture_done</source>
+                <target>Guarde. Las cartas de este pack llevarán esta imagen bajo este reverso.</target>
+            </trans-unit>
+            <trans-unit id="xwqLw0.">
+                <source>narration.guided_step_card_back_picture_image</source>
+                <target>Añada la imagen, del tamaño de una carta, en vertical.</target>
+            </trans-unit>
+            <trans-unit id="r2O9ryW">
+                <source>narration.guided_step_card_back_picture_new</source>
+                <target>Haga clic en el botón de creación, arriba a la derecha de la lista.</target>
+            </trans-unit>
+            <trans-unit id="ujvebZZ">
+                <source>narration.guided_step_card_back_picture_open</source>
+                <target>Abra el menú Imágenes de reversos, en la sección Cartas de la columna izquierda.</target>
+            </trans-unit>
+            <trans-unit id="DLo_ijb">
+                <source>narration.guided_step_card_back_picture_pack</source>
+                <target>Elija el pack cuyas cartas llevarán esta imagen.</target>
             </trans-unit>
             <trans-unit id="JNYDLpx">
                 <source>narration.guided_step_card_back_price</source>
@@ -44,7 +64,7 @@
             </trans-unit>
             <trans-unit id="BCB.qLq">
                 <source>narration.guided_step_card_back_tone</source>
-                <target>Elija la luz sobre la imagen.</target>
+                <target>Elija la luz sobre la imagen de cada pack.</target>
             </trans-unit>
             <trans-unit id="MCT0d76">
                 <source>narration.guided_step_card_export_follow</source>

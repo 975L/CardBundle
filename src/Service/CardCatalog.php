@@ -12,7 +12,6 @@ namespace c975L\CardBundle\Service;
 
 use c975L\CardBundle\Contract\CardCatalogInterface;
 use c975L\CardBundle\Contract\CardPackProviderInterface;
-use c975L\CardBundle\Entity\CardBack;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Contracts\Service\ResetInterface;
@@ -20,7 +19,7 @@ use Symfony\Contracts\Service\ResetInterface;
 // What this bundle reads of the site's catalogue, asked of whatever the site tagged (see CardCatalogInterface, CardPackProviderInterface) - none at all being a site that has not said, where the raw keys stand in
 class CardCatalog implements ResetInterface
 {
-    // Asked of the providers once per request - or per message in a worker (see reset()) - a back's name being read for every back of an export or a basket
+    // Asked of the providers once per request - or per message in a worker (see reset()) - the back office's pack field reading them for every picture
     /** @var array<string, string>|null */
     private ?array $packs = null;
 
@@ -62,18 +61,6 @@ class CardCatalog implements ResetInterface
         }
 
         return $this->packs;
-    }
-
-    // A pack's name, its key when no provider lists it
-    public function packName(string $pack): string
-    {
-        return $this->packs()[$pack] ?? $pack;
-    }
-
-    // A back as a person reads it: its pack's name, then its own
-    public function backName(CardBack $back): string
-    {
-        return $this->packName((string) $back->getPack()) . ' - ' . $back->getName();
     }
 
     // The currency backs are sold in, the shop's own, euros when the site set none

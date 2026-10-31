@@ -79,14 +79,14 @@ class BackBasketItemProviderTest extends TestCase
         $this->assertSame('label.back_already_held', $this->provider(null, $this->back(), true)->validateCheckout($basket, [1 => ['quantity' => 1]]));
     }
 
-    // The line carries the back's price and VAT, under its pack
+    // The line carries the back's price and VAT, under the card backs' heading
     public function testTheBasketLineCarriesThePrice(): void
     {
         $data = $this->provider(null)->toBasketData($this->back()->setVat(20.0), 1);
 
         $this->assertSame(200, $data['total']);
         $this->assertSame(33, $data['totalVat']);
-        $this->assertSame('Hurlton', $data['parent']['title']);
+        $this->assertSame('label.card_backs', $data['parent']['title']);
         $this->assertSame(BackBasketItemProvider::KIND, $data['type']);
     }
 
@@ -138,7 +138,7 @@ class BackBasketItemProviderTest extends TestCase
 
     private function back(): CardBack
     {
-        return new CardBack()->setPack('hur')->setSlug('hurlton-orage')->setName('Orage')->setPrice(200)->setPublished(true);
+        return new CardBack()->setSlug('orage')->setName('Orage')->setPrice(200)->setPublished(true);
     }
 
     private function user(): UserInterface

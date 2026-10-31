@@ -15,7 +15,7 @@ use c975L\CardBundle\Repository\CollectedCardRepository;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 
-// The device-to-account move is raw SQL, MariaDB's multi-table DELETE and UPDATE, which no stub of the ORM would ever run: what is checked is what it says, all of it inside one transaction - for the backs, the device's choice carried to the account first, then the duplicates dropped, then, for the backs, the device's choice cleared where the account chose for the same pack, then the key rewritten
+// The device-to-account move is raw SQL, MariaDB's multi-table DELETE and UPDATE, which no stub of the ORM would ever run: what is checked is what it says, all of it inside one transaction - for the backs, the device's choice carried to the account first, then the duplicates dropped, then, for the backs, the device's choice cleared where the account chose one, then the key rewritten
 class HolderMoveTest extends TestCase
 {
     use RegistryStubTrait;
@@ -30,27 +30,27 @@ class HolderMoveTest extends TestCase
         $this->assertSame('UPDATE card_collected SET holder = :to WHERE holder = :from', $statements[1]);
     }
 
-    // The choice is cleared by pack - the one join that changed shape when the castle became a pack key
-    public function testTheBacksClearTheDevicesChoiceWhereTheAccountChoseForThePack(): void
+    // One choice for all the packs: the device's is cleared whenever the account chose one
+    public function testTheBacksClearTheDevicesChoiceWhereTheAccountChoseOne(): void
     {
         $statements = $this->statements(CollectedBackRepository::class, 'moveHolder', ['abc', 'u1']);
 
         $this->assertCount(4, $statements);
         $this->assertStringStartsWith('DELETE d FROM card_collected_back d', $statements[1]);
-        $this->assertStringContainsString('a.chosen = 1', $statements[2]);
-        $this->assertStringContainsString('ab.pack = db.pack', $statements[2]);
-        $this->assertStringContainsString('SET d.chosen = 0 WHERE d.holder = :from', $statements[2]);
+        $this->assertStringContainsString('(SELECT DISTINCT c.holder FROM card_collected_back c WHERE c.holder = :to AND c.chosen = 1) taken', $statements[2]);
+        $this->assertStringEndsWith('taken ON taken.holder = :to SET d.chosen = 0 WHERE d.holder = :from', $statements[2]);
         $this->assertSame('UPDATE card_collected_back SET holder = :to WHERE holder = :from', $statements[3]);
     }
 
-    // A back both hold, chosen on the device only, keeps being chosen: the account takes the choice before the device's row is dropped, unless it chose for that pack already
+    // A back both hold, chosen on the device only, keeps being chosen: the account takes the choice before the device's row is dropped, unless it chose one already, and takes one at most
     public function testTheBacksCarryTheDevicesChoiceBeforeDroppingTheDuplicates(): void
     {
         $statement = $this->statements(CollectedBackRepository::class, 'moveHolder', ['abc', 'u1'])[0];
 
-        $this->assertStringStartsWith('UPDATE card_collected_back a INNER JOIN card_collected_back d ON d.back_id = a.back_id AND d.holder = :from AND d.chosen = 1', $statement);
-        $this->assertStringContainsString('(SELECT DISTINCT cb.pack FROM card_collected_back c', $statement);
-        $this->assertStringEndsWith('SET a.chosen = 1 WHERE a.holder = :to AND taken.pack IS NULL', $statement);
+        $this->assertStringStartsWith('UPDATE card_collected_back a INNER JOIN (SELECT MAX(d.back_id) AS back_id FROM card_collected_back d', $statement);
+        $this->assertStringContainsString('WHERE d.holder = :from AND d.chosen = 1) carried ON carried.back_id = a.back_id', $statement);
+        $this->assertStringContainsString('(SELECT DISTINCT c.holder FROM card_collected_back c', $statement);
+        $this->assertStringEndsWith('SET a.chosen = 1 WHERE a.holder = :to AND taken.holder IS NULL', $statement);
     }
 
     public function testDeletingAHolderTouchesItsOwnTableOnly(): void

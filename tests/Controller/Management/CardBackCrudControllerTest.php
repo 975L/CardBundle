@@ -10,7 +10,6 @@
 
 namespace c975L\CardBundle\Tests\Controller\Management;
 
-use c975L\CardBundle\Contract\CardPackProviderInterface;
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
 use c975L\CardBundle\Enum\BackEffect;
 use c975L\CardBundle\Enum\BackTone;
@@ -19,7 +18,6 @@ use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -27,50 +25,24 @@ use function Symfony\Component\Translation\t;
 
 class CardBackCrudControllerTest extends TestCase
 {
-    // The preview names its template as a string, which nothing compiles: a renamed file breaks the listing, and that path is also what a site overrides
+    use CrudFieldsTrait;
+
+    // The previews name their template as a string, which nothing compiles: a renamed file breaks the listing, and that path is also what a site overrides
     public function testThePreviewTemplateExists(): void
     {
         $root = \dirname(__DIR__, 3);
-        $this->assertSame(1, preg_match("#'@c975LCard/([^']+)'#", (string) file_get_contents($root . '/src/Controller/Management/CardBackCrudController.php'), $matches));
-        $this->assertFileExists($root . '/templates/' . $matches[1]);
-    }
-
-    // A site naming no pack types the key by hand, rather than facing an empty list it could never fill
-    public function testThePackIsTypedWhenTheSiteListsNone(): void
-    {
-        $pack = $this->fields([], Crud::PAGE_NEW)['pack'];
-
-        $this->assertInstanceOf(TextField::class, $pack);
-        $this->assertEquals(t('help.back_pack_typed', [], 'card'), $pack->getAsDto()->getHelp());
-    }
-
-    // A site listing its packs offers them by name and key, the key being what is stored and two packs of the same name staying apart
-    public function testThePackIsChosenAmongTheSitesPacks(): void
-    {
-        $pack = $this->fields(['hur' => 'Hurlton', 'gob' => 'Hurlton'], Crud::PAGE_NEW)['pack'];
-
-        $this->assertInstanceOf(ChoiceField::class, $pack);
-        $this->assertSame(['Hurlton (hur)' => 'hur', 'Hurlton (gob)' => 'gob'], $pack->getAsDto()->getCustomOption(ChoiceField::OPTION_CHOICES));
-    }
-
-    // A back never moves to another pack: chosen on creation, shown but locked on edition, whichever field the site gets
-    public function testThePackIsLockedOnceCreated(): void
-    {
-        foreach ([[], ['hur' => 'Hurlton']] as $packs) {
-            $this->assertFalse($this->fields($packs, Crud::PAGE_NEW)['pack']->getAsDto()->getFormTypeOption('disabled'));
-
-            $pack = $this->fields($packs, Crud::PAGE_EDIT)['pack']->getAsDto();
-            $this->assertTrue($pack->getFormTypeOption('disabled'));
-            $this->assertEquals(t('help.back_pack_locked', [], 'card'), $pack->getHelp());
+        foreach (['CardBackCrudController', 'CardBackPictureCrudController'] as $controller) {
+            $this->assertSame(1, preg_match("#'@c975LCard/([^']+)'#", (string) file_get_contents($root . '/src/Controller/Management/' . $controller . '.php'), $matches));
+            $this->assertFileExists($root . '/templates/' . $matches[1]);
         }
     }
 
-    // The slug is typed on creation and locked afterwards, as the pack: rewards, codes and the stores name the back by it
+    // The slug is typed on creation and locked afterwards: rewards, codes and the stores name the back by it
     public function testTheSlugIsLockedOnceCreated(): void
     {
-        $this->assertFalse($this->fields([], Crud::PAGE_NEW)['slug']->getAsDto()->getFormTypeOption('disabled'));
+        $this->assertFalse($this->fields(Crud::PAGE_NEW)['slug']->getAsDto()->getFormTypeOption('disabled'));
 
-        $slug = $this->fields([], Crud::PAGE_EDIT)['slug']->getAsDto();
+        $slug = $this->fields(Crud::PAGE_EDIT)['slug']->getAsDto();
         $this->assertTrue($slug->getFormTypeOption('disabled'));
         $this->assertEquals(t('help.back_slug_locked', [], 'card'), $slug->getHelp());
     }
@@ -78,7 +50,7 @@ class CardBackCrudControllerTest extends TestCase
     // No choices are given for the tone and the effect: EasyAdmin then reads the enum off the mapping and stores a case, never a string the setter would refuse
     public function testToneAndEffectAreLeftToTheirEnum(): void
     {
-        $fields = $this->fields([], Crud::PAGE_NEW);
+        $fields = $this->fields(Crud::PAGE_NEW);
 
         foreach (['tone', 'effect'] as $property) {
             $this->assertNull($fields[$property]->getAsDto()->getCustomOption(ChoiceField::OPTION_CHOICES));
@@ -97,23 +69,12 @@ class CardBackCrudControllerTest extends TestCase
 
     // The fields a page shows, by property
     /**
-     * @param array<string, string> $packs
-     *
      * @return array<string, FieldInterface>
      */
-    private function fields(array $packs, string $pageName): array
+    private function fields(string $pageName): array
     {
-        $provider = $this->createStub(CardPackProviderInterface::class);
-        $provider->method('getPacks')->willReturn($packs);
-        $controller = new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [$provider], $this->createStub(ConfigServiceInterface::class)));
+        $controller = new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class)));
 
-        $fields = [];
-        foreach ($controller->configureFields($pageName) as $field) {
-            if ($field->getAsDto()->isDisplayedOn($pageName)) {
-                $fields[$field->getAsDto()->getProperty()] = $field;
-            }
-        }
-
-        return $fields;
+        return $this->fieldsOf($controller, $pageName);
     }
 }

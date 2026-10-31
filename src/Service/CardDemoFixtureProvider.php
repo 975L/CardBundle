@@ -11,6 +11,7 @@
 namespace c975L\CardBundle\Service;
 
 use c975L\CardBundle\Entity\CardBack;
+use c975L\CardBundle\Entity\CardBackPicture;
 use c975L\CardBundle\Enum\BackEffect;
 use c975L\CardBundle\Enum\BackTone;
 use c975L\UiBundle\Contract\DemoFixtureProviderInterface;
@@ -18,10 +19,10 @@ use c975L\UiBundle\Registry\PlaceholderMediaRegistry;
 use c975L\UiBundle\Service\DemoFixtureMediaCopier;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-// The demo's card backs: three published variants over the site's first two packs, each in a tone and an effect, illustrated by UiBundle's placeholder images. No catalogue and no collection: the cards are a site's own, and what players hold is what they did
+// The demo's card backs: three published variants, each in a tone and an effect, and their pictures over the site's first two packs, UiBundle's placeholder images. No catalogue and no collection: the cards are a site's own, and what players hold is what they did
 class CardDemoFixtureProvider implements DemoFixtureProviderInterface
 {
-    // Slug, pack index, name key, tone, effect
+    // Slug, index of the pack its picture is for, name key, tone, effect
     private const array BACKS = [
         ['demo-dawn', 0, 'label.demo_back_dawn', BackTone::Dawn, BackEffect::Zoom],
         ['demo-storm', 0, 'label.demo_back_storm', BackTone::Storm, BackEffect::Lightning],
@@ -39,34 +40,30 @@ class CardDemoFixtureProvider implements DemoFixtureProviderInterface
     ) {
     }
 
-    // One back per BACKS row, in the site's own packs so a player can choose it, numbered within its pack, its name in the site's locale and its picture a copy of a placeholder when the site declares one
+    // One back per BACKS row, its name in the site's locale, then its picture for one of the site's own packs, a copy of a placeholder, when the site declares one
     public function getDemoFixtures(): iterable
     {
         $packs = array_map(strval(...), array_keys($this->cardCatalog->packs()));
-        $positions = [];
 
-        foreach (self::BACKS as [$slug, $index, $name, $tone, $effect]) {
-            // A site listing a single pack gets all three backs in it
-            $pack = $packs[$index] ?? $packs[0] ?? self::FALLBACK_PACKS[$index];
-            $positions[$pack] = ($positions[$pack] ?? -1) + 1;
-
+        foreach (self::BACKS as $position => [$slug, $index, $name, $tone, $effect]) {
             $back = new CardBack()
                 ->setSlug($slug)
-                ->setPack($pack)
                 ->setName($this->translator->trans($name, [], 'card'))
                 ->setTone($tone)
                 ->setEffect($effect)
-                ->setPosition($positions[$pack])
+                ->setPosition($position)
                 ->setPublished(true);
+            yield $back;
 
-            // A back with no picture of its own is drawn from its pack's, which the demo has none of: the placeholder stands in when there is one
+            // A site listing a single pack gets all three pictures in it
             $picture = $this->picture($slug);
             $file = null === $picture ? null : $this->demoFixtureMediaCopier->copy($picture);
             if (null !== $file) {
-                $back->setImageFile($file);
+                yield new CardBackPicture()
+                    ->setBack($back)
+                    ->setPack($packs[$index] ?? $packs[0] ?? self::FALLBACK_PACKS[$index])
+                    ->setImageFile($file);
             }
-
-            yield $back;
         }
     }
 

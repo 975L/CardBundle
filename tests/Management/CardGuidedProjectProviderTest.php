@@ -11,6 +11,7 @@
 namespace c975L\CardBundle\Tests\Management;
 
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
+use c975L\CardBundle\Controller\Management\CardBackPictureCrudController;
 use c975L\CardBundle\Controller\Management\CardExportController;
 use c975L\CardBundle\Export\CardExporter;
 use c975L\CardBundle\Management\CardGuidedProjectProvider;
@@ -54,29 +55,43 @@ class CardGuidedProjectProviderTest extends TestCase
     // A highlighted field the form no longer shows leaves the step pointing at nothing, which no other test would see
     public function testEveryHighlightedFieldIsOnTheForm(): void
     {
-        $controller = new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class)));
-        $properties = array_map(
-            static fn (FieldInterface $field): string => $field->getAsDto()->getProperty(),
-            array_filter([...$controller->configureFields(Crud::PAGE_NEW)], static fn (FieldInterface $field): bool => $field->getAsDto()->isDisplayedOn(Crud::PAGE_NEW)),
-        );
+        $arguments = [$this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class))];
+        foreach (['CardBack' => [new CardBackCrudController(...$arguments), 0], 'CardBackPicture' => [new CardBackPictureCrudController(...$arguments), 1]] as $entity => [$controller, $index]) {
+            $properties = array_map(
+                static fn (FieldInterface $field): string => $field->getAsDto()->getProperty(),
+                array_filter([...$controller->configureFields(Crud::PAGE_NEW)], static fn (FieldInterface $field): bool => $field->getAsDto()->isDisplayedOn(Crud::PAGE_NEW)),
+            );
 
-        $highlighted = 0;
-        foreach ($this->project()['steps'] as $step) {
-            // A Vich upload carries no id of its own, its file input being "<property>_file"
-            if (1 === preg_match('/^#CardBack_([a-zA-Z]+)(?:_file)?$/', $step['highlight'] ?? '', $matches)) {
-                $this->assertContains($matches[1], $properties, $step['label']);
-                ++$highlighted;
+            $highlighted = 0;
+            foreach ($this->projects(false)[$index]['steps'] as $step) {
+                // A Vich upload carries no id of its own, its file input being "<property>_file"
+                if (1 === preg_match('/^#' . $entity . '_([a-zA-Z]+)(?:_file)?$/', $step['highlight'] ?? '', $matches)) {
+                    $this->assertContains($matches[1], $properties, $step['label']);
+                    ++$highlighted;
+                }
             }
+            $this->assertGreaterThan(0, $highlighted, $entity);
         }
-        $this->assertGreaterThan(0, $highlighted);
+    }
+
+    // The pictures' project follows the backs', in the same block and for the same role
+    public function testThePicturesProjectFollowsTheBacks(): void
+    {
+        $project = $this->projects(false)[1];
+
+        $this->assertSame('card-back-picture', $project['slug']);
+        $this->assertSame(11015, $project['order']);
+        $this->assertSame('ROLE_EDITOR', $project['role']);
+        $this->assertSame('label.guided_step_card_back_picture_open', $project['steps'][0]['label']);
+        $this->assertArrayHasKey('url', $project['steps'][0]);
     }
 
     // The export project follows its tile: offered where the export can run, to whoever the tile lets in, and nowhere else
     public function testTheExportProjectFollowsTheTile(): void
     {
-        $this->assertCount(1, $this->projects(false));
+        $this->assertCount(2, $this->projects(false));
 
-        $project = $this->projects(true)[1];
+        $project = $this->projects(true)[2];
         $this->assertSame('card-export', $project['slug']);
         $this->assertSame(11020, $project['order']);
         $this->assertSame(CardExportController::ROLE, $project['role']);
@@ -84,13 +99,15 @@ class CardGuidedProjectProviderTest extends TestCase
         $this->assertSame('/management', $project['steps'][0]['url']);
     }
 
-    // The menu entry asks for the very role the screen and the project ask for
+    // The menu entries ask for the very role the screen and the project ask for
     public function testTheMenuEntryAsksForTheEditorsRole(): void
     {
         $menus = new MenuProvider($this->configService())->getMenus();
 
         $this->assertSame(CardBackCrudController::class, $menus['card_back']['controller']);
         $this->assertSame('ROLE_EDITOR', $menus['card_back']['role']);
+        $this->assertSame(CardBackPictureCrudController::class, $menus['card_back_picture']['controller']);
+        $this->assertSame('ROLE_EDITOR', $menus['card_back_picture']['role']);
     }
 
     /** @return array<string, mixed> */

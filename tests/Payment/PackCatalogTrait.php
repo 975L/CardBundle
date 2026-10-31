@@ -14,7 +14,7 @@ use c975L\CardBundle\Contract\CardPackProviderInterface;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 
-// A catalogue listing the one pack the backs of these tests belong to, "hur" named "Hurlton"
+// A catalogue listing one pack, "hur" named "Hurlton", the currency read off it
 trait PackCatalogTrait
 {
     private function catalog(): CardCatalog

@@ -2,21 +2,21 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" target-language="en" datatype="plaintext" original="card_narration.en.xlf">
         <body>
+            <trans-unit id="wsw_C4A">
+                <source>narration.card_back_pictures</source>
+                <target>The back pictures: each back's picture for each pack.</target>
+            </trans-unit>
             <trans-unit id="1ie_jNt">
                 <source>narration.card_backs</source>
-                <target>The card backs: the variants players win, then choose for a pack's cards.</target>
+                <target>The card backs: the variants players win or buy for every pack, then choose for all their cards.</target>
             </trans-unit>
             <trans-unit id="riJ7JSH">
                 <source>narration.guided_step_card_back_done</source>
-                <target>Save. A reward, a purchase or a code will give this back by its slug.</target>
+                <target>Save. A reward, a purchase or a code will give this back by its slug. Then give it its pictures pack by pack with Illustrate a back for a pack.</target>
             </trans-unit>
             <trans-unit id="c5hRw6a">
                 <source>narration.guided_step_card_back_effect</source>
                 <target>Now choose how it moves: a slow zoom, stars, embers.</target>
-            </trans-unit>
-            <trans-unit id="PYMC1S_">
-                <source>narration.guided_step_card_back_image</source>
-                <target>Add the back's picture, card-sized, in portrait.</target>
             </trans-unit>
             <trans-unit id="9HS.uSj">
                 <source>narration.guided_step_card_back_name</source>
@@ -30,9 +30,29 @@
                 <source>narration.guided_step_card_back_open</source>
                 <target>Open the Card backs menu, in the Cards section of the left-hand column.</target>
             </trans-unit>
-            <trans-unit id="ewxlc7q">
-                <source>narration.guided_step_card_back_pack</source>
-                <target>Choose the pack whose cards will wear this back.</target>
+            <trans-unit id="zkrhW_W">
+                <source>narration.guided_step_card_back_picture_back</source>
+                <target>Choose the back the picture shows.</target>
+            </trans-unit>
+            <trans-unit id="sKhQjul">
+                <source>narration.guided_step_card_back_picture_done</source>
+                <target>Save. This pack's cards will wear this picture under this back.</target>
+            </trans-unit>
+            <trans-unit id="xwqLw0.">
+                <source>narration.guided_step_card_back_picture_image</source>
+                <target>Add the picture, card-sized, in portrait.</target>
+            </trans-unit>
+            <trans-unit id="r2O9ryW">
+                <source>narration.guided_step_card_back_picture_new</source>
+                <target>Click the create button, at the top right of the list.</target>
+            </trans-unit>
+            <trans-unit id="ujvebZZ">
+                <source>narration.guided_step_card_back_picture_open</source>
+                <target>Open the Back pictures menu, in the Cards section of the left-hand column.</target>
+            </trans-unit>
+            <trans-unit id="DLo_ijb">
+                <source>narration.guided_step_card_back_picture_pack</source>
+                <target>Choose the pack whose cards will wear this picture.</target>
             </trans-unit>
             <trans-unit id="JNYDLpx">
                 <source>narration.guided_step_card_back_price</source>
@@ -44,7 +64,7 @@
             </trans-unit>
             <trans-unit id="BCB.qLq">
                 <source>narration.guided_step_card_back_tone</source>
-                <target>Choose the light laid over the picture.</target>
+                <target>Choose the light laid over each pack's picture.</target>
             </trans-unit>
             <trans-unit id="MCT0d76">
                 <source>narration.guided_step_card_export_follow</source>

@@ -13,7 +13,6 @@ namespace c975L\CardBundle\Payment;
 use c975L\CardBundle\Entity\CardBack;
 use c975L\CardBundle\Repository\CardBackRepository;
 use c975L\CardBundle\Service\BackCollector;
-use c975L\CardBundle\Service\CardCatalog;
 use c975L\PaymentBundle\Contract\InAppProduct;
 use c975L\PaymentBundle\Contract\InAppProductProviderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,20 +27,18 @@ class BackInAppProductProvider implements InAppProductProviderInterface
     public function __construct(
         private readonly CardBackRepository $backRepository,
         private readonly BackCollector $backCollector,
-        private readonly CardCatalog $cardCatalog,
         private readonly TranslatorInterface $translator,
     ) {
     }
 
-    // Every back on sale, named and described in each store locale
+    // Every back on sale, named and described in each store locale, one product dressing all the packs
     public function getProducts(): iterable
     {
         foreach ($this->backRepository->findForSale() as $back) {
-            $pack = $this->cardCatalog->packName((string) $back->getPack());
             $names = $descriptions = [];
             foreach (array_keys(InAppProduct::STORE_LOCALES) as $locale) {
-                $names[$locale] = $this->name($back);
-                $descriptions[$locale] = mb_substr($this->translator->trans('label.back_product_description', ['%pack%' => $pack], 'card', $locale), 0, self::DESCRIPTION_LENGTH);
+                $names[$locale] = $this->name($back, $locale);
+                $descriptions[$locale] = mb_substr($this->translator->trans('label.back_product_description', [], 'card', $locale), 0, self::DESCRIPTION_LENGTH);
             }
 
             yield new InAppProduct((string) $back->getProductId(), (int) $back->getPrice(), $names, $descriptions);
@@ -72,10 +69,10 @@ class BackInAppProductProvider implements InAppProductProviderInterface
         }
     }
 
-    // The pack and the variant together where they fit, the variant alone otherwise - a store name says which back it is before which castle
-    private function name(CardBack $back): string
+    // "Card back" and the variant together where they fit, the variant alone otherwise
+    private function name(CardBack $back, string $locale): string
     {
-        $name = $this->cardCatalog->backName($back);
+        $name = $this->translator->trans('label.back_product_name', ['%name%' => $back->getName()], 'card', $locale);
 
         return mb_substr(mb_strlen($name) <= self::NAME_LENGTH ? $name : (string) $back->getName(), 0, self::NAME_LENGTH);
     }

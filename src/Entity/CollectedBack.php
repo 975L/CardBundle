@@ -13,7 +13,7 @@ namespace c975L\CardBundle\Entity;
 use c975L\CardBundle\Repository\CollectedBackRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-// A card back a holder has, under the same key as their cards (see CollectedCard), and whether it is the one its pack's cards wear: one chosen at most per pack, none meaning the pack's own picture. The back is a relation and not a reference, a back being this bundle's own row
+// A card back a holder has, for every pack, under the same key as their cards (see CollectedCard), and whether it is the one their cards wear: one chosen at most, none meaning each pack's own picture. The back is a relation and not a reference, a back being this bundle's own row
 #[ORM\Entity(repositoryClass: CollectedBackRepository::class)]
 #[ORM\Table(name: 'card_collected_back')]
 #[ORM\UniqueConstraint(name: 'uniq_card_collected_back', columns: ['holder', 'back_id'])]

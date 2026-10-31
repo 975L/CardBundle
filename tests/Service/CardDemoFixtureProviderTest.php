@@ -12,6 +12,7 @@ namespace c975L\CardBundle\Tests\Service;
 
 use c975L\CardBundle\Contract\CardPackProviderInterface;
 use c975L\CardBundle\Entity\CardBack;
+use c975L\CardBundle\Entity\CardBackPicture;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\CardBundle\Service\CardDemoFixtureProvider;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
@@ -23,32 +24,23 @@ use Vich\UploaderBundle\FileAbstraction\ReplacingFile;
 
 class CardDemoFixtureProviderTest extends TestCase
 {
-    // Three published backs over two packs, each slug unique, none of them drawing a tone and an effect on the same layer
-    public function testSeedsPublishedBacksOverTwoPacks(): void
+    // Three published backs in order, each slug unique, none of them drawing a tone and an effect on the same layer, and no picture where the site declares no placeholder
+    public function testSeedsThreePublishedBacks(): void
     {
-        $backs = $this->backs();
+        $fixtures = $this->fixtures();
 
-        $this->assertCount(3, $backs);
-        $this->assertContainsOnlyInstancesOf(CardBack::class, $backs);
-        $this->assertSame(['north', 'north', 'south'], $this->packsOf($backs));
-        $this->assertSame([0, 1, 0], array_map(static fn (CardBack $back): ?int => $back->getPosition(), $backs));
-        $this->assertCount(3, array_unique(array_map(static fn (CardBack $back): ?string => $back->getSlug(), $backs)));
-        foreach ($backs as $back) {
+        $this->assertCount(3, $fixtures);
+        $this->assertContainsOnlyInstancesOf(CardBack::class, $fixtures);
+        $this->assertSame([0, 1, 2], array_map(static fn (CardBack $back): ?int => $back->getPosition(), $fixtures));
+        $this->assertCount(3, array_unique(array_map(static fn (CardBack $back): ?string => $back->getSlug(), $fixtures)));
+        foreach ($fixtures as $back) {
             $this->assertTrue($back->isPublished());
             $this->assertFalse($back->getTone()->drawsOverPicture() && $back->getEffect()->drawsOverPicture());
-            $this->assertNull($back->getImageFile());
         }
     }
 
-    // A site listing its packs gets the backs in its own, a player being able to choose only those
-    public function testUsesTheSitePacks(): void
-    {
-        $this->assertSame(['castle', 'castle', 'forest'], $this->packsOf($this->backs(['castle' => 'Castle', 'forest' => 'Forest'])));
-        $this->assertSame(['castle', 'castle', 'castle'], $this->packsOf($this->backs(['castle' => 'Castle'])));
-    }
-
-    // Each back carries a copy of a placeholder, its own when the site declares one, the placeholder itself staying on disk
-    public function testIllustratesEachBackWithACopyOfAPlaceholder(): void
+    // Each back's picture follows it, a copy of a placeholder - its own when the site declares one - in the site's own packs, the placeholder itself staying on disk
+    public function testIllustratesEachBackWithACopyOfAPlaceholderInTheSitePacks(): void
     {
         $projectDir = sys_get_temp_dir() . '/c975l-card-test-' . uniqid();
         mkdir($projectDir . '/public', 0o777, true);
@@ -59,23 +51,42 @@ class CardDemoFixtureProviderTest extends TestCase
         $registry->method('getImages')->willReturn(['pool.jpg']);
         $registry->method('getImagesFor')->willReturnCallback(static fn (string $key): array => 'card/demo-night' === $key ? ['night.jpg'] : []);
 
-        $backs = $this->backs([], $registry, $projectDir);
+        $fixtures = $this->fixtures(['castle' => 'Castle', 'forest' => 'Forest'], $registry, $projectDir);
+        $pictures = array_values(array_filter($fixtures, static fn (object $fixture): bool => $fixture instanceof CardBackPicture));
 
-        foreach ($backs as $back) {
-            $this->assertInstanceOf(ReplacingFile::class, $back->getImageFile());
-            $this->assertStringStartsNotWith($projectDir, $back->getImageFile()->getPathname());
+        $this->assertCount(6, $fixtures);
+        $this->assertSame($fixtures[0], $pictures[0]->getBack());
+        $this->assertSame(['castle', 'castle', 'forest'], array_map(static fn (CardBackPicture $picture): ?string => $picture->getPack(), $pictures));
+        foreach ($pictures as $picture) {
+            $this->assertInstanceOf(ReplacingFile::class, $picture->getImageFile());
+            $this->assertStringStartsNotWith($projectDir, $picture->getImageFile()->getPathname());
         }
-        $this->assertSame(['pool', 'pool', 'night'], array_map(static fn (CardBack $back): string => file_get_contents($back->getImageFile()->getPathname()), $backs));
+        $this->assertSame(['pool', 'pool', 'night'], array_map(static fn (CardBackPicture $picture): string => file_get_contents($picture->getImageFile()->getPathname()), $pictures));
         $this->assertFileExists($projectDir . '/public/pool.jpg');
         $this->assertFileExists($projectDir . '/public/night.jpg');
+    }
+
+    // A site listing no pack gets the raw keys, typed in the back office as it then is
+    public function testFallsBackToRawPackKeys(): void
+    {
+        $projectDir = sys_get_temp_dir() . '/c975l-card-test-' . uniqid();
+        mkdir($projectDir . '/public', 0o777, true);
+        file_put_contents($projectDir . '/public/pool.jpg', 'pool');
+        $registry = $this->createStub(PlaceholderMediaRegistry::class);
+        $registry->method('getImages')->willReturn(['pool.jpg']);
+        $registry->method('getImagesFor')->willReturn([]);
+
+        $pictures = array_values(array_filter($this->fixtures([], $registry, $projectDir), static fn (object $fixture): bool => $fixture instanceof CardBackPicture));
+
+        $this->assertSame(['north', 'north', 'south'], array_map(static fn (CardBackPicture $picture): ?string => $picture->getPack(), $pictures));
     }
 
     /**
      * @param array<string, string> $packs
      *
-     * @return list<CardBack>
+     * @return list<CardBack|CardBackPicture>
      */
-    private function backs(array $packs = [], ?PlaceholderMediaRegistry $registry = null, string $projectDir = ''): array
+    private function fixtures(array $packs = [], ?PlaceholderMediaRegistry $registry = null, string $projectDir = ''): array
     {
         $translator = $this->createStub(TranslatorInterface::class);
         $translator->method('trans')->willReturnArgument(0);
@@ -95,15 +106,5 @@ class CardDemoFixtureProviderTest extends TestCase
         );
 
         return iterator_to_array($provider->getDemoFixtures(), false);
-    }
-
-    /**
-     * @param list<CardBack> $backs
-     *
-     * @return list<?string>
-     */
-    private function packsOf(array $backs): array
-    {
-        return array_map(static fn (CardBack $back): ?string => $back->getPack(), $backs);
     }
 }

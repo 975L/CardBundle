@@ -24,13 +24,11 @@ class CardBackRepository extends ServiceEntityRepository
         parent::__construct($registry, CardBack::class);
     }
 
-    // A pack's published variants, in the back office's order
+    // The published variants, in the back office's order
     /** @return list<CardBack> */
-    public function findPublishedOfPack(string $pack): array
+    public function findPublished(): array
     {
         return $this->published()
-            ->andWhere('b.pack = :pack')
-            ->setParameter('pack', $pack)
             ->getQuery()
             ->getResult();
     }
@@ -41,11 +39,11 @@ class CardBackRepository extends ServiceEntityRepository
         return $this->findOneBy(['slug' => $slug, 'published' => true]);
     }
 
-    // The variants on sale, published and priced, pack by pack in the back office's order
+    // The variants on sale, published and priced, in the back office's order
     /** @return list<CardBack> */
     public function findForSale(): array
     {
-        return $this->published('b.pack')
+        return $this->published()
             ->andWhere('b.price IS NOT NULL')
             ->getQuery()
             ->getResult();
@@ -63,13 +61,13 @@ class CardBackRepository extends ServiceEntityRepository
         return null !== $back && InAppProduct::idFor(CardBack::PRODUCT_PREFIX, (string) $back->getSlug()) === $productId ? $back : null;
     }
 
-    // The published variants in the back office's order, after the given orders, those given no position last - MariaDB would sort them first
-    private function published(string ...$firstOrders): QueryBuilder
+    // The published variants in the back office's order, those given no position last - MariaDB would sort them first
+    private function published(): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('b')
             ->addSelect('CASE WHEN b.position IS NULL THEN 1 ELSE 0 END AS HIDDEN unpositioned')
             ->andWhere('b.published = true');
-        foreach ([...$firstOrders, 'unpositioned', 'b.position', 'b.id'] as $order) {
+        foreach (['unpositioned', 'b.position', 'b.id'] as $order) {
             $queryBuilder->addOrderBy($order);
         }
 

@@ -4,7 +4,11 @@
         <body>
             <trans-unit id="iIWC3BD">
                 <source>description.guided_project_card_back</source>
-                <target>Cree una variante del reverso de las cartas de un pack, que los jugadores podrán ganar o comprar, y luego elegir, y póngala a la venta si lo desea.</target>
+                <target>Cree una variante del reverso de las cartas, que los jugadores podrán ganar o comprar para todos los packs, y luego elegir, y póngala a la venta si lo desea.</target>
+            </trans-unit>
+            <trans-unit id="LRGZYLV">
+                <source>description.guided_project_card_back_picture</source>
+                <target>Dé a un reverso su imagen para un pack: ese castillo al alba, bajo la nieve… Sin imagen, el reverso usa la del pack.</target>
             </trans-unit>
             <trans-unit id="uTfo64l">
                 <source>description.guided_project_card_export</source>
@@ -12,31 +16,47 @@
             </trans-unit>
             <trans-unit id="1lnvqC.">
                 <source>description.guided_step_card_back_done</source>
-                <target>El reverso está listo: una recompensa, una compra o un código lo dan por su slug.</target>
+                <target>El reverso está listo: una recompensa, una compra o un código lo dan por su slug. Dele sus imágenes pack por pack con «Ilustrar un reverso para un pack».</target>
             </trans-unit>
             <trans-unit id="zWKy_oI">
                 <source>description.guided_step_card_back_effect</source>
                 <target>El movimiento del reverso: un zoom lento, estrellas… Se rechaza si se dibuja en la misma capa que el tono.</target>
             </trans-unit>
-            <trans-unit id="JB9Dqrj">
-                <source>description.guided_step_card_back_image</source>
-                <target>Del tamaño de una carta, en vertical. Sin imagen, el reverso usa la del pack.</target>
-            </trans-unit>
             <trans-unit id="oUvgEpU">
                 <source>description.guided_step_card_back_name</source>
-                <target>Su propio nombre, pues el del pack ya figura en el reverso. El slug se deriva de él.</target>
+                <target>Su propio nombre, válido para todos los packs: «Al alba». El slug se deriva de él.</target>
             </trans-unit>
             <trans-unit id="ZMGIO0U">
                 <source>description.guided_step_card_back_new</source>
-                <target>Una nueva variante para las cartas de un pack.</target>
+                <target>Una nueva variante, para las cartas de todos los packs.</target>
             </trans-unit>
             <trans-unit id="HJJbJh0">
                 <source>description.guided_step_card_back_open</source>
-                <target>La lista de variantes, pack por pack.</target>
+                <target>La lista de variantes, en su orden.</target>
             </trans-unit>
-            <trans-unit id="yRCr_AU">
-                <source>description.guided_step_card_back_pack</source>
-                <target>Las cartas de este pack llevarán este reverso una vez que el jugador lo elija.</target>
+            <trans-unit id="1kGBRYG">
+                <source>description.guided_step_card_back_picture_back</source>
+                <target>La variante que ilustra la imagen.</target>
+            </trans-unit>
+            <trans-unit id="jseD9hj">
+                <source>description.guided_step_card_back_picture_done</source>
+                <target>La imagen viste ahora las cartas de este pack bajo este reverso.</target>
+            </trans-unit>
+            <trans-unit id="yDrF2ST">
+                <source>description.guided_step_card_back_picture_image</source>
+                <target>Del tamaño de una carta, en vertical.</target>
+            </trans-unit>
+            <trans-unit id="SoXEWWr">
+                <source>description.guided_step_card_back_picture_new</source>
+                <target>Una imagen para un reverso y un pack.</target>
+            </trans-unit>
+            <trans-unit id="GtDITQn">
+                <source>description.guided_step_card_back_picture_open</source>
+                <target>Las imágenes de cada reverso, pack por pack.</target>
+            </trans-unit>
+            <trans-unit id="hzwCHh_">
+                <source>description.guided_step_card_back_picture_pack</source>
+                <target>Las cartas de este pack llevarán esta imagen cuando el jugador elija este reverso.</target>
             </trans-unit>
             <trans-unit id="42Qz7Vk">
                 <source>description.guided_step_card_back_price</source>
@@ -48,7 +68,7 @@
             </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
-                <target>La luz sobre la imagen. Un efecto dibujado en la misma capa se rechaza.</target>
+                <target>La luz sobre la imagen de cada pack. Un efecto dibujado en la misma capa se rechaza.</target>
             </trans-unit>
             <trans-unit id="BFeTy4P">
                 <source>description.guided_step_card_export_follow</source>
@@ -76,27 +96,27 @@
             </trans-unit>
             <trans-unit id="Fsv4oD6">
                 <source>help.back_image</source>
-                <target>Del tamaño de una carta, en vertical. Sin imagen, el reverso usa la de su pack, con su tono.</target>
+                <target>Del tamaño de una carta, en vertical. Sin imagen para un pack, el reverso usa la del pack, con su tono.</target>
             </trans-unit>
             <trans-unit id="WgS5NsT">
                 <source>help.back_name</source>
-                <target>El nombre de la variante, pues el del pack ya figura en el reverso: «Al alba», «Puesta de sol».</target>
+                <target>El nombre de la variante, válido para todos los packs: «Al alba», «Puesta de sol».</target>
             </trans-unit>
             <trans-unit id="3FgP2nj">
                 <source>help.back_pack</source>
-                <target>Las cartas de este pack llevan este reverso una vez elegido.</target>
-            </trans-unit>
-            <trans-unit id="Y1neHMB">
-                <source>help.back_pack_locked</source>
-                <target>Fijado al crearlo: un reverso nunca cambia de pack, sus jugadores lo perderían. Para otro pack, cree un nuevo reverso.</target>
+                <target>El pack cuyas cartas viste esta imagen, cuando el jugador lleva este reverso.</target>
             </trans-unit>
             <trans-unit id="CV05C_b">
                 <source>help.back_pack_typed</source>
-                <target>La clave del pack tal como la nombra el sitio (el prefijo de un castillo, el slug de una serie): las cartas de este pack llevan este reverso una vez elegido.</target>
+                <target>La clave del pack tal como la nombra el sitio (el prefijo de un castillo, el slug de una serie), en letras, cifras y guiones: esta imagen viste sus cartas cuando el jugador lleva este reverso.</target>
+            </trans-unit>
+            <trans-unit id="rlWZ0_L">
+                <source>help.back_picture_back</source>
+                <target>La variante que esta imagen ilustra para un pack.</target>
             </trans-unit>
             <trans-unit id="iQyCGJQ">
                 <source>help.back_position</source>
-                <target>El orden de las variantes de un mismo pack.</target>
+                <target>El orden de las variantes.</target>
             </trans-unit>
             <trans-unit id="uckuSVZ">
                 <source>help.back_price</source>
@@ -188,7 +208,11 @@
             </trans-unit>
             <trans-unit id="1xkZvVV">
                 <source>label.back_product_description</source>
-                <target>Un reverso para tus cartas %pack%</target>
+                <target>Un reverso para todas tus cartas</target>
+            </trans-unit>
+            <trans-unit id="GFs84ZN">
+                <source>label.back_product_name</source>
+                <target>Reverso «%name%»</target>
             </trans-unit>
             <trans-unit id="oMHBw_6">
                 <source>label.back_published</source>
@@ -246,6 +270,14 @@
                 <source>label.card_back</source>
                 <target>Reverso de carta</target>
             </trans-unit>
+            <trans-unit id="qdA4sym">
+                <source>label.card_back_picture</source>
+                <target>Imagen de reverso</target>
+            </trans-unit>
+            <trans-unit id="27lh5xp">
+                <source>label.card_back_pictures</source>
+                <target>Imágenes de reversos</target>
+            </trans-unit>
             <trans-unit id="u6Tx7Tp">
                 <source>label.card_backs</source>
                 <target>Reversos de las cartas</target>
@@ -298,6 +330,10 @@
                 <source>label.guided_project_card_back</source>
                 <target>Crear un reverso de carta</target>
             </trans-unit>
+            <trans-unit id="pPtbp6r">
+                <source>label.guided_project_card_back_picture</source>
+                <target>Ilustrar un reverso para un pack</target>
+            </trans-unit>
             <trans-unit id="IzejoBX">
                 <source>label.guided_project_card_export</source>
                 <target>Exportar las cartas</target>
@@ -309,10 +345,6 @@
             <trans-unit id="IUWI87y">
                 <source>label.guided_step_card_back_effect</source>
                 <target>Elija el efecto</target>
-            </trans-unit>
-            <trans-unit id="44AmozW">
-                <source>label.guided_step_card_back_image</source>
-                <target>Añada la imagen</target>
             </trans-unit>
             <trans-unit id="DPZSu2K">
                 <source>label.guided_step_card_back_name</source>
@@ -326,8 +358,28 @@
                 <source>label.guided_step_card_back_open</source>
                 <target>Abra los reversos de las cartas</target>
             </trans-unit>
-            <trans-unit id="a9sNeeA">
-                <source>label.guided_step_card_back_pack</source>
+            <trans-unit id="9zZUD26">
+                <source>label.guided_step_card_back_picture_back</source>
+                <target>Elija el reverso</target>
+            </trans-unit>
+            <trans-unit id="mQStV63">
+                <source>label.guided_step_card_back_picture_done</source>
+                <target>Guarde</target>
+            </trans-unit>
+            <trans-unit id="ru2DxNF">
+                <source>label.guided_step_card_back_picture_image</source>
+                <target>Añada la imagen</target>
+            </trans-unit>
+            <trans-unit id="C7PnUml">
+                <source>label.guided_step_card_back_picture_new</source>
+                <target>Añada una imagen</target>
+            </trans-unit>
+            <trans-unit id="97enhUD">
+                <source>label.guided_step_card_back_picture_open</source>
+                <target>Abra las imágenes de reversos</target>
+            </trans-unit>
+            <trans-unit id="xv7WAoI">
+                <source>label.guided_step_card_back_picture_pack</source>
                 <target>Elija el pack</target>
             </trans-unit>
             <trans-unit id="1uvf.r0">
@@ -354,9 +406,13 @@
                 <source>label.guided_step_card_export_run</source>
                 <target>Lance la exportación</target>
             </trans-unit>
+            <trans-unit id="e8W.GdF">
+                <source>label.info_card_back_pictures</source>
+                <target>La imagen de cada reverso para cada pack: un castillo al alba es la imagen de ese castillo. Sin imagen para un pack, el reverso usa allí la del pack, con su tono.</target>
+            </trans-unit>
             <trans-unit id="jm7lrtY">
                 <source>label.info_card_backs</source>
-                <target>Las variantes del reverso de las cartas de un pack: un jugador las gana o las compra y luego elige la que llevan las cartas de ese pack. Sin variante elegida, una carta conserva el reverso de su pack.</target>
+                <target>Las variantes del reverso de las cartas: un jugador las gana o las compra, cada una para todos los packs, y luego elige la que llevan todas sus cartas. Sin variante elegida, una carta conserva el reverso de su pack.</target>
             </trans-unit>
             <trans-unit id="yGOxphS">
                 <source>label.sign_in_required</source>

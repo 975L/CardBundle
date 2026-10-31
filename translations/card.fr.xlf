@@ -4,7 +4,11 @@
         <body>
             <trans-unit id="iIWC3BD">
                 <source>description.guided_project_card_back</source>
-                <target>Créez une variante du dos des cartes d'un pack, que les joueurs pourront gagner ou acheter, puis choisir, et mettez-la en vente si vous le souhaitez.</target>
+                <target>Créez une variante du dos des cartes, que les joueurs pourront gagner ou acheter pour tous les packs, puis choisir, et mettez-la en vente si vous le souhaitez.</target>
+            </trans-unit>
+            <trans-unit id="LRGZYLV">
+                <source>description.guided_project_card_back_picture</source>
+                <target>Donnez à un dos son image pour un pack : ce château à l'aube, sous la neige… Sans image, le dos reprend celle du pack.</target>
             </trans-unit>
             <trans-unit id="uTfo64l">
                 <source>description.guided_project_card_export</source>
@@ -12,31 +16,47 @@
             </trans-unit>
             <trans-unit id="1lnvqC.">
                 <source>description.guided_step_card_back_done</source>
-                <target>Le dos est prêt : une récompense, un achat ou un code le donnent par son slug.</target>
+                <target>Le dos est prêt : une récompense, un achat ou un code le donnent par son slug. Donnez-lui ses images pack par pack avec « Illustrer un dos pour un pack ».</target>
             </trans-unit>
             <trans-unit id="zWKy_oI">
                 <source>description.guided_step_card_back_effect</source>
                 <target>Le mouvement du dos : un zoom lent, des étoiles… Refusé s'il se dessine sur la même couche que le ton.</target>
             </trans-unit>
-            <trans-unit id="JB9Dqrj">
-                <source>description.guided_step_card_back_image</source>
-                <target>Au format d'une carte, en portrait. Sans image, le dos reprend celle du pack.</target>
-            </trans-unit>
             <trans-unit id="oUvgEpU">
                 <source>description.guided_step_card_back_name</source>
-                <target>Son nom à elle, celui du pack étant déjà sur le dos. Le slug en est tiré.</target>
+                <target>Son nom à elle, valable pour tous les packs : « À l'aube ». Le slug en est tiré.</target>
             </trans-unit>
             <trans-unit id="ZMGIO0U">
                 <source>description.guided_step_card_back_new</source>
-                <target>Une nouvelle variante pour les cartes d'un pack.</target>
+                <target>Une nouvelle variante, pour les cartes de tous les packs.</target>
             </trans-unit>
             <trans-unit id="HJJbJh0">
                 <source>description.guided_step_card_back_open</source>
-                <target>La liste des variantes, pack par pack.</target>
+                <target>La liste des variantes, dans leur ordre.</target>
             </trans-unit>
-            <trans-unit id="yRCr_AU">
-                <source>description.guided_step_card_back_pack</source>
-                <target>Les cartes de ce pack porteront ce dos une fois que le joueur l'aura choisi.</target>
+            <trans-unit id="1kGBRYG">
+                <source>description.guided_step_card_back_picture_back</source>
+                <target>La variante que l'image illustre.</target>
+            </trans-unit>
+            <trans-unit id="jseD9hj">
+                <source>description.guided_step_card_back_picture_done</source>
+                <target>L'image habille désormais les cartes de ce pack sous ce dos.</target>
+            </trans-unit>
+            <trans-unit id="yDrF2ST">
+                <source>description.guided_step_card_back_picture_image</source>
+                <target>Au format d'une carte, en portrait.</target>
+            </trans-unit>
+            <trans-unit id="SoXEWWr">
+                <source>description.guided_step_card_back_picture_new</source>
+                <target>Une image pour un dos et un pack.</target>
+            </trans-unit>
+            <trans-unit id="GtDITQn">
+                <source>description.guided_step_card_back_picture_open</source>
+                <target>Les images de chaque dos, pack par pack.</target>
+            </trans-unit>
+            <trans-unit id="hzwCHh_">
+                <source>description.guided_step_card_back_picture_pack</source>
+                <target>Les cartes de ce pack porteront cette image quand le joueur choisira ce dos.</target>
             </trans-unit>
             <trans-unit id="42Qz7Vk">
                 <source>description.guided_step_card_back_price</source>
@@ -48,7 +68,7 @@
             </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
-                <target>La lumière posée sur l'image. Un effet dessiné au même endroit est refusé.</target>
+                <target>La lumière posée sur l'image de chaque pack. Un effet dessiné au même endroit est refusé.</target>
             </trans-unit>
             <trans-unit id="BFeTy4P">
                 <source>description.guided_step_card_export_follow</source>
@@ -76,27 +96,27 @@
             </trans-unit>
             <trans-unit id="Fsv4oD6">
                 <source>help.back_image</source>
-                <target>Au format d'une carte, en portrait. Sans image, le dos reprend celle de son pack, dans son rendu.</target>
+                <target>Au format d'une carte, en portrait. Sans image pour un pack, le dos reprend celle du pack, dans son rendu.</target>
             </trans-unit>
             <trans-unit id="WgS5NsT">
                 <source>help.back_name</source>
-                <target>Le nom de la variante, celui du pack étant déjà sur le dos : « À l'aube », « Coucher de soleil ».</target>
+                <target>Le nom de la variante, valable pour tous les packs : « À l'aube », « Coucher de soleil ».</target>
             </trans-unit>
             <trans-unit id="3FgP2nj">
                 <source>help.back_pack</source>
-                <target>Les cartes de ce pack portent ce dos une fois choisi.</target>
-            </trans-unit>
-            <trans-unit id="Y1neHMB">
-                <source>help.back_pack_locked</source>
-                <target>Fixé à la création : un dos ne change jamais de pack, ses joueurs le perdraient. Pour un autre pack, créez un nouveau dos.</target>
+                <target>Le pack dont cette image habille les cartes, quand le joueur porte ce dos.</target>
             </trans-unit>
             <trans-unit id="CV05C_b">
                 <source>help.back_pack_typed</source>
-                <target>La clé du pack telle que le site la nomme (le préfixe d'un château, le slug d'une série) : les cartes de ce pack portent ce dos une fois choisi.</target>
+                <target>La clé du pack telle que le site la nomme (le préfixe d'un château, le slug d'une série), en lettres, chiffres et tirets : cette image habille ses cartes quand le joueur porte ce dos.</target>
+            </trans-unit>
+            <trans-unit id="rlWZ0_L">
+                <source>help.back_picture_back</source>
+                <target>La variante que cette image illustre pour un pack.</target>
             </trans-unit>
             <trans-unit id="iQyCGJQ">
                 <source>help.back_position</source>
-                <target>L'ordre des variantes d'un même pack.</target>
+                <target>L'ordre des variantes.</target>
             </trans-unit>
             <trans-unit id="uckuSVZ">
                 <source>help.back_price</source>
@@ -188,7 +208,11 @@
             </trans-unit>
             <trans-unit id="1xkZvVV">
                 <source>label.back_product_description</source>
-                <target>Un dos pour vos cartes %pack%</target>
+                <target>Un dos pour toutes vos cartes</target>
+            </trans-unit>
+            <trans-unit id="GFs84ZN">
+                <source>label.back_product_name</source>
+                <target>Dos « %name% »</target>
             </trans-unit>
             <trans-unit id="oMHBw_6">
                 <source>label.back_published</source>
@@ -246,6 +270,14 @@
                 <source>label.card_back</source>
                 <target>Dos de carte</target>
             </trans-unit>
+            <trans-unit id="qdA4sym">
+                <source>label.card_back_picture</source>
+                <target>Image de dos</target>
+            </trans-unit>
+            <trans-unit id="27lh5xp">
+                <source>label.card_back_pictures</source>
+                <target>Images des dos</target>
+            </trans-unit>
             <trans-unit id="u6Tx7Tp">
                 <source>label.card_backs</source>
                 <target>Dos des cartes</target>
@@ -298,6 +330,10 @@
                 <source>label.guided_project_card_back</source>
                 <target>Créer un dos de carte</target>
             </trans-unit>
+            <trans-unit id="pPtbp6r">
+                <source>label.guided_project_card_back_picture</source>
+                <target>Illustrer un dos pour un pack</target>
+            </trans-unit>
             <trans-unit id="IzejoBX">
                 <source>label.guided_project_card_export</source>
                 <target>Exporter les cartes</target>
@@ -309,10 +345,6 @@
             <trans-unit id="IUWI87y">
                 <source>label.guided_step_card_back_effect</source>
                 <target>Choisissez l'effet</target>
-            </trans-unit>
-            <trans-unit id="44AmozW">
-                <source>label.guided_step_card_back_image</source>
-                <target>Ajoutez l'image</target>
             </trans-unit>
             <trans-unit id="DPZSu2K">
                 <source>label.guided_step_card_back_name</source>
@@ -326,8 +358,28 @@
                 <source>label.guided_step_card_back_open</source>
                 <target>Ouvrez les dos des cartes</target>
             </trans-unit>
-            <trans-unit id="a9sNeeA">
-                <source>label.guided_step_card_back_pack</source>
+            <trans-unit id="9zZUD26">
+                <source>label.guided_step_card_back_picture_back</source>
+                <target>Choisissez le dos</target>
+            </trans-unit>
+            <trans-unit id="mQStV63">
+                <source>label.guided_step_card_back_picture_done</source>
+                <target>Enregistrez</target>
+            </trans-unit>
+            <trans-unit id="ru2DxNF">
+                <source>label.guided_step_card_back_picture_image</source>
+                <target>Ajoutez l'image</target>
+            </trans-unit>
+            <trans-unit id="C7PnUml">
+                <source>label.guided_step_card_back_picture_new</source>
+                <target>Ajoutez une image</target>
+            </trans-unit>
+            <trans-unit id="97enhUD">
+                <source>label.guided_step_card_back_picture_open</source>
+                <target>Ouvrez les images des dos</target>
+            </trans-unit>
+            <trans-unit id="xv7WAoI">
+                <source>label.guided_step_card_back_picture_pack</source>
                 <target>Choisissez le pack</target>
             </trans-unit>
             <trans-unit id="1uvf.r0">
@@ -354,9 +406,13 @@
                 <source>label.guided_step_card_export_run</source>
                 <target>Lancer l'export</target>
             </trans-unit>
+            <trans-unit id="e8W.GdF">
+                <source>label.info_card_back_pictures</source>
+                <target>L'image de chaque dos pour chaque pack : un château à l'aube est l'image de ce château. Sans image pour un pack, le dos y reprend l'image du pack, dans son rendu.</target>
+            </trans-unit>
             <trans-unit id="jm7lrtY">
                 <source>label.info_card_backs</source>
-                <target>Les variantes du dos des cartes d'un pack : un joueur les gagne ou les achète, puis choisit celle que portent les cartes de ce pack. Sans variante choisie, une carte garde le dos de son pack.</target>
+                <target>Les variantes du dos des cartes : un joueur les gagne ou les achète, chacune pour tous les packs, puis choisit celle que portent toutes ses cartes. Sans variante choisie, une carte garde le dos de son pack.</target>
             </trans-unit>
             <trans-unit id="yGOxphS">
                 <source>label.sign_in_required</source>

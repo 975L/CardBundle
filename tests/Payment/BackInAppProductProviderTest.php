@@ -19,25 +19,23 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BackInAppProductProviderTest extends TestCase
 {
-    use PackCatalogTrait;
-
     // Each back on sale is one store product: its derived id, its price, a name and a description in each locale
     public function testEachBackOnSaleIsAProduct(): void
     {
-        $products = iterator_to_array($this->provider([$this->back('chateau-hurlton-orage', 'Orage')])->getProducts(), false);
+        $products = iterator_to_array($this->provider([$this->back('orage', 'Orage')])->getProducts(), false);
 
         $this->assertCount(1, $products);
-        $this->assertSame('back.chateau_hurlton_orage', $products[0]->productId);
+        $this->assertSame('back.orage', $products[0]->productId);
         $this->assertSame(100, $products[0]->price);
         $this->assertSame(['fr', 'en', 'es'], array_keys($products[0]->names));
-        $this->assertSame('Hurlton - Orage', $products[0]->names['fr']);
-        $this->assertSame('Hurlton', $products[0]->descriptions['es']);
+        $this->assertSame('Dos Orage', $products[0]->names['fr']);
+        $this->assertSame('label.back_product_description', $products[0]->descriptions['es']);
     }
 
     // A name past Apple's 30 characters keeps the variant alone, cut to fit
     public function testANameTooLongForTheStoresKeepsTheVariant(): void
     {
-        $products = iterator_to_array($this->provider([$this->back('hurlton-long', 'Coucher de soleil sur la mer')])->getProducts(), false);
+        $products = iterator_to_array($this->provider([$this->back('long', 'Coucher de soleil sur la mer')])->getProducts(), false);
 
         $this->assertSame('Coucher de soleil sur la mer', $products[0]->names['fr']);
         $this->assertLessThanOrEqual(30, mb_strlen($products[0]->names['fr']));
@@ -46,15 +44,15 @@ class BackInAppProductProviderTest extends TestCase
     // A purchase gives the back under the store's name, a refund takes back only what that store gave
     public function testDeliverAndRevokeGoThroughTheCollectorUnderTheStore(): void
     {
-        $back = $this->back('chateau-hurlton-orage', 'Orage');
+        $back = $this->back('orage', 'Orage');
         $collector = $this->createMock(BackCollector::class);
         $collector->expects($this->once())->method('grant')->with('u1', $back, 'apple', true);
         $collector->expects($this->once())->method('revoke')->with('u1', $back, 'google');
         $provider = $this->provider([$back], $back, $collector);
 
-        $this->assertTrue($provider->supports('back.chateau_hurlton_orage'));
-        $provider->deliver('u1', 'back.chateau_hurlton_orage', 'apple');
-        $provider->revoke('u1', 'back.chateau_hurlton_orage', 'google');
+        $this->assertTrue($provider->supports('back.orage'));
+        $provider->deliver('u1', 'back.orage', 'apple');
+        $provider->revoke('u1', 'back.orage', 'google');
     }
 
     // Another provider's product is left alone
@@ -77,15 +75,15 @@ class BackInAppProductProviderTest extends TestCase
         $repository->method('findForSale')->willReturn($forSale);
         $repository->method('findByProductId')->willReturn($byProductId);
 
-        // The description answered as its pack, which is what the stores are then told
+        // The name answered as "Dos" and the variant, the description as its key
         $translator = $this->createStub(TranslatorInterface::class);
-        $translator->method('trans')->willReturnCallback(static fn (string $key, array $parameters): string => $parameters['%pack%']);
+        $translator->method('trans')->willReturnCallback(static fn (string $key, array $parameters): string => isset($parameters['%name%']) ? 'Dos ' . $parameters['%name%'] : $key);
 
-        return new BackInAppProductProvider($repository, $collector ?? $this->createStub(BackCollector::class), $this->catalog(), $translator);
+        return new BackInAppProductProvider($repository, $collector ?? $this->createStub(BackCollector::class), $translator);
     }
 
     private function back(string $slug, string $name): CardBack
     {
-        return new CardBack()->setPack('hur')->setSlug($slug)->setName($name)->setPrice(100)->setPublished(true);
+        return new CardBack()->setSlug($slug)->setName($name)->setPrice(100)->setPublished(true);
     }
 }

@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.3.0
+
+A card back held for every pack, one chosen for all the cards
+
+- `CardBack` is a variant held once for every pack, earned or bought alike: its `pack` and its picture are gone, see the README's *Upgrading to v1.3* (31/10/2026) **Breaking change** **Needs db update**
+- `CardBackPicture`: a back's picture for one pack, on its own back-office screen with its guided project, `card-back-picture` (31/10/2026)
+- `BackCollector::choose($holder, $back)` and `chosen($holder)`: one back for all the holder's cards, no longer one per pack (31/10/2026) **Breaking change**
+- `CardBackRepository::findPublished()` replaces `findPublishedOfPack()`, `CardBackPictureRepository::findImagesOfPack()` reads a pack's pictures (31/10/2026) **Breaking change**
+- A store product and a basket line sell a back for all the packs, named « Card back “variant” » (31/10/2026)
+- `CardCatalog::packName()` and `backName()` removed, a back being named by its own name (31/10/2026) **Breaking change**
+- The device's chosen back is carried to the account only when the account chose none (31/10/2026)
+- The device's chosen back is carried to the account one at most, even from several legacy choices (31/10/2026)
+- `CardBackPicture`: the pack key in letters, digits, dashes and underscores, a file required on creation (31/10/2026)
+- `CardBack::$pictures`: a back's pictures removed with it, their files included (31/10/2026)
+- Guided project `card-back` points to the pictures and no longer speaks of one pack (31/10/2026)
+
 ## v1.2.0
 
 Card backs for sale, in the app stores and on the site

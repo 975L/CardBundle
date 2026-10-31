@@ -14,7 +14,6 @@ use c975L\CardBundle\Entity\CardBack;
 use c975L\CardBundle\Enum\BackEffect;
 use c975L\CardBundle\Enum\BackTone;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
@@ -29,21 +28,15 @@ class CardBackTest extends TestCase
         $this->assertSame(0, $this->violations(BackTone::None, BackEffect::Mist));
     }
 
-    // Each upload lands under the bundle's own directory, named after the slug
-    public function testTheMediaPathIsNamedAfterTheSlug(): void
-    {
-        $this->assertSame(CardBack::MEDIA_DIRECTORY . '/hurlton-aube', new CardBack()->setSlug('hurlton-aube')->getVichMediaPath());
-    }
-
     // On sale once published and priced, its store product id derived from its slug - and none without a price
     public function testItsProductIdIsDerivedFromItsSlugOncePriced(): void
     {
-        $back = new CardBack()->setSlug('chateau-hurlton-orage')->setPublished(true);
+        $back = new CardBack()->setSlug('orage')->setPublished(true);
         $this->assertNull($back->getProductId());
         $this->assertFalse($back->isForSale());
 
         $back->setPrice(100);
-        $this->assertSame('back.chateau_hurlton_orage', $back->getProductId());
+        $this->assertSame('back.orage', $back->getProductId());
         $this->assertTrue($back->isForSale());
         $this->assertFalse($back->setPublished(false)->isForSale());
     }
@@ -59,23 +52,10 @@ class CardBackTest extends TestCase
         }
     }
 
-    public function testItIsNamedByItsPackAndItsName(): void
+    public function testItIsNamedByItsName(): void
     {
-        $this->assertSame('hur - À l\'aube', (string) new CardBack()->setPack('hur')->setName('À l\'aube'));
+        $this->assertSame('À l\'aube', (string) new CardBack()->setName('À l\'aube'));
         $this->assertSame('', (string) new CardBack());
-    }
-
-    // A new upload dates the row, Doctrine seeing no other change when only the file is replaced; clearing the field does not
-    public function testANewPictureDatesTheRow(): void
-    {
-        $back = new CardBack();
-        $this->assertSame($back->getCreation(), $back->getModification());
-
-        $back->setImageFile(null);
-        $this->assertSame($back->getCreation(), $back->getModification());
-
-        $back->setImageFile(new File(__FILE__));
-        $this->assertNotSame($back->getCreation(), $back->getModification());
     }
 
     private function violations(BackTone $tone, BackEffect $effect): int

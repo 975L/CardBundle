@@ -1,0 +1,5 @@
+{# The picture's thumbnail, the one UiBundle cuts beside every upload (see CardBackPicture::getThumbnailSize) #}
+{% set picture = entity.instance %}
+{% if picture.image %}
+    <img src="{{ asset(picture.image|replace({'.webp': '-thumb.webp'})) }}" alt="{{ picture }}" loading="lazy" width="60">
+{% endif %}

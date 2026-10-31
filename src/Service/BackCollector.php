@@ -42,7 +42,7 @@ class BackCollector
         return true;
     }
 
-    // Takes back a back the given source gave, and says whether one was held: a refunded purchase. The same back earned another way stays, and a chosen one taken back leaves its pack to its own picture
+    // Takes back a back the given source gave, and says whether one was held: a refunded purchase. The same back earned another way stays, and a chosen one taken back leaves the cards to their packs' own pictures
     public function revoke(string $holder, CardBack $back, string $source): bool
     {
         $collected = $this->collectedBackRepository->findOneBy(['holder' => $holder, 'back' => $back, 'source' => $source]);
@@ -56,35 +56,31 @@ class BackCollector
         return true;
     }
 
-    // Makes a held back the one its pack's cards wear, or none for the pack's own picture, and says whether it was done: false for a back not held, not published or of another pack
-    public function choose(string $holder, string $pack, ?CardBack $back): bool
+    // Makes a held back the one all the holder's cards wear, or none for each pack's own picture, and says whether it was done: false for a back not held or not published
+    public function choose(string $holder, ?CardBack $back): bool
     {
         $held = $this->collectedBackRepository->findByHolder($holder);
-        if (null !== $back && (!$back->isPublished() || $back->getPack() !== $pack || [] === array_filter($held, static fn (CollectedBack $collected): bool => $collected->getBack() === $back))) {
+        if (null !== $back && (!$back->isPublished() || [] === array_filter($held, static fn (CollectedBack $collected): bool => $collected->getBack() === $back))) {
             return false;
         }
 
         foreach ($held as $collected) {
-            if ($collected->getBack()->getPack() === $pack) {
-                $collected->setChosen($collected->getBack() === $back);
-            }
+            $collected->setChosen($collected->getBack() === $back);
         }
         $this->entityManager->flush();
 
         return true;
     }
 
-    // The back each pack's cards wear for the holder, by pack, a pack with none chosen being absent - as is one whose back was unpublished, worn again once republished, the choice being kept
-    /** @return array<string, CardBack> */
-    public function chosen(string $holder): array
+    // The back the holder's cards wear, null for none chosen - or one unpublished since, worn again once republished, the choice being kept
+    public function chosen(string $holder): ?CardBack
     {
-        $chosen = [];
         foreach ($this->collectedBackRepository->findByHolder($holder) as $collected) {
             if ($collected->isChosen() && $collected->getBack()->isPublished()) {
-                $chosen[(string) $collected->getBack()->getPack()] = $collected->getBack();
+                return $collected->getBack();
             }
         }
 
-        return $chosen;
+        return null;
     }
 }

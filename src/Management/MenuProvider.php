@@ -11,10 +11,11 @@
 namespace c975L\CardBundle\Management;
 
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
+use c975L\CardBundle\Controller\Management\CardBackPictureCrudController;
 use c975L\ConfigBundle\Management\MenuProviderInterface;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 
-// One entry, the card backs: the cards themselves are the site's catalogue and have their own screens there, and the collections are what players did rather than what an admin makes
+// Two entries, the card backs and their pictures pack by pack: the cards themselves are the site's catalogue and have their own screens there, and the collections are what players did rather than what an admin makes
 class MenuProvider implements MenuProviderInterface
 {
     public function __construct(
@@ -42,6 +43,15 @@ class MenuProvider implements MenuProviderInterface
                 'icon' => 'fas fa-clone',
                 'description' => 'label.info_card_backs',
                 // The bar CardBackCrudController sets on its own index - a back is content like any other
+                'role' => (string) $this->configService->get('site-role-editor'),
+            ],
+            'card_back_picture' => [
+                'controller' => CardBackPictureCrudController::class,
+                'label' => 'label.card_back_pictures',
+                'narration' => 'narration.card_back_pictures',
+                'translation_domain' => 'card',
+                'icon' => 'fas fa-image',
+                'description' => 'label.info_card_back_pictures',
                 'role' => (string) $this->configService->get('site-role-editor'),
             ],
         ];

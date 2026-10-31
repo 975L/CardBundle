@@ -30,7 +30,7 @@ class AccountDataProviderTest extends TestCase
     {
         $catalog = $this->createStub(CardCatalogInterface::class);
         $catalog->method('getCardName')->willReturnCallback(static fn (string $reference): ?string => 'GUE 02' === $reference ? 'Athelleen' : null);
-        $back = new CollectedBack('u3', new CardBack()->setPack('hur')->setName('À l\'aube'), 'quiz');
+        $back = new CollectedBack('u3', new CardBack()->setName('À l\'aube'), 'quiz');
         $back->setChosen(true);
 
         $data = $this->provider(
@@ -41,7 +41,7 @@ class AccountDataProviderTest extends TestCase
 
         $this->assertSame(['Athelleen', 'XYZ 99'], array_column($data['cards'], 'name'));
         $this->assertSame(['shiny', 'normal'], array_column($data['cards'], 'finish'));
-        $this->assertSame('hur - À l\'aube', $data['backs'][0]['back']);
+        $this->assertSame('À l\'aube', $data['backs'][0]['back']);
         $this->assertTrue($data['backs'][0]['chosen']);
     }
 

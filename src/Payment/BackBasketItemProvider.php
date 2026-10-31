@@ -107,7 +107,7 @@ class BackBasketItemProvider implements BasketItemProviderInterface, AccountBask
         return null;
     }
 
-    // The back as the basket stores it, its title naming its pack, VAT included in its price
+    // The back as the basket stores it, under the card backs' heading, VAT included in its price
     public function toBasketData(object $item, int $quantity): array
     {
         /** @var CardBack $item */
@@ -116,7 +116,7 @@ class BackBasketItemProvider implements BasketItemProviderInterface, AccountBask
         return [
             'item' => [
                 'id' => $item->getId(),
-                'title' => $this->cardCatalog->backName($item),
+                'title' => $item->getName(),
                 'price' => $item->getPrice(),
                 'currency' => $this->cardCatalog->currency(),
                 'vat' => $item->getVat(),
@@ -125,7 +125,7 @@ class BackBasketItemProvider implements BasketItemProviderInterface, AccountBask
             ],
             // No catalogue page of its own: a back is bought where the collection shows it
             'parent' => [
-                'title' => $this->cardCatalog->packName((string) $item->getPack()),
+                'title' => $this->translator->trans('label.card_backs', [], 'card'),
             ],
             'type' => self::KIND,
             'quantity' => $quantity,
