@@ -20,7 +20,7 @@
             </trans-unit>
             <trans-unit id="zWKy_oI">
                 <source>description.guided_step_card_back_effect</source>
-                <target>Le mouvement du dos : un zoom lent, des étoiles… Refusé s'il se dessine sur la même couche que le ton.</target>
+                <target>Le mouvement du dos : un zoom lent, des étoiles…</target>
             </trans-unit>
             <trans-unit id="oUvgEpU">
                 <source>description.guided_step_card_back_name</source>
@@ -68,7 +68,7 @@
             </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
-                <target>La lumière posée sur l'image de chaque pack. Un effet dessiné au même endroit est refusé.</target>
+                <target>La lumière posée sur l'image de chaque pack. Tout effet s'y accorde.</target>
             </trans-unit>
             <trans-unit id="BFeTy4P">
                 <source>description.guided_step_card_export_follow</source>
@@ -417,10 +417,6 @@
             <trans-unit id="yGOxphS">
                 <source>label.sign_in_required</source>
                 <target>Connectez-vous pour recevoir ce dos sur votre compte.</target>
-            </trans-unit>
-            <trans-unit id="XUNDdCp">
-                <source>message.back_layers_clash</source>
-                <target>Ce rendu et cet effet se dessinent au même endroit : choisissez un autre effet.</target>
             </trans-unit>
         </body>
     </file>

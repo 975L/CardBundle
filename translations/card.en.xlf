@@ -20,7 +20,7 @@
             </trans-unit>
             <trans-unit id="zWKy_oI">
                 <source>description.guided_step_card_back_effect</source>
-                <target>How the back moves: a slow zoom, stars… Refused when drawn on the same layer as the tone.</target>
+                <target>How the back moves: a slow zoom, stars…</target>
             </trans-unit>
             <trans-unit id="oUvgEpU">
                 <source>description.guided_step_card_back_name</source>
@@ -68,7 +68,7 @@
             </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
-                <target>The light laid over each pack's picture. An effect drawn on the same layer is refused.</target>
+                <target>The light laid over each pack's picture. Any effect goes with it.</target>
             </trans-unit>
             <trans-unit id="BFeTy4P">
                 <source>description.guided_step_card_export_follow</source>
@@ -417,10 +417,6 @@
             <trans-unit id="yGOxphS">
                 <source>label.sign_in_required</source>
                 <target>Sign in to receive this back on your account.</target>
-            </trans-unit>
-            <trans-unit id="XUNDdCp">
-                <source>message.back_layers_clash</source>
-                <target>This tone and this effect are drawn on the same layer: choose another effect.</target>
             </trans-unit>
         </body>
     </file>

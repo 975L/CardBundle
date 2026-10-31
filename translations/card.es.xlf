@@ -20,7 +20,7 @@
             </trans-unit>
             <trans-unit id="zWKy_oI">
                 <source>description.guided_step_card_back_effect</source>
-                <target>El movimiento del reverso: un zoom lento, estrellas… Se rechaza si se dibuja en la misma capa que el tono.</target>
+                <target>El movimiento del reverso: un zoom lento, estrellas…</target>
             </trans-unit>
             <trans-unit id="oUvgEpU">
                 <source>description.guided_step_card_back_name</source>
@@ -68,7 +68,7 @@
             </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
-                <target>La luz sobre la imagen de cada pack. Un efecto dibujado en la misma capa se rechaza.</target>
+                <target>La luz sobre la imagen de cada pack. Cualquier efecto le va.</target>
             </trans-unit>
             <trans-unit id="BFeTy4P">
                 <source>description.guided_step_card_export_follow</source>
@@ -417,10 +417,6 @@
             <trans-unit id="yGOxphS">
                 <source>label.sign_in_required</source>
                 <target>Inicia sesión para recibir este reverso en tu cuenta.</target>
-            </trans-unit>
-            <trans-unit id="XUNDdCp">
-                <source>message.back_layers_clash</source>
-                <target>Este tono y este efecto se dibujan en la misma capa: elija otro efecto.</target>
             </trans-unit>
         </body>
     </file>

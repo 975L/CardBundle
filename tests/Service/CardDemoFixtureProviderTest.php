@@ -24,7 +24,7 @@ use Vich\UploaderBundle\FileAbstraction\ReplacingFile;
 
 class CardDemoFixtureProviderTest extends TestCase
 {
-    // Three published backs in order, each slug unique, none of them drawing a tone and an effect on the same layer, and no picture where the site declares no placeholder
+    // Three published backs in order, each slug unique, and no picture where the site declares no placeholder
     public function testSeedsThreePublishedBacks(): void
     {
         $fixtures = $this->fixtures();
@@ -35,7 +35,6 @@ class CardDemoFixtureProviderTest extends TestCase
         $this->assertCount(3, array_unique(array_map(static fn (CardBack $back): ?string => $back->getSlug(), $fixtures)));
         foreach ($fixtures as $back) {
             $this->assertTrue($back->isPublished());
-            $this->assertFalse($back->getTone()->drawsOverPicture() && $back->getEffect()->drawsOverPicture());
         }
     }
 

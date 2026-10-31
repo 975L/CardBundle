@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4
+
+Any tone of a card back goes with any effect
+
+- `CardBack` no longer refuses a tone and an effect drawn on the same layer (31/10/2026)
+- `BackTone::drawsOverPicture()` and `BackEffect::drawsOverPicture()` removed (31/10/2026) **Breaking change**
+- Guided project `card-back` no longer warns of a refused tone and effect (31/10/2026)
+
 ## v1.3.0
 
 A card back held for every pack, one chosen for all the cards

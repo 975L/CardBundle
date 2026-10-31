@@ -11,23 +11,11 @@
 namespace c975L\CardBundle\Tests\Entity;
 
 use c975L\CardBundle\Entity\CardBack;
-use c975L\CardBundle\Enum\BackEffect;
-use c975L\CardBundle\Enum\BackTone;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class CardBackTest extends TestCase
 {
-    // A tone and an effect drawn on the same layer are refused, on the effect; on different layers they pass
-    public function testATonAndAnEffectOnTheSameLayerAreRefused(): void
-    {
-        $this->assertSame(1, $this->violations(BackTone::Dawn, BackEffect::Snow));
-        $this->assertSame(0, $this->violations(BackTone::Dawn, BackEffect::Stars));
-        $this->assertSame(0, $this->violations(BackTone::None, BackEffect::Mist));
-    }
-
     // On sale once published and priced, its store product id derived from its slug - and none without a price
     public function testItsProductIdIsDerivedFromItsSlugOncePriced(): void
     {
@@ -56,22 +44,5 @@ class CardBackTest extends TestCase
     {
         $this->assertSame('À l\'aube', (string) new CardBack()->setName('À l\'aube'));
         $this->assertSame('', (string) new CardBack());
-    }
-
-    private function violations(BackTone $tone, BackEffect $effect): int
-    {
-        $count = 0;
-        $builder = $this->createStub(ConstraintViolationBuilderInterface::class);
-        $builder->method('setTranslationDomain')->willReturnSelf();
-        $builder->method('atPath')->willReturnSelf();
-        $builder->method('addViolation')->willReturnCallback(static function () use (&$count): void {
-            ++$count;
-        });
-        $context = $this->createStub(ExecutionContextInterface::class);
-        $context->method('buildViolation')->willReturn($builder);
-
-        new CardBack()->setTone($tone)->setEffect($effect)->validateLayers($context);
-
-        return $count;
     }
 }

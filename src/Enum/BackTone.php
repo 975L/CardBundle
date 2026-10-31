@@ -36,10 +36,4 @@ enum BackTone: string implements TranslatableInterface
     {
         return $translator->trans($this->label(), [], 'card', $locale);
     }
-
-    // Whether its light is drawn over the picture, on the layer the snow, the wind and the mist effects draw on too (see BackEffect::drawsOverPicture())
-    public function drawsOverPicture(): bool
-    {
-        return \in_array($this, [self::Dawn, self::Sunset, self::Storm, self::Night], true);
-    }
 }

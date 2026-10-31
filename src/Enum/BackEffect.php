@@ -36,10 +36,4 @@ enum BackEffect: string implements TranslatableInterface
     {
         return $translator->trans($this->label(), [], 'card', $locale);
     }
-
-    // Whether it is drawn over the picture, on the layer the tones light it on too (see BackTone::drawsOverPicture())
-    public function drawsOverPicture(): bool
-    {
-        return \in_array($this, [self::Snow, self::Wind, self::Mist], true);
-    }
 }

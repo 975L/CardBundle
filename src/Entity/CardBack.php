@@ -20,7 +20,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 // A variant of the card backs - at dawn, at sunset, under the storm - held once for every pack and worn by all the holder's cards once chosen. Only the variants are stored: with none chosen, a card's back is whatever the site draws for its pack. Each pack's picture of it is a CardBackPicture, and how a back is had is none of its columns: a reward, a purchase or a code each give it through BackCollector
 #[ORM\Entity(repositoryClass: CardBackRepository::class)]
@@ -222,18 +221,6 @@ class CardBack implements \Stringable
     public function touch(): void
     {
         $this->modification = new \DateTimeImmutable();
-    }
-
-    // A tone and an effect drawn on the same layer of the picture, one would hide the other
-    #[Assert\Callback]
-    public function validateLayers(ExecutionContextInterface $context): void
-    {
-        if ($this->tone->drawsOverPicture() && $this->effect->drawsOverPicture()) {
-            $context->buildViolation('message.back_layers_clash')
-                ->setTranslationDomain('card')
-                ->atPath('effect')
-                ->addViolation();
-        }
     }
 
     // What the back office and a reward's message name it by
