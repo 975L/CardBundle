@@ -38,7 +38,7 @@ class CardBackRepositoryTest extends TestCase
             $this->stoppedRepository()->findForSale();
             $this->fail('The query was never written.');
         } catch (\LogicException $exception) {
-            $this->assertStringContainsString('b.published = true AND b.price IS NOT NULL', $exception->getMessage());
+            $this->assertStringContainsString('b.published = true AND b.standard = false AND b.price IS NOT NULL', $exception->getMessage());
             $this->assertStringEndsWith('ORDER BY unpositioned ASC, b.position ASC, b.id ASC', $exception->getMessage());
         }
     }

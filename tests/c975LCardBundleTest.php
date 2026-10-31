@@ -11,6 +11,7 @@
 namespace c975L\CardBundle\Tests;
 
 use c975L\CardBundle\c975LCardBundle;
+use c975L\CardBundle\Contract\CardBackPageProviderInterface;
 use c975L\CardBundle\Contract\CardCatalogInterface;
 use c975L\CardBundle\Contract\CardPackProviderInterface;
 use c975L\CardBundle\Contract\HolderStoreInterface;
@@ -36,13 +37,14 @@ class c975LCardBundleTest extends TestCase
         $this->assertTrue($container->hasDefinition(CardHolder::class));
     }
 
-    // The three points a site plugs into are tagged rather than aliased, which is what spares the site any configuration: an attribute dropped would leave its implementation silently unread
+    // The points a site plugs into are tagged rather than aliased, which is what spares the site any configuration: an attribute dropped would leave its implementation silently unread
     public function testTheSiteContractsAreTaggedByAutoconfiguration(): void
     {
         $tags = [
             HolderStoreInterface::class => 'c975l.card_holder_store',
             CardCatalogInterface::class => 'c975l.card_catalog',
             CardPackProviderInterface::class => 'c975l.card_pack_provider',
+            CardBackPageProviderInterface::class => 'c975l.card_back_page_provider',
         ];
         foreach ($tags as $interface => $tag) {
             $attributes = new \ReflectionClass($interface)->getAttributes(AutoconfigureTag::class);

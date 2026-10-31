@@ -30,6 +30,15 @@ class CardBackTest extends TestCase
         $this->assertFalse($back->setPublished(false)->isForSale());
     }
 
+    // The standard back is never sold, a price typed on it notwithstanding
+    public function testTheStandardBackIsNeverForSale(): void
+    {
+        $back = new CardBack()->setSlug('origin')->setPrice(100)->setPublished(true);
+        $this->assertTrue($back->isForSale());
+
+        $this->assertFalse($back->setStandard(true)->isForSale());
+    }
+
     // Lowercase words joined by hyphens only: the store id is read back from it (see CardBackRepository::findByProductId()), and stores refuse capitals and accents
     public function testTheSlugIsLowercaseWordsJoinedByHyphens(): void
     {

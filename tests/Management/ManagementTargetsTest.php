@@ -12,9 +12,11 @@ namespace c975L\CardBundle\Tests\Management;
 
 use c975L\CardBundle\Export\CardExporter;
 use c975L\CardBundle\Export\ExportStatus;
+use c975L\CardBundle\Management\BackThumbnailsShortcutProvider;
 use c975L\CardBundle\Management\CardExportShortcutProvider;
 use c975L\CardBundle\Management\CardGuidedProjectProvider;
 use c975L\CardBundle\Management\MenuProvider;
+use c975L\CardBundle\Service\BackThumbnailMaker;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\ConfigBundle\Test\ManagementTargetsTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -23,15 +25,18 @@ class ManagementTargetsTest extends ManagementTargetsTestCase
 {
     protected function managementProviders(): iterable
     {
-        // The tile and the export project only show where the export can run
+        // The tiles and their projects only show where the export can run and the thumbnails be made
         $cardExporter = $this->createStub(CardExporter::class);
         $cardExporter->method('isAvailable')->willReturn(true);
+        $backThumbnailMaker = $this->createStub(BackThumbnailMaker::class);
+        $backThumbnailMaker->method('isAvailable')->willReturn(true);
 
         return [
             new MenuProvider($this->createStub(ConfigServiceInterface::class)),
             // The guided projects generate their urls, so they take the recorders this test case reads them back from
-            new CardGuidedProjectProvider($this->adminUrlGenerator(), $this->createStub(ConfigServiceInterface::class), $this->urlGenerator(), $cardExporter),
+            new CardGuidedProjectProvider($this->adminUrlGenerator(), $this->createStub(ConfigServiceInterface::class), $this->urlGenerator(), $cardExporter, $backThumbnailMaker),
             new CardExportShortcutProvider($cardExporter, $this->createStub(ExportStatus::class), $this->createStub(TranslatorInterface::class), sys_get_temp_dir()),
+            new BackThumbnailsShortcutProvider($backThumbnailMaker, $this->createStub(TranslatorInterface::class)),
         ];
     }
 

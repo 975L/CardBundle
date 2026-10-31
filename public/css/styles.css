@@ -1,0 +1,238 @@
+/*
+ * (c) 2026: 975L <contact@975l.com>
+ * (c) 2026: Laurent Marquet <laurent.marquet@laposte.net>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+/* A card's back (see templates/components/Back.html.twig): its picture under a vignette, a thin rule inside the frame, the site's own content over it. Sized on its own width (cqw), so it reads the same at a card's size and at a thumbnail. The frame's metal, its light, its shade and "--back-rays" (the strength of the dawn's and the sunset's rays) are variables a site sets, by camp or otherwise: their defaults weigh nothing, so the site's win whichever stylesheet comes last */
+:where(.card-back) {
+  --back-frame: #c8952b;
+  --back-light: #e8c46a;
+  --back-shade: 16 14 12;
+  --back-rays: 0.16;
+}
+
+.card-back {
+  position: relative;
+  box-sizing: border-box;
+  width: var(--card-width, 100%);
+  max-width: 100%;
+  aspect-ratio: 63/88;
+  overflow: hidden;
+  border-radius: var(--radius-card, 12px);
+  container-type: inline-size;
+  background: #0d0b0a;
+  /* Leant by back.js like a card's face */
+  transform: perspective(900px) rotateX(var(--card-rx, 0deg)) rotateY(var(--card-ry, 0deg));
+  transition: transform 0.12s ease-out;
+}
+
+/* The frame drawn inside the card and over its picture, so the back is exactly the size of the face it turns from */
+.card-back::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 2px #2a2117, inset 0 0 0 5px var(--back-frame), inset 0 0 0 7px #2a2117;
+  pointer-events: none;
+}
+
+/* The picture is an <img> stretched over the back, the CSP refusing style="": isolated so it paints under the tones' and effects' pseudo-elements and blends with them. Its effects are drawn in "--back-px", a pixel of a 352px-wide back, so a thumbnail shows them as the card turned over does, only smaller */
+.card-back__picture {
+  --back-px: calc(100cqw / 352);
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+}
+
+.card-back__picture > img {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+
+.card-back__picture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%, transparent 30%, rgb(var(--back-shade)/70%) 80%), linear-gradient(180deg, rgb(var(--back-shade)/35%), transparent 30%, transparent 55%, rgb(var(--back-shade)/92%));
+}
+
+.card-back__rule {
+  position: absolute;
+  inset: 3.5cqw;
+  border: 1px solid color-mix(in srgb, var(--back-light) 55%, transparent);
+  border-radius: 2.5cqw;
+  pointer-events: none;
+}
+
+/* The canvas the effects are drawn on, between the picture and the frame (see back.js) */
+.card-back__sky {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* The zoom: the picture drawing slowly in and out */
+.card-back--zoom .card-back__picture {
+  animation: card-back-zoom 14s ease-in-out infinite alternate;
+}
+
+@keyframes card-back-zoom {
+  to {
+    scale: 1.12;
+  }
+}
+/* The tones, a pack's picture in another light. The dawn and the night's moon draw on the picture's "::before", the effects that move over it all being drawn on the canvas */
+/* The dawn: a warm light coming down from the sky, rising over the hours as the zoom draws in */
+.card-back--tone-dawn .card-back__picture {
+  filter: sepia(0.35) saturate(1.35) hue-rotate(-12deg) brightness(1.08);
+}
+
+.card-back--tone-dawn .card-back__picture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(255, 150, 70, 0.5), rgba(255, 120, 60, 0.18) 45%, transparent 70%);
+  mix-blend-mode: screen;
+  animation: card-back-dawn 14s ease-in-out infinite alternate;
+}
+
+@keyframes card-back-dawn {
+  from {
+    opacity: 0.15;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+/* The picture itself coming out of the night's blue into the day, quickly, then the day held */
+.card-back--tone-dawn .card-back__picture > img {
+  animation: card-back-daybreak 14s ease-in-out infinite alternate;
+}
+
+@keyframes card-back-daybreak {
+  from {
+    filter: brightness(0.55) saturate(0.6) hue-rotate(25deg);
+  }
+  30% {
+    filter: none;
+  }
+}
+/* The sunset: the picture repainted by the browser - a golden hour, its sky from indigo to the low sun's gold, the stone warm, the ground in shadow (see back.js) - kept crisp, then the light sinking into the dusk as the zoom draws in. Nothing is laid over it, a veil only hazing it */
+.card-back--tone-sunset .card-back__picture > img {
+  filter: contrast(1.12) saturate(1.12);
+  animation: card-back-dusk 14s ease-in-out infinite alternate;
+}
+
+@keyframes card-back-dusk {
+  30%, to {
+    filter: contrast(1.18) saturate(1.05) brightness(0.8);
+  }
+}
+/* The snow's cold light as an inset wash, the flakes falling on the canvas (see back.js) */
+.card-back--tone-snow .card-back__picture {
+  filter: saturate(0.35) brightness(1.2) contrast(0.92);
+  box-shadow: inset 0 0 0 100cqw rgba(205, 222, 255, 0.16);
+}
+
+/* The storm: a dark slate sky, its rain falling on the canvas (see back.js), the lightning lighting it now and then */
+.card-back--tone-storm .card-back__picture {
+  filter: saturate(0.45) brightness(0.72) contrast(1.15) hue-rotate(10deg);
+  box-shadow: inset 0 0 0 100cqw rgba(40, 55, 80, 0.3);
+}
+
+/* The lightning: the whole back flashing white twice, then the dark again, at uneven intervals */
+.card-back--lightning::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(ellipse at 35% 10%, rgba(235, 240, 255, 0.95), rgba(200, 215, 255, 0.55) 45%, transparent 80%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  animation: card-back-lightning 7s linear infinite;
+}
+
+@keyframes card-back-lightning {
+  0%, 61%, 63.5%, 65%, 100% {
+    opacity: 0;
+  }
+  62% {
+    opacity: 0.9;
+  }
+  64% {
+    opacity: 1;
+  }
+  88%, 89.5% {
+    opacity: 0;
+  }
+  88.7% {
+    opacity: 0.55;
+  }
+}
+/* The wind: a grey, washed light, the picture swaying under its gusts, drawn on the canvas with the leaves they carry (see back.js) */
+.card-back--tone-wind .card-back__picture {
+  filter: saturate(0.6) brightness(1.02) contrast(1.05);
+  box-shadow: inset 0 0 0 100cqw rgba(190, 200, 190, 0.14);
+}
+
+.card-back--wind .card-back__picture {
+  animation: card-back-sway 5s ease-in-out infinite alternate;
+}
+
+@keyframes card-back-sway {
+  from {
+    translate: -1.5% 0;
+    scale: 1.05;
+  }
+  to {
+    translate: 1.5% 0;
+    scale: 1.05;
+  }
+}
+/* The night: the picture in a deep blue under a moon's glow, the stars drifting over it being the Astrale's own sky */
+.card-back--tone-night .card-back__picture {
+  filter: saturate(0.35) brightness(0.62) contrast(1.1);
+  box-shadow: inset 0 0 0 100cqw rgba(25, 45, 110, 0.42);
+}
+
+.card-back--tone-night .card-back__picture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(circle at 75% 14%, rgba(235, 240, 255, 0.85) 0 4%, rgba(180, 200, 255, 0.3) 7%, transparent 32%);
+  mix-blend-mode: screen;
+}
+
+/* The mist: a pale, soft light, its banks of fog drifting across the castle on the canvas (see back.js) */
+.card-back--tone-mist .card-back__picture {
+  filter: saturate(0.55) brightness(1.08) contrast(0.85) blur(calc(0.4 * var(--back-px)));
+  box-shadow: inset 0 0 0 100cqw rgba(225, 228, 232, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-back--zoom .card-back__picture,
+  .card-back--tone-dawn .card-back__picture::before,
+  .card-back--tone-dawn .card-back__picture > img,
+  .card-back--tone-sunset .card-back__picture > img,
+  .card-back--lightning::before,
+  .card-back--wind .card-back__picture {
+    animation: none;
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */

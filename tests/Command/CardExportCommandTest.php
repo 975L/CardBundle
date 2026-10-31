@@ -14,12 +14,11 @@ use c975L\CardBundle\Command\CardExportCommand;
 use c975L\CardBundle\Export\CardExporter;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CardExportCommandTest extends TestCase
 {
+    use ConsoleIoTrait;
+
     // An empty target is everything, a target is handed to the site as it is typed
     public function testTheTargetIsHandedOver(): void
     {
@@ -53,12 +52,5 @@ class CardExportCommandTest extends TestCase
 
         $this->assertSame([\SIGINT, \SIGTERM], $command->getSubscribedSignals());
         $this->assertSame(130, $command->handleSignal(\SIGINT));
-    }
-
-    private function io(?BufferedOutput &$output): SymfonyStyle
-    {
-        $output = new BufferedOutput();
-
-        return new SymfonyStyle(new ArrayInput([]), $output);
     }
 }

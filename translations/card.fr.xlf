@@ -10,6 +10,10 @@
                 <source>description.guided_project_card_back_picture</source>
                 <target>Donnez à un dos son image pour un pack : ce château à l'aube, sous la neige… Sans image, le dos reprend celle du pack.</target>
             </trans-unit>
+            <trans-unit id="dE6ztVA">
+                <source>description.guided_project_card_back_thumbnails</source>
+                <target>Photographiez chaque dos sur la page du site qui le montre seul, plutôt que de déposer ses vignettes une à une.</target>
+            </trans-unit>
             <trans-unit id="uTfo64l">
                 <source>description.guided_project_card_export</source>
                 <target>Produire les PDF, les images et les vidéos des cartes depuis la tuile du tableau de bord : seul ce qui a changé depuis le dernier export est refait.</target>
@@ -66,9 +70,25 @@
                 <source>description.guided_step_card_back_published</source>
                 <target>Seul un dos publié peut être donné et choisi.</target>
             </trans-unit>
+            <trans-unit id="4LJDoId">
+                <source>description.guided_step_card_back_standard</source>
+                <target>Le dos de base, porté par toutes les cartes tant qu'un autre n'est pas choisi. Un seul par site.</target>
+            </trans-unit>
             <trans-unit id="HSMDdco">
                 <source>description.guided_step_card_back_thumbnail</source>
                 <target>Le dos seul, au format d'une carte, en portrait : le panier, les mails de commande et la facture le montrent ainsi, sans château.</target>
+            </trans-unit>
+            <trans-unit id="hIpJ.kR">
+                <source>description.guided_step_card_back_thumbnails_done</source>
+                <target>Le message dit combien de vignettes ont été faites, chaque dos montrant la sienne dans la liste. Pour quelques dos seulement, la commande card:back-thumbnails en terminal fait le même travail.</target>
+            </trans-unit>
+            <trans-unit id="jfaV6mr">
+                <source>description.guided_step_card_back_thumbnails_open</source>
+                <target>La tuile Vignettes des dos se trouve parmi les raccourcis du tableau de bord, sur la machine où Chrome est installé.</target>
+            </trans-unit>
+            <trans-unit id="Z0HsMRk">
+                <source>description.guided_step_card_back_thumbnails_run</source>
+                <target>Cliquez sur la tuile : chaque variante publiée est photographiée après quelques secondes, le temps de bouger.</target>
             </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
@@ -85,6 +105,10 @@
             <trans-unit id="gGRXzN8">
                 <source>description.guided_step_card_export_run</source>
                 <target>Cliquez sur la tuile : l'export part dans le worker Messenger et la main vous est rendue aussitôt.</target>
+            </trans-unit>
+            <trans-unit id="F_kUhYO">
+                <source>flash.back_thumbnails_made</source>
+                <target>Vignettes des dos faites : %count%.</target>
             </trans-unit>
             <trans-unit id="3DW3sx7">
                 <source>flash.export_running</source>
@@ -137,6 +161,10 @@
             <trans-unit id="8NbWFto">
                 <source>help.back_slug_locked</source>
                 <target>Fixé à la création : récompenses, codes et stores le connaissent.</target>
+            </trans-unit>
+            <trans-unit id="GZ1hq.d">
+                <source>help.back_standard</source>
+                <target>Le dos que portent toutes les cartes tant qu'un autre n'est pas choisi. Un seul par site : le cocher ici le retire à l'autre. Jamais vendu ni donné, son prix est ignoré.</target>
             </trans-unit>
             <trans-unit id="T2hS5aX">
                 <source>help.back_thumbnail</source>
@@ -230,9 +258,17 @@
                 <source>label.back_slug</source>
                 <target>Slug</target>
             </trans-unit>
+            <trans-unit id="Nb6GUwk">
+                <source>label.back_standard</source>
+                <target>Dos standard</target>
+            </trans-unit>
             <trans-unit id="C8KDNul">
                 <source>label.back_thumbnail</source>
                 <target>Vignette</target>
+            </trans-unit>
+            <trans-unit id="cl.69qD">
+                <source>label.back_thumbnails_make</source>
+                <target>Vignettes des dos</target>
             </trans-unit>
             <trans-unit id="sz35eBo">
                 <source>label.back_tone</source>
@@ -346,6 +382,10 @@
                 <source>label.guided_project_card_back_picture</source>
                 <target>Illustrer un dos pour un pack</target>
             </trans-unit>
+            <trans-unit id="R9_5P1U">
+                <source>label.guided_project_card_back_thumbnails</source>
+                <target>Faire les vignettes des dos</target>
+            </trans-unit>
             <trans-unit id="IzejoBX">
                 <source>label.guided_project_card_export</source>
                 <target>Exporter les cartes</target>
@@ -402,9 +442,25 @@
                 <source>label.guided_step_card_back_published</source>
                 <target>Publiez-le</target>
             </trans-unit>
+            <trans-unit id="hQlkDDX">
+                <source>label.guided_step_card_back_standard</source>
+                <target>Marquez-le standard, s'il est celui de base</target>
+            </trans-unit>
             <trans-unit id="0A4FaNY">
                 <source>label.guided_step_card_back_thumbnail</source>
                 <target>Ajoutez sa vignette</target>
+            </trans-unit>
+            <trans-unit id="Bd7fmXL">
+                <source>label.guided_step_card_back_thumbnails_done</source>
+                <target>Vérifier les vignettes</target>
+            </trans-unit>
+            <trans-unit id="_qujOb2">
+                <source>label.guided_step_card_back_thumbnails_open</source>
+                <target>Ouvrir le tableau de bord</target>
+            </trans-unit>
+            <trans-unit id="iHg837p">
+                <source>label.guided_step_card_back_thumbnails_run</source>
+                <target>Lancer les vignettes</target>
             </trans-unit>
             <trans-unit id="Ou7jNu4">
                 <source>label.guided_step_card_back_tone</source>

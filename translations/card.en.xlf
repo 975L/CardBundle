@@ -10,6 +10,10 @@
                 <source>description.guided_project_card_back_picture</source>
                 <target>Give a back its picture for one pack: that castle at dawn, under the snow… Without one, the back takes the pack's picture.</target>
             </trans-unit>
+            <trans-unit id="dE6ztVA">
+                <source>description.guided_project_card_back_thumbnails</source>
+                <target>Shoot every back on the site's page showing it alone, rather than uploading its thumbnails one by one.</target>
+            </trans-unit>
             <trans-unit id="uTfo64l">
                 <source>description.guided_project_card_export</source>
                 <target>Produce the cards' PDFs, images and videos from the dashboard tile: only what changed since the last export is made again.</target>
@@ -66,9 +70,25 @@
                 <source>description.guided_step_card_back_published</source>
                 <target>Only a published back can be given and chosen.</target>
             </trans-unit>
+            <trans-unit id="4LJDoId">
+                <source>description.guided_step_card_back_standard</source>
+                <target>The base back, worn by every card until another is chosen. One per site.</target>
+            </trans-unit>
             <trans-unit id="HSMDdco">
                 <source>description.guided_step_card_back_thumbnail</source>
                 <target>The back on its own, card-sized, in portrait: the basket, the order emails and the invoice show it so, with no castle.</target>
+            </trans-unit>
+            <trans-unit id="hIpJ.kR">
+                <source>description.guided_step_card_back_thumbnails_done</source>
+                <target>The message says how many thumbnails were made, each back showing its own in the listing. For a few backs only, the card:back-thumbnails command in a terminal does the same work.</target>
+            </trans-unit>
+            <trans-unit id="jfaV6mr">
+                <source>description.guided_step_card_back_thumbnails_open</source>
+                <target>The Back thumbnails tile is among the dashboard's shortcuts, on the machine where Chrome is installed.</target>
+            </trans-unit>
+            <trans-unit id="Z0HsMRk">
+                <source>description.guided_step_card_back_thumbnails_run</source>
+                <target>Click the tile: every published variant is shot after a few seconds, the time it takes to move.</target>
             </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
@@ -85,6 +105,10 @@
             <trans-unit id="gGRXzN8">
                 <source>description.guided_step_card_export_run</source>
                 <target>Click the tile: the export goes to the Messenger worker and you get the hand back at once.</target>
+            </trans-unit>
+            <trans-unit id="F_kUhYO">
+                <source>flash.back_thumbnails_made</source>
+                <target>Back thumbnails made: %count%.</target>
             </trans-unit>
             <trans-unit id="3DW3sx7">
                 <source>flash.export_running</source>
@@ -137,6 +161,10 @@
             <trans-unit id="8NbWFto">
                 <source>help.back_slug_locked</source>
                 <target>Set on creation: rewards, codes and stores know it.</target>
+            </trans-unit>
+            <trans-unit id="GZ1hq.d">
+                <source>help.back_standard</source>
+                <target>The back every card wears until another is chosen. One per site: ticking it here unticks the other. Never sold nor given, its price is ignored.</target>
             </trans-unit>
             <trans-unit id="T2hS5aX">
                 <source>help.back_thumbnail</source>
@@ -230,9 +258,17 @@
                 <source>label.back_slug</source>
                 <target>Slug</target>
             </trans-unit>
+            <trans-unit id="Nb6GUwk">
+                <source>label.back_standard</source>
+                <target>Standard back</target>
+            </trans-unit>
             <trans-unit id="C8KDNul">
                 <source>label.back_thumbnail</source>
                 <target>Thumbnail</target>
+            </trans-unit>
+            <trans-unit id="cl.69qD">
+                <source>label.back_thumbnails_make</source>
+                <target>Back thumbnails</target>
             </trans-unit>
             <trans-unit id="sz35eBo">
                 <source>label.back_tone</source>
@@ -346,6 +382,10 @@
                 <source>label.guided_project_card_back_picture</source>
                 <target>Illustrate a back for a pack</target>
             </trans-unit>
+            <trans-unit id="R9_5P1U">
+                <source>label.guided_project_card_back_thumbnails</source>
+                <target>Make the backs' thumbnails</target>
+            </trans-unit>
             <trans-unit id="IzejoBX">
                 <source>label.guided_project_card_export</source>
                 <target>Export the cards</target>
@@ -402,9 +442,25 @@
                 <source>label.guided_step_card_back_published</source>
                 <target>Publish it</target>
             </trans-unit>
+            <trans-unit id="hQlkDDX">
+                <source>label.guided_step_card_back_standard</source>
+                <target>Mark it standard, if it is the base one</target>
+            </trans-unit>
             <trans-unit id="0A4FaNY">
                 <source>label.guided_step_card_back_thumbnail</source>
                 <target>Add its thumbnail</target>
+            </trans-unit>
+            <trans-unit id="Bd7fmXL">
+                <source>label.guided_step_card_back_thumbnails_done</source>
+                <target>Check the thumbnails</target>
+            </trans-unit>
+            <trans-unit id="_qujOb2">
+                <source>label.guided_step_card_back_thumbnails_open</source>
+                <target>Open the dashboard</target>
+            </trans-unit>
+            <trans-unit id="iHg837p">
+                <source>label.guided_step_card_back_thumbnails_run</source>
+                <target>Make the thumbnails</target>
             </trans-unit>
             <trans-unit id="Ou7jNu4">
                 <source>label.guided_step_card_back_tone</source>

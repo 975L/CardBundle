@@ -79,6 +79,20 @@ class ChromeSession
         }
     }
 
+    // One element of the page as it stands, written as a PNG at the given scale: everything around it made transparent, so its rounded corners come out clear
+    public function screenshotElement(string $selector, string $path, float $scale = 2.0): void
+    {
+        $box = $this->evaluate(\sprintf('(() => { const element = document.querySelector(%s); if (!element) { return null; } for (let node = element.parentElement; node; node = node.parentElement) { node.style.background = "transparent"; } const box = element.getBoundingClientRect(); return { x: box.x, y: box.y, width: box.width, height: box.height }; })()', json_encode($selector)));
+        if (!\is_array($box)) {
+            throw new \RuntimeException(\sprintf('No "%s" on the page.', $selector));
+        }
+        $this->send('Emulation.setDefaultBackgroundColorOverride', ['color' => ['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]]);
+        $result = $this->send('Page.captureScreenshot', ['format' => 'png', 'clip' => [...$box, 'scale' => $scale]]);
+        if (false === file_put_contents($path, base64_decode((string) $result['data'], true))) {
+            throw new \RuntimeException(\sprintf('"%s" could not be written.', $path));
+        }
+    }
+
     // Chrome closed, whatever state it is in - and never throwing, called as it is from a finally whose own error has to come through
     public function close(): void
     {

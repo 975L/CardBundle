@@ -10,6 +10,10 @@
                 <source>description.guided_project_card_back_picture</source>
                 <target>Dé a un reverso su imagen para un pack: ese castillo al alba, bajo la nieve… Sin imagen, el reverso usa la del pack.</target>
             </trans-unit>
+            <trans-unit id="dE6ztVA">
+                <source>description.guided_project_card_back_thumbnails</source>
+                <target>Fotografíe cada reverso en la página del sitio que lo muestra solo, en lugar de subir sus miniaturas una a una.</target>
+            </trans-unit>
             <trans-unit id="uTfo64l">
                 <source>description.guided_project_card_export</source>
                 <target>Generar los PDF, las imágenes y los vídeos de las cartas desde el mosaico del panel: solo se rehace lo que ha cambiado desde la última exportación.</target>
@@ -66,9 +70,25 @@
                 <source>description.guided_step_card_back_published</source>
                 <target>Solo un reverso publicado puede darse y elegirse.</target>
             </trans-unit>
+            <trans-unit id="4LJDoId">
+                <source>description.guided_step_card_back_standard</source>
+                <target>El reverso de base, que llevan todas las cartas mientras no se elija otro. Uno por sitio.</target>
+            </trans-unit>
             <trans-unit id="HSMDdco">
                 <source>description.guided_step_card_back_thumbnail</source>
                 <target>El reverso solo, del tamaño de una carta, en vertical: la cesta, los correos del pedido y la factura lo muestran así, sin castillo.</target>
+            </trans-unit>
+            <trans-unit id="hIpJ.kR">
+                <source>description.guided_step_card_back_thumbnails_done</source>
+                <target>El mensaje dice cuántas miniaturas se hicieron, y cada reverso muestra la suya en la lista. Para solo algunos reversos, el comando card:back-thumbnails en un terminal hace el mismo trabajo.</target>
+            </trans-unit>
+            <trans-unit id="jfaV6mr">
+                <source>description.guided_step_card_back_thumbnails_open</source>
+                <target>El mosaico Miniaturas de los reversos está entre los accesos directos del panel, en la máquina donde Chrome está instalado.</target>
+            </trans-unit>
+            <trans-unit id="Z0HsMRk">
+                <source>description.guided_step_card_back_thumbnails_run</source>
+                <target>Haga clic en el mosaico: cada variante publicada se fotografía tras unos segundos, el tiempo de moverse.</target>
             </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
@@ -85,6 +105,10 @@
             <trans-unit id="gGRXzN8">
                 <source>description.guided_step_card_export_run</source>
                 <target>Haga clic en el mosaico: la exportación pasa al worker de Messenger y recupera el control enseguida.</target>
+            </trans-unit>
+            <trans-unit id="F_kUhYO">
+                <source>flash.back_thumbnails_made</source>
+                <target>Miniaturas de los reversos hechas: %count%.</target>
             </trans-unit>
             <trans-unit id="3DW3sx7">
                 <source>flash.export_running</source>
@@ -137,6 +161,10 @@
             <trans-unit id="8NbWFto">
                 <source>help.back_slug_locked</source>
                 <target>Fijado al crearlo: recompensas, códigos y tiendas lo conocen.</target>
+            </trans-unit>
+            <trans-unit id="GZ1hq.d">
+                <source>help.back_standard</source>
+                <target>El reverso que llevan todas las cartas mientras no se elija otro. Uno por sitio: marcarlo aquí lo quita del otro. Nunca se vende ni se regala, su precio se ignora.</target>
             </trans-unit>
             <trans-unit id="T2hS5aX">
                 <source>help.back_thumbnail</source>
@@ -230,9 +258,17 @@
                 <source>label.back_slug</source>
                 <target>Slug</target>
             </trans-unit>
+            <trans-unit id="Nb6GUwk">
+                <source>label.back_standard</source>
+                <target>Reverso estándar</target>
+            </trans-unit>
             <trans-unit id="C8KDNul">
                 <source>label.back_thumbnail</source>
                 <target>Miniatura</target>
+            </trans-unit>
+            <trans-unit id="cl.69qD">
+                <source>label.back_thumbnails_make</source>
+                <target>Miniaturas de los reversos</target>
             </trans-unit>
             <trans-unit id="sz35eBo">
                 <source>label.back_tone</source>
@@ -346,6 +382,10 @@
                 <source>label.guided_project_card_back_picture</source>
                 <target>Ilustrar un reverso para un pack</target>
             </trans-unit>
+            <trans-unit id="R9_5P1U">
+                <source>label.guided_project_card_back_thumbnails</source>
+                <target>Hacer las miniaturas de los reversos</target>
+            </trans-unit>
             <trans-unit id="IzejoBX">
                 <source>label.guided_project_card_export</source>
                 <target>Exportar las cartas</target>
@@ -402,9 +442,25 @@
                 <source>label.guided_step_card_back_published</source>
                 <target>Publíquelo</target>
             </trans-unit>
+            <trans-unit id="hQlkDDX">
+                <source>label.guided_step_card_back_standard</source>
+                <target>Márquelo estándar, si es el de base</target>
+            </trans-unit>
             <trans-unit id="0A4FaNY">
                 <source>label.guided_step_card_back_thumbnail</source>
                 <target>Añada su miniatura</target>
+            </trans-unit>
+            <trans-unit id="Bd7fmXL">
+                <source>label.guided_step_card_back_thumbnails_done</source>
+                <target>Compruebe las miniaturas</target>
+            </trans-unit>
+            <trans-unit id="_qujOb2">
+                <source>label.guided_step_card_back_thumbnails_open</source>
+                <target>Abra el panel</target>
+            </trans-unit>
+            <trans-unit id="iHg837p">
+                <source>label.guided_step_card_back_thumbnails_run</source>
+                <target>Lance las miniaturas</target>
             </trans-unit>
             <trans-unit id="Ou7jNu4">
                 <source>label.guided_step_card_back_tone</source>

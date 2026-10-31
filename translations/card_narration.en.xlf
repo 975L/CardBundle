@@ -62,9 +62,25 @@
                 <source>narration.guided_step_card_back_published</source>
                 <target>Tick Published: otherwise the back can be neither given nor chosen.</target>
             </trans-unit>
+            <trans-unit id="n.3ofqr">
+                <source>narration.guided_step_card_back_standard</source>
+                <target>Tick Standard back if this back is the base one, worn by every card until another is chosen.</target>
+            </trans-unit>
             <trans-unit id="WaOX9C_">
                 <source>narration.guided_step_card_back_thumbnail</source>
                 <target>Add its thumbnail: the back on its own, card-sized, in portrait, which the basket and the order emails show.</target>
+            </trans-unit>
+            <trans-unit id="2QlHUHN">
+                <source>narration.guided_step_card_back_thumbnails_done</source>
+                <target>Check the thumbnails in the backs' listing. For a few backs only, use the card:back-thumbnails command.</target>
+            </trans-unit>
+            <trans-unit id="w8mObLs">
+                <source>narration.guided_step_card_back_thumbnails_open</source>
+                <target>Open the dashboard: the Back thumbnails tile is among the shortcuts.</target>
+            </trans-unit>
+            <trans-unit id="NLHdRSG">
+                <source>narration.guided_step_card_back_thumbnails_run</source>
+                <target>Click the Back thumbnails tile. Allow a few seconds per back.</target>
             </trans-unit>
             <trans-unit id="BCB.qLq">
                 <source>narration.guided_step_card_back_tone</source>

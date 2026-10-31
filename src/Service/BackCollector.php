@@ -25,10 +25,10 @@ class BackCollector
     ) {
     }
 
-    // Gives a back, and says whether it was given: false when already held or not published - the same gift sent twice at once included, the unique index refusing the second (Doctrine then closes the EntityManager, so nothing else is written in that request). A paid back is given even unpublished, a purchase being owed: it stays out of sight until republished (see chosen())
+    // Gives a back, and says whether it was given: false for the standard back, worn by all without being given, when already held or not published - the same gift sent twice at once included, the unique index refusing the second (Doctrine then closes the EntityManager, so nothing else is written in that request). A paid back is given even unpublished, a purchase being owed: it stays out of sight until republished (see chosen())
     public function grant(string $holder, CardBack $back, string $source, bool $paid = false): bool
     {
-        if ((!$paid && !$back->isPublished()) || null !== $this->collectedBackRepository->findOneBy(['holder' => $holder, 'back' => $back])) {
+        if ($back->isStandard() || (!$paid && !$back->isPublished()) || null !== $this->collectedBackRepository->findOneBy(['holder' => $holder, 'back' => $back])) {
             return false;
         }
 
@@ -56,9 +56,12 @@ class BackCollector
         return true;
     }
 
-    // Makes a held back the one all the holder's cards wear, or none for each pack's own picture, and says whether it was done: false for a back not held or not published
+    // Makes a held back the one all the holder's cards wear, or none - the standard back - and says whether it was done: false for a back not held or not published
     public function choose(string $holder, ?CardBack $back): bool
     {
+        if (true === $back?->isStandard()) {
+            $back = null;
+        }
         $held = $this->collectedBackRepository->findByHolder($holder);
         if (null !== $back && (!$back->isPublished() || [] === array_filter($held, static fn (CollectedBack $collected): bool => $collected->getBack() === $back))) {
             return false;

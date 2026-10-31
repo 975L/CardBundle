@@ -1,6 +1,6 @@
 ---
 name: c975l-card
-description: "Use this skill when working with collectible cards in a Symfony application built on the c975L ecosystem with c975l/card-bundle. Covers the collection held under a device token then an account, the three finishes, the card backs held for every pack and one chosen for all the cards, and the plumbing of a mobile app's card api. Triggers on: cards, card collection, collectible cards, album, CollectedCard, CardCollector, grant a card, CardFinish, finish, shiny, magic, CardHolder, holder, device token, connect a device, CardBack, CollectedBack, CardBackPicture, findImagesOfPack, back picture, back thumbnail, BackImageTrait, BackCollector, card back, choose a back, pack, sell a back, back price, BackInAppProductProvider, BackBasketItemProvider, revoke, BackTone, BackEffect, CardDemoFixtureProvider, demo dataset, demo backs, CardRequest, app api, /app/api/cards, HolderStoreInterface, CardCatalogInterface, CardPackProviderInterface, Plumes, UserAnonymizedEvent, account export."
+description: "Use this skill when working with collectible cards in a Symfony application built on the c975L ecosystem with c975l/card-bundle. Covers the collection held under a device token then an account, the three finishes, the card backs held for every pack and one chosen for all the cards, the standard back, the Back component drawing them, their thumbnails shot by a local Chrome, and the plumbing of a mobile app's card api. Triggers on: cards, card collection, collectible cards, album, CollectedCard, CardCollector, grant a card, CardFinish, finish, shiny, magic, CardHolder, holder, device token, connect a device, CardBack, CollectedBack, CardBackPicture, findImagesOfPack, back picture, back thumbnail, BackImageTrait, BackCollector, card back, choose a back, pack, sell a back, back price, BackInAppProductProvider, BackBasketItemProvider, revoke, standard back, findStandard, c975LCard:Back, Back component, card_back_standard, card-back controller, CardBackPageProviderInterface, BackThumbnailMaker, card:back-thumbnails, back thumbnails tile, BackTone, BackEffect, CardDemoFixtureProvider, demo dataset, demo backs, CardRequest, app api, /app/api/cards, HolderStoreInterface, CardCatalogInterface, CardPackProviderInterface, Plumes, UserAnonymizedEvent, account export."
 ---
 
 # c975L CardBundle
@@ -10,7 +10,7 @@ description: "Use this skill when working with collectible cards in a Symfony ap
 **Package:** `c975l/card-bundle` · **Namespace:** `c975L\CardBundle\` · **Translation domain:** `card` (narrations in `card_narration`)
 
 **Key source paths** (relative to the package root):
-`src/Entity/`, `src/Enum/`, `src/Repository/`, `src/Service/`, `src/Contract/`, `src/EventListener/`, `src/Management/`, `src/Controller/Management/`, `config/services.yaml`
+`src/Entity/`, `src/Enum/`, `src/Repository/`, `src/Service/`, `src/Contract/`, `src/EventListener/`, `src/Management/`, `src/Controller/Management/`, `src/Command/`, `src/Twig/`, `templates/components/`, `assets/`, `sass/`, `config/services.yaml`
 
 **Related documentation:** this package's `README.md` is the reference. The ecosystem's rules (configuration, management contributions, accounts) live in `c975l/core-bundle`.
 
@@ -42,7 +42,9 @@ if (null !== $holder) {
 - The source passed to `grant()` is the site's own short word (20 characters at most).
 - Never change the values of `CardFinish`, `BackTone` or `BackEffect`: they are stored.
 - A back is given only published, through `BackCollector::grant()` — except a paid one (`paid: true`, as the two Payment providers pass it), given even unpublished since, a purchase being owed — and chosen through `BackCollector::choose()`, one for all the holder's cards, which refuses a back unpublished or not held: never set `chosen` by hand. Earned or bought, a back is the same: never give it per pack. Unpublishing a back withdraws it from `BackCollector::chosen()` without clearing the choice.
-- A back's own thumbnail (`CardBack::$image`, card-sized, in portrait) is what the basket, the order emails and the invoice show, no pack drawing it there. A back's picture for a pack is a `CardBackPicture`, its back and pack locked once created, the pack key in letters, digits, dashes and underscores; read a pack's pictures with `CardBackPictureRepository::findImagesOfPack()`, a pack with none drawing its own picture in the back's tone. Remove a back through Doctrine, never by raw SQL: its pictures go with it one by one, so that their files are deleted too.
+- The standard back (`CardBack::$standard`, read by `CardBackRepository::findStandard()`) is the one every card wears until another is chosen, one per site: never give it, sell it nor list it among the variants; `BackCollector::choose()` on it clears the choice, as `null` does.
+- A back's own thumbnail (`CardBack::$image`, card-sized, in portrait) is what the basket, the order emails and the invoice show, no pack drawing it there. A back's picture for a pack is a `CardBackPicture`, its back and pack locked once created, the pack key in letters, digits, dashes and underscores; read a pack's pictures with `CardBackPictureRepository::findImagesOfPack()`, a pack with none drawing its own picture in the back's tone.
+- Draw a back with `<twig:c975LCard:Back back="{{ back }}">` (`still` for paper), `back` holding `image`, `tone`, `effect` and optionally `sky` and `label`, the site's own content inside the tag; `card_back_standard(pack)` gives the standard back in that shape. Never redraw a tone or an effect in the site's stylesheet: set `--back-frame`, `--back-light`, `--back-shade` and `--back-rays` instead. Remove a back through Doctrine, never by raw SQL: its pictures go with it one by one, so that their files are deleted too.
 - A back is on sale once priced and published (`CardBack::isForSale()`), at one price in the app and on the site. Never type or store a store product id: it is `CardBack::getProductId()`, derived from the slug, which is lowercase words joined by hyphens and locked once created (the back office disables it on edit).
 - Never write a site provider to sell backs: `BackInAppProductProvider` (the stores) and `BackBasketItemProvider` (the basket, kind `cardback`) are the bundle's. A refund goes through `BackCollector::revoke($holder, $back, $source)`, which removes only what that source gave.
 - Never change a site's app route nor its JSON when moving it onto this bundle: the published apps are built against them.
@@ -55,9 +57,12 @@ Each interface is tagged by autoconfiguration, so implementing it is all it take
 - `CardCatalogInterface`: `getCardName()`, the name of a card from its reference, read by the account export.
 - `CardPackProviderInterface`: `getPacks()`, the packs a back's picture can be made for (key => name), turning the back office's pack field into a list.
 
+- `CardBackPageProviderInterface`: `getBackPageUrl()`, the absolute url of the site's page showing a back alone, from which `BackThumbnailMaker` shoots its thumbnail.
 - `CardExportSourceInterface`: `getExportItems(?string $target)`, the pages to export as `PdfItem` and `SocialItem`, rendered by the site's Twig and passed through `PageRenderer::onDisk()`.
 
 ## Exports
+
+- The backs' thumbnails: one command, `card:back-thumbnails [slugs] [--delay]`, and one dashboard tile, both only where Chrome is installed (never on the managed production server).
 
 - One command, `card:export [target] [--force]`, and one dashboard tile: never write a site command or a site exporter around Chrome, Ghostscript or ffmpeg, hand the pages to `CardExportSourceInterface`.
 - A page must render the same twice: no date, random id or token in it, or its fingerprint moves at every run and the export redoes it every time.
@@ -67,6 +72,6 @@ Each interface is tagged by autoconfiguration, so implementing it is all it take
 
 ## Back office
 
-Two screens, the card backs (`CardBackCrudController`) and their pictures pack by pack (`CardBackPictureCrudController`), behind `site-role-editor`, each with its guided project (`CardGuidedProjectProvider`, `card-back` and `card-back-picture`); the export tile has its own, `card-export`, offered only where the export can run. The backs' listing shows nothing of their look: how a tone or an effect is drawn is the site's stylesheet, and a site showing it there overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig` rather than replacing the controller.
+Two screens, the card backs (`CardBackCrudController`) and their pictures pack by pack (`CardBackPictureCrudController`), behind `site-role-editor`, each with its guided project (`CardGuidedProjectProvider`, `card-back` and `card-back-picture`); the export and thumbnails tiles have theirs, `card-export` and `card-back-thumbnails`, offered only where each can run. The backs' listing shows nothing of their look: a site showing it there overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig` rather than replacing the controller.
 
 The demo dataset (`CardDemoFixtureProvider`, UiBundle's `DemoFixtureProviderInterface`) seeds three published backs, slugs `demo-dawn`, `demo-storm` and `demo-night`, their pictures over the site's first two packs (raw `north`/`south` when it lists none), each illustrated by its `keyed_images['card/<slug>']` placeholder or one of the generic pool — no catalogue and no collection. They are sample rows, not content to build on.

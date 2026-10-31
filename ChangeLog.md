@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.4.2
+
+Card backs drawn by the bundle, a standard one worn by every card
+
+- `CardBack::$standard`, the back every card wears until another is chosen (31/10/2026) **Needs db update**
+- One standard back per site, the one saved as such unmarking the others (31/10/2026)
+- The standard back is never sold nor given, chosen as none, left out of the variants (31/10/2026)
+- `CardBackRepository::findStandard()` (31/10/2026)
+- Guided project `card-back` asks whether it is the standard back (31/10/2026)
+- Twig component `c975LCard:Back`, a card back drawn and moving, the site laying its own content over it (31/10/2026)
+- `still` on the `c975LCard:Back` component, for paper (31/10/2026)
+- Stimulus controller `card-back` (`assets/js/back.js`) drawing the backs' effects (31/10/2026)
+- The storm's thunder and the wind's gusts heard and felt, in `assets/js/audio.js` (31/10/2026)
+- `assets/js/audio.js` and `assets/js/sky.js` importable by a site as `@c975l/card-bundle/audio.js` and `@c975l/card-bundle/sky.js` (31/10/2026)
+- Stylesheet `sass/_back.scss`, its colours set by the site through `--back-frame`, `--back-light`, `--back-shade` and `--back-rays` (31/10/2026)
+- `AssetProvider`, the backs' controller and stylesheet loaded by UiBundle's layout (31/10/2026)
+- `ImportmapProvider`, the importmap entry `c975l:config:check-importmap` expects (31/10/2026)
+- Twig function `card_back_standard(pack)`, the standard back as the component draws it (31/10/2026)
+- `CardBackPageProviderInterface`, the site's page showing a back alone (31/10/2026)
+- `BackThumbnailMaker`, the backs' thumbnails shot from that page by a local Chrome (31/10/2026)
+- Command `card:back-thumbnails [slugs] [--delay]` (31/10/2026)
+- Dashboard tile making the backs' thumbnails, shown only where Chrome is installed (31/10/2026)
+- Guided project `card-back-thumbnails` for that tile (31/10/2026)
+- `ChromeSession::screenshotElement()`, one element shot as a transparent PNG (31/10/2026)
+
 ## v1.4.1
 
 A card back has its own thumbnail, shown by the basket

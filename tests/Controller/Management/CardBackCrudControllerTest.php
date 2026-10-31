@@ -11,10 +11,13 @@
 namespace c975L\CardBundle\Tests\Controller\Management;
 
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
+use c975L\CardBundle\Entity\CardBack;
 use c975L\CardBundle\Enum\BackEffect;
 use c975L\CardBundle\Enum\BackTone;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -67,14 +70,46 @@ class CardBackCrudControllerTest extends TestCase
         $this->assertSame('card:label.back_effect_snow:es', BackEffect::Snow->trans($translator, 'es'));
     }
 
+    // One standard back per site: the one saved as such unmarks the others, flushed with it
+    public function testSavingAStandardBackUnmarksTheOthers(): void
+    {
+        $saved = new CardBack()->setStandard(true);
+        $other = new CardBack()->setStandard(true);
+        $repository = $this->createStub(EntityRepository::class);
+        $repository->method('findBy')->willReturn([$saved, $other]);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->method('getRepository')->willReturn($repository);
+        $entityManager->expects($this->exactly(2))->method('flush');
+
+        $this->controller()->persistEntity($entityManager, $saved);
+        $this->assertTrue($saved->isStandard());
+        $this->assertFalse($other->isStandard());
+
+        $other->setStandard(true);
+        $this->controller()->updateEntity($entityManager, $saved);
+        $this->assertFalse($other->isStandard());
+    }
+
+    // A back that is not the standard one leaves the others as they are, unread
+    public function testSavingAVariantLeavesTheStandardBack(): void
+    {
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->never())->method('getRepository');
+
+        $this->controller()->updateEntity($entityManager, new CardBack());
+    }
+
     // The fields a page shows, by property
     /**
      * @return array<string, FieldInterface>
      */
     private function fields(string $pageName): array
     {
-        $controller = new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class)));
+        return $this->fieldsOf($this->controller(), $pageName);
+    }
 
-        return $this->fieldsOf($controller, $pageName);
+    private function controller(): CardBackCrudController
+    {
+        return new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class)));
     }
 }

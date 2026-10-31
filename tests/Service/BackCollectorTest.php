@@ -43,6 +43,27 @@ class BackCollectorTest extends TestCase
         $this->assertFalse($held[0]->isChosen());
     }
 
+    // The standard back, worn by all without being held, is chosen as none: the choice cleared
+    public function testChoosingTheStandardBackClearsTheChoice(): void
+    {
+        $held = [new CollectedBack('u1', $this->back('dawn'), 'quiz')];
+        $held[0]->setChosen(true);
+
+        $this->assertTrue($this->collector($held)->choose('u1', $this->back('origin')->setStandard(true)));
+        $this->assertFalse($held[0]->isChosen());
+    }
+
+    // The standard back is never given: everyone wears it already
+    public function testGrantRefusesTheStandardBack(): void
+    {
+        $repository = $this->createStub(CollectedBackRepository::class);
+        $repository->method('findOneBy')->willReturn(null);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->never())->method('persist');
+
+        $this->assertFalse(new BackCollector($repository, $entityManager)->grant('u1', $this->back('origin')->setStandard(true), 'apple', paid: true));
+    }
+
     // A back not held is refused and nothing changes
     public function testRefusesABackNotHeld(): void
     {

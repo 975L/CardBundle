@@ -10,12 +10,14 @@
 
 namespace c975L\CardBundle\Tests\Management;
 
+use c975L\CardBundle\Controller\Management\BackThumbnailsController;
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
 use c975L\CardBundle\Controller\Management\CardBackPictureCrudController;
 use c975L\CardBundle\Controller\Management\CardExportController;
 use c975L\CardBundle\Export\CardExporter;
 use c975L\CardBundle\Management\CardGuidedProjectProvider;
 use c975L\CardBundle\Management\MenuProvider;
+use c975L\CardBundle\Service\BackThumbnailMaker;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -99,6 +101,20 @@ class CardGuidedProjectProviderTest extends TestCase
         $this->assertSame('/management', $project['steps'][0]['url']);
     }
 
+    // The thumbnails project follows its tile too: offered where they can be made, after the export, and nowhere else
+    public function testTheThumbnailsProjectFollowsTheTile(): void
+    {
+        $this->assertNotContains('card-back-thumbnails', array_column($this->projects(true), 'slug'));
+
+        $project = $this->projects(true, true)[3];
+        $this->assertSame('card-back-thumbnails', $project['slug']);
+        $this->assertSame(11025, $project['order']);
+        $this->assertSame(BackThumbnailsController::ROLE, $project['role']);
+        $this->assertSame(['label.guided_step_card_back_thumbnails_open', 'label.guided_step_card_back_thumbnails_run', 'label.guided_step_card_back_thumbnails_done'], array_column($project['steps'], 'label'));
+        $this->assertSame('form[action$="/card/back-thumbnails"] button', $project['steps'][1]['highlight']);
+        $this->assertSame('/management', $project['steps'][0]['url']);
+    }
+
     // The menu entries ask for the very role the screen and the project ask for
     public function testTheMenuEntryAsksForTheEditorsRole(): void
     {
@@ -117,7 +133,7 @@ class CardGuidedProjectProviderTest extends TestCase
     }
 
     /** @return list<array<string, mixed>> */
-    private function projects(bool $exportAvailable): array
+    private function projects(bool $exportAvailable, bool $thumbnailsAvailable = false): array
     {
         $adminUrlGenerator = $this->createStub(AdminUrlGeneratorInterface::class);
         $adminUrlGenerator->method('unsetAll')->willReturnSelf();
@@ -129,8 +145,10 @@ class CardGuidedProjectProviderTest extends TestCase
         $urlGenerator->method('generate')->willReturn('/management');
         $cardExporter = $this->createStub(CardExporter::class);
         $cardExporter->method('isAvailable')->willReturn($exportAvailable);
+        $backThumbnailMaker = $this->createStub(BackThumbnailMaker::class);
+        $backThumbnailMaker->method('isAvailable')->willReturn($thumbnailsAvailable);
 
-        return new CardGuidedProjectProvider($adminUrlGenerator, $this->configService(), $urlGenerator, $cardExporter)->getGuidedProjects();
+        return new CardGuidedProjectProvider($adminUrlGenerator, $this->configService(), $urlGenerator, $cardExporter, $backThumbnailMaker)->getGuidedProjects();
     }
 
     private function configService(): ConfigServiceInterface

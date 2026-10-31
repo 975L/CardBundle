@@ -33,10 +33,16 @@ class CardBackRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    // A published variant by its slug
+    // A published variant by its slug, the standard back being none
     public function findPublishedBySlug(string $slug): ?CardBack
     {
-        return $this->findOneBy(['slug' => $slug, 'published' => true]);
+        return $this->findOneBy(['slug' => $slug, 'published' => true, 'standard' => false]);
+    }
+
+    // The back every card wears until another is chosen, null while the site has none published
+    public function findStandard(): ?CardBack
+    {
+        return $this->findOneBy(['standard' => true, 'published' => true]);
     }
 
     // The variants on sale, published and priced, in the back office's order
@@ -61,12 +67,13 @@ class CardBackRepository extends ServiceEntityRepository
         return null !== $back && InAppProduct::idFor(CardBack::PRODUCT_PREFIX, (string) $back->getSlug()) === $productId ? $back : null;
     }
 
-    // The published variants in the back office's order, those given no position last - MariaDB would sort them first
+    // The published variants in the back office's order, those given no position last - MariaDB would sort them first. The standard back is no variant
     private function published(): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('b')
             ->addSelect('CASE WHEN b.position IS NULL THEN 1 ELSE 0 END AS HIDDEN unpositioned')
-            ->andWhere('b.published = true');
+            ->andWhere('b.published = true')
+            ->andWhere('b.standard = false');
         foreach (['unpositioned', 'b.position', 'b.id'] as $order) {
             $queryBuilder->addOrderBy($order);
         }

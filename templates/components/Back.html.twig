@@ -1,0 +1,10 @@
+{# <twig:c975LCard:Back back="{{ back }}" [still] [class="..."]>the site's own content</twig:c975LCard:Back> - a card's back drawn and moving: the picture (an <img> the CSS stretches over it, the CSP refusing style=""), the light of its tone, the effect of its back drawn by back.js, the frame. "back" holds "image", "tone", "effect" (the enums or their values) and, optionally, "sky" (where a night's stars stop, in % of the height, read off the picture otherwise) and "label" (what a screen reader says). The phone leans it on a page showing a card alone, which marks it "data-card-lean"; "still" draws it without its controller, for paper. What the site lays over it - a crest, a name - is the content #}
+{% props back, still = false %}
+{% set effect = back.effect.value ?? back.effect ?? 'none' %}
+{% set tone = back.tone.value ?? back.tone ?? 'none' %}
+{# @symfony-lsp-ignore stimulus.unknown_controller (registered by CardBundle's controllers.js, which lsp:check does not read) #}
+<div {{ attributes.defaults({class: 'card-back card-back--' ~ effect ~ ' card-back--tone-' ~ tone, 'aria-label': back.label ?? null}) }}{% if not still %} data-controller="card-back"{% if back.sky ?? null %} data-card-back-sky-value="{{ back.sky }}"{% endif %}{% endif %}>
+	<div class="card-back__picture">{% if back.image ?? null %}<img src="{{ back.image }}" alt="" loading="lazy">{% endif %}</div>
+	<span class="card-back__rule"></span>
+	{% block content %}{% endblock %}
+</div>

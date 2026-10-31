@@ -10,10 +10,12 @@
 
 namespace c975L\CardBundle\Management;
 
+use c975L\CardBundle\Controller\Management\BackThumbnailsController;
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
 use c975L\CardBundle\Controller\Management\CardBackPictureCrudController;
 use c975L\CardBundle\Controller\Management\CardExportController;
 use c975L\CardBundle\Export\CardExporter;
+use c975L\CardBundle\Service\BackThumbnailMaker;
 use c975L\ConfigBundle\Management\GuidedProjectProviderInterface;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -28,13 +30,19 @@ class CardGuidedProjectProvider implements GuidedProjectProviderInterface
         private readonly ConfigServiceInterface $configService,
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly CardExporter $cardExporter,
+        private readonly BackThumbnailMaker $backThumbnailMaker,
     ) {
     }
 
     public function getGuidedProjects(): array
     {
-        // The export follows its tile, shown only where Chrome and Ghostscript are installed: elsewhere it would highlight nothing
-        return [$this->backProject(), $this->pictureProject(), ...($this->cardExporter->isAvailable() ? [$this->exportProject()] : [])];
+        // The export and the thumbnails follow their tiles, shown only where Chrome (and Ghostscript for the export) is installed: elsewhere they would highlight nothing
+        return [
+            $this->backProject(),
+            $this->pictureProject(),
+            ...($this->cardExporter->isAvailable() ? [$this->exportProject()] : []),
+            ...($this->backThumbnailMaker->isAvailable() ? [$this->thumbnailsProject()] : []),
+        ];
     }
 
     // Making a variant of the backs, which a player then wins or buys for all the packs and chooses for all their cards
@@ -42,7 +50,7 @@ class CardGuidedProjectProvider implements GuidedProjectProviderInterface
     {
         return self::project('card_back', 11010, (string) $this->configService->get('site-role-editor'), self::formSteps(
             $this->indexUrl(CardBackCrudController::class),
-            ['name' => '#CardBack_name', 'tone' => '#CardBack_tone', 'effect' => '#CardBack_effect', 'thumbnail' => '#CardBack_imageFile_file', 'price' => '#CardBack_price', 'published' => '#CardBack_published'],
+            ['name' => '#CardBack_name', 'tone' => '#CardBack_tone', 'effect' => '#CardBack_effect', 'thumbnail' => '#CardBack_imageFile_file', 'price' => '#CardBack_price', 'published' => '#CardBack_published', 'standard' => '#CardBack_standard'],
         ));
     }
 
@@ -79,6 +87,16 @@ class CardGuidedProjectProvider implements GuidedProjectProviderInterface
             ['key' => 'open', 'url' => $this->urlGenerator->generate('management')],
             ['key' => 'run', 'highlight' => 'form[action$="/card/export"] button'],
             ['key' => 'follow'],
+        ]);
+    }
+
+    // Making every back's thumbnail from the dashboard tile, each shot on the site's page showing it alone
+    private function thumbnailsProject(): array
+    {
+        return self::project('card_back_thumbnails', 11025, BackThumbnailsController::ROLE, [
+            ['key' => 'open', 'url' => $this->urlGenerator->generate('management')],
+            ['key' => 'run', 'highlight' => 'form[action$="/card/back-thumbnails"] button'],
+            ['key' => 'done'],
         ]);
     }
 

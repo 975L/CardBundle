@@ -32,6 +32,9 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 - A collection held under a key rather than an account: the token a device made up, then `u<id>` once a member connects it — a player collects on the first evening, before anyone signs up, and nothing is lost when they do
 - Three finishes (`CardFinish`: normal ●, shiny ◆, magic ✦), the finish being no other card; the ladder (shiny only over normal) is offered, never imposed
 - Card backs: variants held once for every pack, each with a tone, an effect, a picture per pack and a thumbnail of its own for the basket, given by a reward, a purchase or a code, one chosen for all the holder's cards
+- Card backs drawn by the bundle (`<twig:c975LCard:Back>`): picture, tone, effect and frame, moving on screen and still on paper, the site laying its own content over them; `c975l:config:check-importmap` adds `@c975l/card-bundle/controllers.js` to the site's importmap, the site declaring `@c975l/card-bundle/sky.js` or `@c975l/card-bundle/audio.js` itself if it uses them
+- A standard back, the one every card wears until another is chosen: never sold nor given, one per site
+- The backs' thumbnails shot from the site's page showing each alone (`card:back-thumbnails`, or a dashboard tile where Chrome is installed)
 - Card backs for sale, in the app stores and on the site, through PaymentBundle (`InAppProductProviderInterface` and `BasketItemProviderInterface`), at one price
 - A device's collection handed over to the account on its first connected call, the account keeping its own where both hold the same card
 - Everything erased with the account (ConfigBundle's `UserAnonymizedEvent`), the site's own stores included
@@ -105,9 +108,21 @@ Which card and which finish is the site's decision, taken before calling: a site
 
 ## Card backs
 
-A `CardBack` is a variant held once for every pack — the packs being the site's own keys: a castle's prefix, a set's slug — and only a published one is ever given. Earned or bought, it is the same back: `BackCollector::grant($holder, $back, $source)` gives it, `BackCollector::choose($holder, $back)` makes it the one all the holder's cards wear (`null` for each pack's own picture), refusing a back not held or unpublished, and `BackCollector::chosen($holder)` returns it. Unpublishing a back withdraws it: it is no longer worn, the choice being kept so that republishing it puts it back. A back's slug is set on creation and locked afterwards, lowercase words joined by hyphens, and the backs are read by position, those given none last.
+A `CardBack` is a variant held once for every pack — the packs being the site's own keys: a castle's prefix, a set's slug — and only a published one is ever given. Earned or bought, it is the same back: `BackCollector::grant($holder, $back, $source)` gives it, `BackCollector::choose($holder, $back)` makes it the one all the holder's cards wear (`null` for the standard back), refusing a back not held or unpublished, and `BackCollector::chosen($holder)` returns it. Unpublishing a back withdraws it: it is no longer worn, the choice being kept so that republishing it puts it back. A back's slug is set on creation and locked afterwards, lowercase words joined by hyphens, and the backs are read by position, those given none last.
 
-A back's picture for a pack is a `CardBackPicture` — that castle at dawn — uploaded on its own screen, its back and pack locked once created and the pack key in letters, digits, dashes and underscores, removed with its back along with its files; `CardBackPictureRepository::findImagesOfPack($pack)` reads a pack's pictures in one query, and a pack with none draws its own picture in the back's tone. How a tone or an effect is drawn is the site's stylesheet and its app's: the bundle only names them (`BackTone`, `BackEffect`) and lets any tone go with any effect. A site drawing its backs in the back office's listing as its app does overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig`, which shows nothing otherwise.
+A back's picture for a pack is a `CardBackPicture` — that castle at dawn — uploaded on its own screen, its back and pack locked once created and the pack key in letters, digits, dashes and underscores, removed with its back along with its files; `CardBackPictureRepository::findImagesOfPack($pack)` reads a pack's pictures in one query, and a pack with none draws its own picture in the back's tone. Any tone goes with any effect (`BackTone`, `BackEffect`). A site drawing its backs in the back office's listing as its app does overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig`, which shows nothing otherwise.
+
+### The standard back
+
+The back marked standard is the one every card wears until its holder chooses another, one per site: ticking it on a back unticks the other. It is never sold nor given, `BackCollector::choose()` on it clears the choice, and it is left out of the variants listed, sold or shot. `CardBackRepository::findStandard()` reads it, null while none is published.
+
+### Drawing a back
+
+`<twig:c975LCard:Back back="{{ back }}">` draws a back as the bundle does on screen — its picture, the light of its tone, its effect moving (Stimulus controller `card-back`), its frame — the site laying its own content (a crest, a name) inside the tag; `still` draws it without its controller, for paper. `back` holds `image`, `tone`, `effect` and optionally `sky` and `label`; `card_back_standard(pack)` gives the standard back in that shape, null while there is none. The stylesheet and the controller are loaded by UiBundle's layout, the site setting the frame's colours through `--back-frame`, `--back-light`, `--back-shade` and `--back-rays`.
+
+### The backs' thumbnails
+
+A site implementing `CardBackPageProviderInterface` — the absolute url of its page showing a back alone — gets each published variant's thumbnail shot there by a headless Chrome, after a few seconds for its effect to move, and stored as an upload would be: `php bin/console card:back-thumbnails [slugs…] [--delay=4000]`, or the dashboard tile. Both exist only where Chrome is installed, the local machine and not a managed server; elsewhere the thumbnails are uploaded by hand.
 
 ### Selling a back
 
@@ -150,7 +165,7 @@ It is idempotent: each item's fingerprint — its pages, and the date and size o
 
 ## What the site plugs in
 
-Four interfaces, each tagged by autoconfiguration — implementing one is all it takes:
+Five interfaces, each tagged by autoconfiguration — implementing one is all it takes:
 
 | Interface | What for | Without it |
 | --- | --- | --- |
@@ -158,6 +173,7 @@ Four interfaces, each tagged by autoconfiguration — implementing one is all it
 | `CardCatalogInterface` | the name of a card, from its reference | the reference is shown |
 | `CardPackProviderInterface` | the packs a back can be made for | the pack is typed in the back office |
 | `CardExportSourceInterface` | the pages to export, paper and social (see [exports](#exports)) | no tile, `card:export` has nothing to do |
+| `CardBackPageProviderInterface` | the page showing a back alone (see [the backs' thumbnails](#the-backs-thumbnails)) | the thumbnails are uploaded by hand |
 
 ## Translations
 
@@ -167,9 +183,9 @@ Everything the back office shows is in the `card` domain, its spoken narrations 
 
 ## Guided projects
 
-The bundle contributes three guided projects, in the 11000 block `GuidedProjectProviderInterface` reserves it. `card-back` makes a variant of the backs: it opens on the card backs' listing, then walks the form field by field — the name, the tone, the effect, the price when it is for sale — then the box that publishes it, a back being given only once published, and ends on the save button. `card-back-picture` gives a back its picture for one pack: the back, the pack, the picture, then the save button. Both are offered to `site-role-editor`, the role the screens themselves ask for.
+The bundle contributes four guided projects, in the 11000 block `GuidedProjectProviderInterface` reserves it. `card-back` makes a variant of the backs: it opens on the card backs' listing, then walks the form field by field — the name, the tone, the effect, the thumbnail, the price when it is for sale — then the box that publishes it, a back being given only once published, the box marking it standard, and ends on the save button. `card-back-picture` gives a back its picture for one pack: the back, the pack, the picture, then the save button. Both are offered to `site-role-editor`, the role the screens themselves ask for.
 
-`card-export` opens on the dashboard, highlights the export tile, then tells how to follow the run on the tile. Like the tile, it is offered only where the export can run, to `ROLE_SUPER_ADMIN`.
+`card-export` opens on the dashboard, highlights the export tile, then tells how to follow the run on the tile. Like the tile, it is offered only where the export can run, to `ROLE_SUPER_ADMIN`. `card-back-thumbnails` does the same for the thumbnails' tile, offered only where they can be made.
 
 The ways a back is then *had* — a reward, a purchase, a code — are not walked: a reward and a code are the site's own code calling `BackCollector::grant()`, a purchase PaymentBundle's, with nothing to do in the back office beyond the price.
 

@@ -14,6 +14,7 @@ use c975L\CardBundle\Enum\BackEffect;
 use c975L\CardBundle\Enum\BackTone;
 use c975L\CardBundle\Export\CardExporter;
 use c975L\CardBundle\Management\CardGuidedProjectProvider;
+use c975L\CardBundle\Service\BackThumbnailMaker;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -68,10 +69,12 @@ class TranslationKeysTest extends TestCase
         foreach (['unsetAll', 'setController', 'setAction'] as $method) {
             $adminUrlGenerator->method($method)->willReturnSelf();
         }
-        // The export project only shows where the export can run
+        // The export and thumbnails projects only show where their tiles can run
         $cardExporter = $this->createStub(CardExporter::class);
         $cardExporter->method('isAvailable')->willReturn(true);
-        foreach (new CardGuidedProjectProvider($adminUrlGenerator, $this->createStub(ConfigServiceInterface::class), $this->createStub(UrlGeneratorInterface::class), $cardExporter)->getGuidedProjects() as $project) {
+        $backThumbnailMaker = $this->createStub(BackThumbnailMaker::class);
+        $backThumbnailMaker->method('isAvailable')->willReturn(true);
+        foreach (new CardGuidedProjectProvider($adminUrlGenerator, $this->createStub(ConfigServiceInterface::class), $this->createStub(UrlGeneratorInterface::class), $cardExporter, $backThumbnailMaker)->getGuidedProjects() as $project) {
             $keys[] = $project['label'];
             $keys[] = $project['description'];
             foreach ($project['steps'] as $step) {

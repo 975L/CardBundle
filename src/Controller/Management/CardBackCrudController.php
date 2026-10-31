@@ -14,6 +14,7 @@ use c975L\CardBundle\Entity\CardBack;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\UiBundle\Form\VichImageOptions;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -29,7 +30,7 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 use function Symfony\Component\Translation\t;
 
-// The variants of the card backs, each held once for every pack; their pictures, pack by pack, are CardBackPictureCrudController's. A pack's own back is no row here, being whatever the site draws for it; how a back is drawn (its tone and effect over a picture) is the site's stylesheet, so the listing shows a preview only where the site overrides its template
+// The card backs: the standard one every card wears until another is chosen, and the variants, each held once for every pack; their pictures, pack by pack, are CardBackPictureCrudController's, a back with none for a pack drawn on the pack's own picture; the listing shows no preview of how a back is drawn (the Back component and the site's own content over it) unless the site overrides its template
 /** @extends AbstractCrudController<CardBack> */
 class CardBackCrudController extends AbstractCrudController
 {
@@ -101,5 +102,37 @@ class CardBackCrudController extends AbstractCrudController
 
         yield BooleanField::new('published', t('label.back_published', [], 'card'))
             ->setHelp(t('help.back_published', [], 'card'));
+
+        yield BooleanField::new('standard', t('label.back_standard', [], 'card'))
+            ->setHelp(t('help.back_standard', [], 'card'));
+    }
+
+    // One standard back per site: the one saved as such unmarks the others
+    #[\Override]
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $this->keepOneStandard($entityManager, $entityInstance);
+        parent::persistEntity($entityManager, $entityInstance);
+    }
+
+    #[\Override]
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $this->keepOneStandard($entityManager, $entityInstance);
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+
+    // The other standard backs unmarked, flushed with the one saved
+    private function keepOneStandard(EntityManagerInterface $entityManager, mixed $back): void
+    {
+        if (!$back instanceof CardBack || !$back->isStandard()) {
+            return;
+        }
+
+        foreach ($entityManager->getRepository(CardBack::class)->findBy(['standard' => true]) as $other) {
+            if ($other !== $back) {
+                $other->setStandard(false);
+            }
+        }
     }
 }

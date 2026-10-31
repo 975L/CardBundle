@@ -72,6 +72,10 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     #[Assert\PositiveOrZero]
     private float $vat = 0.0;
 
+    // The back every card wears until its holder chooses another, one per site: worn by all without being given, never sold, drawn on each pack's own picture unless it has one for that pack
+    #[ORM\Column(options: ['default' => false])]
+    private bool $standard = false;
+
     // Only a published back is ever given or shown
     #[ORM\Column(options: ['default' => false])]
     private bool $published = false;
@@ -180,10 +184,10 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
         return $this;
     }
 
-    // Whether it can be bought: published and priced
+    // Whether it can be bought: published and priced, the standard one never
     public function isForSale(): bool
     {
-        return $this->published && null !== $this->price && null !== $this->slug;
+        return !$this->standard && $this->published && null !== $this->price && null !== $this->slug;
     }
 
     // The product the app stores sell it as, derived from its slug and never typed (see InAppProduct::idFor()), null for a back that is not for sale
@@ -200,6 +204,18 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     public function setPublished(bool $published): static
     {
         $this->published = $published;
+
+        return $this;
+    }
+
+    public function isStandard(): bool
+    {
+        return $this->standard;
+    }
+
+    public function setStandard(bool $standard): static
+    {
+        $this->standard = $standard;
 
         return $this;
     }
