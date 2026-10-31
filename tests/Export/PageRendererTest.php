@@ -40,6 +40,16 @@ class PageRendererTest extends TestCase
         $this->assertSame('a{background:url(//cdn.example/x.woff2)}' . "\n", $renderer->stylesheets(['public/css/site.css']));
         $this->assertSame('<img src="//cdn.example/a.webp">', $renderer->onDisk('<img src="//cdn.example/a.webp">'));
 
+        // An AssetMapper file is read from its source, its digest holding a dash or not
+        mkdir($project . '/assets/images', 0o775, true);
+        file_put_contents($project . '/assets/images/end-en.webp', 'webp');
+        foreach (['end-en-2ucDF-q.webp', 'end-en-2ucDFkq.webp'] as $digested) {
+            $this->assertSame('<img src="file://' . $project . '/assets/images/end-en.webp">', $renderer->onDisk('<img src="/assets/images/' . $digested . '">'));
+        }
+        unlink($project . '/assets/images/end-en.webp');
+        rmdir($project . '/assets/images');
+        rmdir($project . '/assets');
+
         unlink($project . '/public/css/site.css');
         rmdir($project . '/public/css');
         rmdir($project . '/public');

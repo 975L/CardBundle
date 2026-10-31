@@ -117,6 +117,8 @@ class BackBasketItemProvider implements BasketItemProviderInterface, AccountBask
             'item' => [
                 'id' => $item->getId(),
                 'title' => $item->getName(),
+                // Drawn by the basket row with no page to link to (see PaymentBundle's Basket:Item)
+                'media' => $item->getImage(),
                 'price' => $item->getPrice(),
                 'currency' => $this->cardCatalog->currency(),
                 'vat' => $item->getVat(),

@@ -12,6 +12,7 @@ namespace c975L\CardBundle\Tests\Entity;
 
 use c975L\CardBundle\Entity\CardBack;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Validation;
 
 class CardBackTest extends TestCase
@@ -44,5 +45,24 @@ class CardBackTest extends TestCase
     {
         $this->assertSame('À l\'aube', (string) new CardBack()->setName('À l\'aube'));
         $this->assertSame('', (string) new CardBack());
+    }
+
+    // Its thumbnail is named after its slug, beside the packs' pictures
+    public function testTheThumbnailIsNamedAfterItsSlug(): void
+    {
+        $this->assertSame(CardBack::MEDIA_DIRECTORY . '/aube', new CardBack()->setSlug('aube')->getVichMediaPath());
+    }
+
+    // A new thumbnail dates the row, Doctrine seeing no other change when only the file is replaced; clearing the field does not
+    public function testANewThumbnailDatesTheRow(): void
+    {
+        $back = new CardBack();
+        $before = $back->getModification();
+
+        $back->setImageFile(null);
+        $this->assertSame($before, $back->getModification());
+
+        $back->setImageFile(new File(__FILE__));
+        $this->assertNotSame($before, $back->getModification());
     }
 }

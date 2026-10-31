@@ -62,6 +62,10 @@
                 <source>narration.guided_step_card_back_published</source>
                 <target>Marque Publicado: si no, el reverso no puede darse ni elegirse.</target>
             </trans-unit>
+            <trans-unit id="WaOX9C_">
+                <source>narration.guided_step_card_back_thumbnail</source>
+                <target>Añada su miniatura: el reverso solo, del tamaño de una carta, en vertical, que muestran la cesta y los correos del pedido.</target>
+            </trans-unit>
             <trans-unit id="BCB.qLq">
                 <source>narration.guided_step_card_back_tone</source>
                 <target>Elija la luz sobre la imagen de cada pack.</target>

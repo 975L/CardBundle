@@ -13,6 +13,7 @@ namespace c975L\CardBundle\Controller\Management;
 use c975L\CardBundle\Entity\CardBack;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
+use c975L\UiBundle\Form\VichImageOptions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -24,6 +25,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 use function Symfony\Component\Translation\t;
 
@@ -76,6 +78,13 @@ class CardBackCrudController extends AbstractCrudController
 
         yield ChoiceField::new('effect', t('label.back_effect', [], 'card'))
             ->setHelp(t('help.back_effect', [], 'card'));
+
+        // Its image on its own, where no pack draws it: the basket, the order emails, the invoice
+        yield Field::new('imageFile', t('label.back_thumbnail', [], 'card'))
+            ->setFormType(VichImageType::class)
+            ->setFormTypeOptions(VichImageOptions::default('10M'))
+            ->setHelp(t('help.back_thumbnail', [], 'card'))
+            ->onlyOnForms();
 
         yield MoneyField::new('price', t('label.back_price', [], 'card'))
             ->setCurrency($this->cardCatalog->currency())

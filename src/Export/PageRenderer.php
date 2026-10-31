@@ -75,9 +75,9 @@ class PageRenderer
         // Chrome does not load an offscreen image, and a whole series puts very nearly all of them offscreen
         $html = str_replace('loading="lazy"', 'loading="eager"', $html);
 
-        // An AssetMapper file is served under a digested name that only exists on disk once compiled: its source is read instead
+        // An AssetMapper file is served under a digested name that only exists on disk once compiled: its source is read instead. The digest may hold a dash ("carton-fin-en-2ucDF-q.webp")
         $html = (string) preg_replace_callback(
-            '#src="/assets/([^"]+)-[A-Za-z0-9_]{7}\.(\w+)"#',
+            '#src="/assets/([^"]+)-[A-Za-z0-9_-]{7}\.(\w+)"#',
             fn (array $matches): string => is_file($source = $this->projectDir . '/assets/' . $matches[1] . '.' . $matches[2]) ? 'src="file://' . $source . '"' : $matches[0],
             $html
         );

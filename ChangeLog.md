@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.1
+
+A card back has its own thumbnail, shown by the basket
+
+- `CardBack` thumbnail, its image on its own, shown by the basket, the order emails and the invoice (31/10/2026) **Needs db update**
+- `BackImageTrait`, the image a back and its picture for a pack share (31/10/2026)
+- Guided project `card-back` asks for the thumbnail (31/10/2026)
+- Requires PaymentBundle ^6.22.3, which draws a line's picture with no page of its own (31/10/2026)
+- Fixed the export of an AssetMapper file whose digest holds a dash: read from its source rather than left as a broken image (31/10/2026)
+
 ## v1.4
 
 Any tone of a card back goes with any effect

@@ -31,7 +31,7 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 
 - A collection held under a key rather than an account: the token a device made up, then `u<id>` once a member connects it — a player collects on the first evening, before anyone signs up, and nothing is lost when they do
 - Three finishes (`CardFinish`: normal ●, shiny ◆, magic ✦), the finish being no other card; the ladder (shiny only over normal) is offered, never imposed
-- Card backs: variants held once for every pack, each with a tone, an effect and a picture per pack, given by a reward, a purchase or a code, one chosen for all the holder's cards
+- Card backs: variants held once for every pack, each with a tone, an effect, a picture per pack and a thumbnail of its own for the basket, given by a reward, a purchase or a code, one chosen for all the holder's cards
 - Card backs for sale, in the app stores and on the site, through PaymentBundle (`InAppProductProviderInterface` and `BasketItemProviderInterface`), at one price
 - A device's collection handed over to the account on its first connected call, the account keeping its own where both hold the same card
 - Everything erased with the account (ConfigBundle's `UserAnonymizedEvent`), the site's own stores included

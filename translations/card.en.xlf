@@ -66,6 +66,10 @@
                 <source>description.guided_step_card_back_published</source>
                 <target>Only a published back can be given and chosen.</target>
             </trans-unit>
+            <trans-unit id="HSMDdco">
+                <source>description.guided_step_card_back_thumbnail</source>
+                <target>The back on its own, card-sized, in portrait: the basket, the order emails and the invoice show it so, with no castle.</target>
+            </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
                 <target>The light laid over each pack's picture. Any effect goes with it.</target>
@@ -133,6 +137,10 @@
             <trans-unit id="8NbWFto">
                 <source>help.back_slug_locked</source>
                 <target>Set on creation: rewards, codes and stores know it.</target>
+            </trans-unit>
+            <trans-unit id="T2hS5aX">
+                <source>help.back_thumbnail</source>
+                <target>The back on its own, card-sized, in portrait: what the basket, the order emails and the invoice show.</target>
             </trans-unit>
             <trans-unit id="JefzzOt">
                 <source>help.back_tone</source>
@@ -221,6 +229,10 @@
             <trans-unit id="iuOHX.5">
                 <source>label.back_slug</source>
                 <target>Slug</target>
+            </trans-unit>
+            <trans-unit id="C8KDNul">
+                <source>label.back_thumbnail</source>
+                <target>Thumbnail</target>
             </trans-unit>
             <trans-unit id="sz35eBo">
                 <source>label.back_tone</source>
@@ -389,6 +401,10 @@
             <trans-unit id="c8kDmoG">
                 <source>label.guided_step_card_back_published</source>
                 <target>Publish it</target>
+            </trans-unit>
+            <trans-unit id="0A4FaNY">
+                <source>label.guided_step_card_back_thumbnail</source>
+                <target>Add its thumbnail</target>
             </trans-unit>
             <trans-unit id="Ou7jNu4">
                 <source>label.guided_step_card_back_tone</source>

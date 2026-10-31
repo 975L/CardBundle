@@ -90,6 +90,14 @@ class BackBasketItemProviderTest extends TestCase
         $this->assertSame(BackBasketItemProvider::KIND, $data['type']);
     }
 
+    // The line shows the back's own image, the basket having no page to link it to
+    public function testTheBasketLineCarriesTheBacksImage(): void
+    {
+        $data = $this->provider(null)->toBasketData($this->back()->setImage('medias/cards/backs/thumbnails/aube.webp'), 1);
+
+        $this->assertSame('medias/cards/backs/thumbnails/aube.webp', $data['item']['media']);
+    }
+
     // Digital content supplied at once, which asks for the waiver of the right of withdrawal
     public function testABackIsDigitalContent(): void
     {

@@ -62,6 +62,10 @@
                 <source>narration.guided_step_card_back_published</source>
                 <target>Cochez Publié : sans cela, le dos ne peut être ni donné ni choisi.</target>
             </trans-unit>
+            <trans-unit id="WaOX9C_">
+                <source>narration.guided_step_card_back_thumbnail</source>
+                <target>Ajoutez sa vignette : le dos seul, au format d'une carte, en portrait, que montrent le panier et les mails de commande.</target>
+            </trans-unit>
             <trans-unit id="BCB.qLq">
                 <source>narration.guided_step_card_back_tone</source>
                 <target>Choisissez la lumière posée sur l'image de chaque pack.</target>

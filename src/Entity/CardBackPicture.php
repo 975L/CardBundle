@@ -16,7 +16,6 @@ use c975L\UiBundle\Contract\VichMultiSizeImageInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
@@ -30,6 +29,8 @@ use Vich\UploaderBundle\Mapping\Attribute as Vich;
 #[Vich\Uploadable]
 class CardBackPicture implements VichMediaNamableInterface, VichMultiSizeImageInterface, \Stringable
 {
+    use BackImageTrait;
+
     // Where the uploads land, under UiBundle's own "block_media" mapping rather than a mapping of this bundle's
     public const string MEDIA_DIRECTORY = 'medias/cards/backs';
 
@@ -53,13 +54,6 @@ class CardBackPicture implements VichMediaNamableInterface, VichMultiSizeImageIn
     // Its back's slug and its pack, never typed (see setSlugFromBackAndPack()): what a content sync between two sites matches it by, and what its file is named after
     #[ORM\Column(length: 130, unique: true)]
     private ?string $slug = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $image = null;
-
-    // Never persisted: Vich converts the upload to webp and UiBundle cuts its "-thumb"/"-highres" siblings
-    #[Vich\UploadableField(mapping: 'block_media', fileNameProperty: 'image')]
-    private ?File $imageFile = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $modification;
@@ -127,35 +121,6 @@ class CardBackPicture implements VichMediaNamableInterface, VichMultiSizeImageIn
         return null === $back || null === $this->pack ? null : $back . '-' . strtolower($this->pack);
     }
 
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): static
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    // Stamping the modification date is what makes Doctrine see a change at all, $imageFile being no column
-    public function setImageFile(?File $imageFile): static
-    {
-        $this->imageFile = $imageFile;
-
-        if (null !== $imageFile) {
-            $this->modification = new \DateTimeImmutable();
-        }
-
-        return $this;
-    }
-
     public function getModification(): \DateTimeImmutable
     {
         return $this->modification;
@@ -165,22 +130,6 @@ class CardBackPicture implements VichMediaNamableInterface, VichMultiSizeImageIn
     public function getVichMediaPath(): string
     {
         return self::MEDIA_DIRECTORY . '/' . ($this->slugOf() ?? uniqid());
-    }
-
-    // A back is drawn no wider than a card
-    public function getImageWidth(): int
-    {
-        return 800;
-    }
-
-    public function getThumbnailSize(): int
-    {
-        return 500;
-    }
-
-    public function getHighresWidth(): int
-    {
-        return 1200;
     }
 
     // Every edit dates the row, the back office having no field for it

@@ -14,22 +14,32 @@ use c975L\CardBundle\Enum\BackEffect;
 use c975L\CardBundle\Enum\BackTone;
 use c975L\CardBundle\Repository\CardBackRepository;
 use c975L\PaymentBundle\Contract\InAppProduct;
+use c975L\UiBundle\Contract\VichMediaNamableInterface;
+use c975L\UiBundle\Contract\VichMultiSizeImageInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 // A variant of the card backs - at dawn, at sunset, under the storm - held once for every pack and worn by all the holder's cards once chosen. Only the variants are stored: with none chosen, a card's back is whatever the site draws for its pack. Each pack's picture of it is a CardBackPicture, and how a back is had is none of its columns: a reward, a purchase or a code each give it through BackCollector
 #[ORM\Entity(repositoryClass: CardBackRepository::class)]
 #[ORM\Table(name: 'card_back')]
 #[ORM\HasLifecycleCallbacks]
 #[UniqueEntity(fields: ['slug'])]
-class CardBack implements \Stringable
+#[Vich\Uploadable]
+class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface, \Stringable
 {
+    // Its image shown on its own, where no pack draws it: the basket, the order emails, the invoice
+    use BackImageTrait;
+
     // What a back's store product id starts with (see getProductId())
     public const string PRODUCT_PREFIX = 'back';
+
+    // Where its thumbnail lands, beside the packs' pictures (see CardBackPicture::MEDIA_DIRECTORY)
+    public const string MEDIA_DIRECTORY = 'medias/cards/backs/thumbnails';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -204,6 +214,12 @@ class CardBack implements \Stringable
         $this->position = $position;
 
         return $this;
+    }
+
+    // One file per back, named after it
+    public function getVichMediaPath(): string
+    {
+        return self::MEDIA_DIRECTORY . '/' . ($this->slug ?? uniqid());
     }
 
     public function getCreation(): \DateTimeImmutable

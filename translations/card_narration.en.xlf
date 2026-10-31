@@ -62,6 +62,10 @@
                 <source>narration.guided_step_card_back_published</source>
                 <target>Tick Published: otherwise the back can be neither given nor chosen.</target>
             </trans-unit>
+            <trans-unit id="WaOX9C_">
+                <source>narration.guided_step_card_back_thumbnail</source>
+                <target>Add its thumbnail: the back on its own, card-sized, in portrait, which the basket and the order emails show.</target>
+            </trans-unit>
             <trans-unit id="BCB.qLq">
                 <source>narration.guided_step_card_back_tone</source>
                 <target>Choose the light laid over each pack's picture.</target>

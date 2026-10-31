@@ -42,7 +42,7 @@ class CardGuidedProjectProvider implements GuidedProjectProviderInterface
     {
         return self::project('card_back', 11010, (string) $this->configService->get('site-role-editor'), self::formSteps(
             $this->indexUrl(CardBackCrudController::class),
-            ['name' => '#CardBack_name', 'tone' => '#CardBack_tone', 'effect' => '#CardBack_effect', 'price' => '#CardBack_price', 'published' => '#CardBack_published'],
+            ['name' => '#CardBack_name', 'tone' => '#CardBack_tone', 'effect' => '#CardBack_effect', 'thumbnail' => '#CardBack_imageFile_file', 'price' => '#CardBack_price', 'published' => '#CardBack_published'],
         ));
     }
 
