@@ -8,7 +8,9 @@
 /.gitignore export-ignore
 /.markdownlint.json export-ignore
 /.php-cs-fixer.dist.php export-ignore
+/.stylelintrc.json export-ignore
 /bin export-ignore
+/eslint.config.mjs export-ignore
 /phpcs.xml.dist export-ignore
 /phpstan.dist.neon export-ignore
 /phpunit.xml.dist export-ignore

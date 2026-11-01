@@ -24,7 +24,7 @@
             </trans-unit>
             <trans-unit id="zWKy_oI">
                 <source>description.guided_step_card_back_effect</source>
-                <target>El movimiento del reverso: un zoom lento, estrellas…</target>
+                <target>El movimiento del reverso, entre los que ofrece el sitio.</target>
             </trans-unit>
             <trans-unit id="oUvgEpU">
                 <source>description.guided_step_card_back_name</source>
@@ -92,7 +92,7 @@
             </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
-                <target>La luz sobre la imagen de cada pack. Cualquier efecto le va.</target>
+                <target>La luz sobre la imagen de cada pack, entre las que ofrece el sitio. Cualquier efecto le va.</target>
             </trans-unit>
             <trans-unit id="BFeTy4P">
                 <source>description.guided_step_card_export_follow</source>
@@ -172,7 +172,7 @@
             </trans-unit>
             <trans-unit id="JefzzOt">
                 <source>help.back_tone</source>
-                <target>La luz sobre la imagen: alba, puesta de sol, nieve, tormenta, viento, noche o niebla.</target>
+                <target>La luz sobre la imagen, entre las que ofrece el sitio.</target>
             </trans-unit>
             <trans-unit id="E9GkcBn">
                 <source>help.back_vat</source>
@@ -182,41 +182,29 @@
                 <source>label.back_already_held</source>
                 <target>Ya tienes este reverso.</target>
             </trans-unit>
+            <trans-unit id="3Vo7ge.">
+                <source>label.back_buy</source>
+                <target>Comprar %name%, %price%</target>
+            </trans-unit>
+            <trans-unit id="9SkQ40k">
+                <source>label.back_buy_for</source>
+                <target>Comprar %price%</target>
+            </trans-unit>
+            <trans-unit id="PgbqMXg">
+                <source>label.back_choose</source>
+                <target>Elegir el reverso %name%</target>
+            </trans-unit>
+            <trans-unit id="zWPkTsJ">
+                <source>label.back_chosen</source>
+                <target>Elegido</target>
+            </trans-unit>
             <trans-unit id=".Kew4lH">
                 <source>label.back_effect</source>
                 <target>Efecto</target>
             </trans-unit>
-            <trans-unit id="MQ.xF7B">
-                <source>label.back_effect_embers</source>
-                <target>Brasas</target>
-            </trans-unit>
-            <trans-unit id="TVAaThq">
-                <source>label.back_effect_lightning</source>
-                <target>Relámpagos</target>
-            </trans-unit>
-            <trans-unit id="UweWsvM">
-                <source>label.back_effect_mist</source>
-                <target>Niebla</target>
-            </trans-unit>
             <trans-unit id="0LjkTmi">
                 <source>label.back_effect_none</source>
                 <target>Ninguno</target>
-            </trans-unit>
-            <trans-unit id="B.Ol5cV">
-                <source>label.back_effect_snow</source>
-                <target>Nieve</target>
-            </trans-unit>
-            <trans-unit id="uBa4i8R">
-                <source>label.back_effect_stars</source>
-                <target>Estrellas</target>
-            </trans-unit>
-            <trans-unit id="T480EBI">
-                <source>label.back_effect_wind</source>
-                <target>Viento</target>
-            </trans-unit>
-            <trans-unit id="tVtJ_K9">
-                <source>label.back_effect_zoom</source>
-                <target>Zoom lento</target>
             </trans-unit>
             <trans-unit id="PUQJ_3g">
                 <source>label.back_image</source>
@@ -254,6 +242,10 @@
                 <source>label.back_published</source>
                 <target>Publicado</target>
             </trans-unit>
+            <trans-unit id="v4oNzvm">
+                <source>label.back_see</source>
+                <target>Ver</target>
+            </trans-unit>
             <trans-unit id="iuOHX.5">
                 <source>label.back_slug</source>
                 <target>Slug</target>
@@ -274,37 +266,9 @@
                 <source>label.back_tone</source>
                 <target>Tono</target>
             </trans-unit>
-            <trans-unit id="cf0GMRw">
-                <source>label.back_tone_dawn</source>
-                <target>Alba</target>
-            </trans-unit>
-            <trans-unit id="LyjDpHt">
-                <source>label.back_tone_mist</source>
-                <target>Niebla</target>
-            </trans-unit>
-            <trans-unit id="RmXVj1e">
-                <source>label.back_tone_night</source>
-                <target>Noche</target>
-            </trans-unit>
             <trans-unit id="pUcrr9a">
                 <source>label.back_tone_none</source>
                 <target>Ninguno</target>
-            </trans-unit>
-            <trans-unit id="AQ66pSH">
-                <source>label.back_tone_snow</source>
-                <target>Nieve</target>
-            </trans-unit>
-            <trans-unit id="2QNVkQ3">
-                <source>label.back_tone_storm</source>
-                <target>Tormenta</target>
-            </trans-unit>
-            <trans-unit id="20F9ysN">
-                <source>label.back_tone_sunset</source>
-                <target>Puesta de sol</target>
-            </trans-unit>
-            <trans-unit id="11FxTXX">
-                <source>label.back_tone_wind</source>
-                <target>Viento</target>
             </trans-unit>
             <trans-unit id="_0O26Hm">
                 <source>label.back_unavailable</source>

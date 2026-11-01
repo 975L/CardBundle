@@ -24,7 +24,7 @@
             </trans-unit>
             <trans-unit id="zWKy_oI">
                 <source>description.guided_step_card_back_effect</source>
-                <target>Le mouvement du dos : un zoom lent, des étoiles…</target>
+                <target>Le mouvement du dos, parmi ceux que le site propose.</target>
             </trans-unit>
             <trans-unit id="oUvgEpU">
                 <source>description.guided_step_card_back_name</source>
@@ -92,7 +92,7 @@
             </trans-unit>
             <trans-unit id="U2U4GGg">
                 <source>description.guided_step_card_back_tone</source>
-                <target>La lumière posée sur l'image de chaque pack. Tout effet s'y accorde.</target>
+                <target>La lumière posée sur l'image de chaque pack, parmi celles que le site propose. Tout effet s'y accorde.</target>
             </trans-unit>
             <trans-unit id="BFeTy4P">
                 <source>description.guided_step_card_export_follow</source>
@@ -172,7 +172,7 @@
             </trans-unit>
             <trans-unit id="JefzzOt">
                 <source>help.back_tone</source>
-                <target>La lumière posée sur l'image : aube, coucher de soleil, neige, orage, vent, nuit ou brume.</target>
+                <target>La lumière posée sur l'image, parmi celles que le site propose.</target>
             </trans-unit>
             <trans-unit id="E9GkcBn">
                 <source>help.back_vat</source>
@@ -182,41 +182,29 @@
                 <source>label.back_already_held</source>
                 <target>Vous avez déjà ce dos.</target>
             </trans-unit>
+            <trans-unit id="3Vo7ge.">
+                <source>label.back_buy</source>
+                <target>Acheter %name%, %price%</target>
+            </trans-unit>
+            <trans-unit id="9SkQ40k">
+                <source>label.back_buy_for</source>
+                <target>Acheter %price%</target>
+            </trans-unit>
+            <trans-unit id="PgbqMXg">
+                <source>label.back_choose</source>
+                <target>Choisir le dos %name%</target>
+            </trans-unit>
+            <trans-unit id="zWPkTsJ">
+                <source>label.back_chosen</source>
+                <target>Choisi</target>
+            </trans-unit>
             <trans-unit id=".Kew4lH">
                 <source>label.back_effect</source>
                 <target>Effet</target>
             </trans-unit>
-            <trans-unit id="MQ.xF7B">
-                <source>label.back_effect_embers</source>
-                <target>Braises</target>
-            </trans-unit>
-            <trans-unit id="TVAaThq">
-                <source>label.back_effect_lightning</source>
-                <target>Éclairs</target>
-            </trans-unit>
-            <trans-unit id="UweWsvM">
-                <source>label.back_effect_mist</source>
-                <target>Brume</target>
-            </trans-unit>
             <trans-unit id="0LjkTmi">
                 <source>label.back_effect_none</source>
                 <target>Aucun</target>
-            </trans-unit>
-            <trans-unit id="B.Ol5cV">
-                <source>label.back_effect_snow</source>
-                <target>Neige</target>
-            </trans-unit>
-            <trans-unit id="uBa4i8R">
-                <source>label.back_effect_stars</source>
-                <target>Étoiles</target>
-            </trans-unit>
-            <trans-unit id="T480EBI">
-                <source>label.back_effect_wind</source>
-                <target>Vent</target>
-            </trans-unit>
-            <trans-unit id="tVtJ_K9">
-                <source>label.back_effect_zoom</source>
-                <target>Zoom lent</target>
             </trans-unit>
             <trans-unit id="PUQJ_3g">
                 <source>label.back_image</source>
@@ -254,6 +242,10 @@
                 <source>label.back_published</source>
                 <target>Publié</target>
             </trans-unit>
+            <trans-unit id="v4oNzvm">
+                <source>label.back_see</source>
+                <target>Voir</target>
+            </trans-unit>
             <trans-unit id="iuOHX.5">
                 <source>label.back_slug</source>
                 <target>Slug</target>
@@ -274,37 +266,9 @@
                 <source>label.back_tone</source>
                 <target>Rendu</target>
             </trans-unit>
-            <trans-unit id="cf0GMRw">
-                <source>label.back_tone_dawn</source>
-                <target>Aube</target>
-            </trans-unit>
-            <trans-unit id="LyjDpHt">
-                <source>label.back_tone_mist</source>
-                <target>Brume</target>
-            </trans-unit>
-            <trans-unit id="RmXVj1e">
-                <source>label.back_tone_night</source>
-                <target>Nuit</target>
-            </trans-unit>
             <trans-unit id="pUcrr9a">
                 <source>label.back_tone_none</source>
                 <target>Aucun</target>
-            </trans-unit>
-            <trans-unit id="AQ66pSH">
-                <source>label.back_tone_snow</source>
-                <target>Neige</target>
-            </trans-unit>
-            <trans-unit id="2QNVkQ3">
-                <source>label.back_tone_storm</source>
-                <target>Orage</target>
-            </trans-unit>
-            <trans-unit id="20F9ysN">
-                <source>label.back_tone_sunset</source>
-                <target>Coucher de soleil</target>
-            </trans-unit>
-            <trans-unit id="11FxTXX">
-                <source>label.back_tone_wind</source>
-                <target>Vent</target>
             </trans-unit>
             <trans-unit id="_0O26Hm">
                 <source>label.back_unavailable</source>

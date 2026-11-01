@@ -10,8 +10,6 @@
 
 namespace c975L\CardBundle\Entity;
 
-use c975L\CardBundle\Enum\BackEffect;
-use c975L\CardBundle\Enum\BackTone;
 use c975L\CardBundle\Repository\CardBackRepository;
 use c975L\PaymentBundle\Contract\InAppProduct;
 use c975L\UiBundle\Contract\VichMediaNamableInterface;
@@ -35,6 +33,9 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     // Its image shown on its own, where no pack draws it: the basket, the order emails, the invoice
     use BackImageTrait;
 
+    // Neither tone nor effect, the only value the bundle itself knows
+    public const string NO_STYLE = 'none';
+
     // What a back's store product id starts with (see getProductId())
     public const string PRODUCT_PREFIX = 'back';
 
@@ -56,11 +57,12 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
     #[Assert\Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 10, enumType: BackEffect::class, options: ['default' => 'none'])]
-    private BackEffect $effect = BackEffect::None;
+    // How it moves and the light on its picture, values the site offers and draws (see BackStyleProviderInterface)
+    #[ORM\Column(length: 10, options: ['default' => 'none'])]
+    private string $effect = self::NO_STYLE;
 
-    #[ORM\Column(length: 10, enumType: BackTone::class, options: ['default' => 'none'])]
-    private BackTone $tone = BackTone::None;
+    #[ORM\Column(length: 10, options: ['default' => 'none'])]
+    private string $tone = self::NO_STYLE;
 
     // What it sells for, in cents and VAT included, the same in the app stores and on the site; null for a back that is not for sale, only ever given
     #[ORM\Column(nullable: true)]
@@ -136,24 +138,24 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
         return $this->pictures;
     }
 
-    public function getEffect(): BackEffect
+    public function getEffect(): string
     {
         return $this->effect;
     }
 
-    public function setEffect(BackEffect $effect): static
+    public function setEffect(string $effect): static
     {
         $this->effect = $effect;
 
         return $this;
     }
 
-    public function getTone(): BackTone
+    public function getTone(): string
     {
         return $this->tone;
     }
 
-    public function setTone(BackTone $tone): static
+    public function setTone(string $tone): static
     {
         $this->tone = $tone;
 

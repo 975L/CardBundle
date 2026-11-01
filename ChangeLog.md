@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.5
+
+Card backs' tones and effects left to the sites
+
+- `BackTone`, `BackEffect`, their styles and drawing, `sky.js` and `audio.js` removed, see the README's *Upgrading to v1.5* (01/11/2026) **Breaking change**
+- `CardBack::getTone()` and `getEffect()` are strings, the stored values unchanged (01/11/2026) **Breaking change**
+- `--back-rays` and the `sky` of the `c975LCard:Back` component removed (01/11/2026) **Breaking change**
+- `BackStyleProviderInterface`, the tones and effects a site offers in the back office (01/11/2026)
+- `assets/js/back-canvas.js`, the controller a site extends to draw on a back's canvas (01/11/2026)
+- `controller`, `format` and `plain` on the `c975LCard:Back` component (01/11/2026)
+- Twig component `c975LCard:BackChoice`: a back to choose, or padlocked, seen large and bought from its price (01/11/2026)
+- `BackImageOptions`: a back's thumbnail and pictures take a jpeg, png, webp or gif only (01/11/2026)
+- The demo's backs left without tone nor effect (01/11/2026)
+- `eslint.config.mjs` and `.stylelintrc.json`, read by Codacy and by `GitPush.sh` (01/11/2026)
+
 ## v1.4.2
 
 Card backs drawn by the bundle, a standard one worn by every card

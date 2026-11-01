@@ -10,6 +10,7 @@
 
 namespace c975L\CardBundle\Tests\Templates;
 
+use c975L\CardBundle\Payment\BackBasketItemProvider;
 use c975L\CardBundle\Service\AssetProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -22,16 +23,36 @@ class BackComponentTest extends TestCase
         $template = $this->read('templates/components/Back.html.twig');
 
         $this->assertStringContainsString("'card-back card-back--' ~ effect ~ ' card-back--tone-' ~ tone", $template);
-        $this->assertStringContainsString('{% if not still %} data-controller="card-back"', $template);
-        $this->assertStringContainsString('data-card-back-sky-value', $template);
+        $this->assertStringContainsString('{% if not still and not plain %} data-controller="card-back{{ controller ? \' \' ~ controller }}"', $template);
+        $this->assertStringContainsString("'square' == format ? ' card-back--square'", $template);
     }
 
-    // The controller registered under the name the component writes, its sounds and sky beside it
+    // Plain, the shape alone: neither picture nor rule, nor any controller
+    public function testAPlainBackKeepsTheShapeAlone(): void
+    {
+        $template = $this->read('templates/components/Back.html.twig');
+
+        $this->assertMatchesRegularExpression('/\{% if not plain %\}.*card-back__picture.*card-back__rule.*\{% endif %\}\s*\{% block content %\}/s', $template);
+        $this->assertStringContainsString('.card-back--plain', $this->read('sass/_back.scss'));
+    }
+
+    // A held back posts what the header says, a purchase goes to the basket under the kind the provider answers to, in the shop's currency unless named
+    public function testTheChoicePostsItsBackAndSellsItThroughTheBasket(): void
+    {
+        $choice = $this->read('templates/components/BackChoice.html.twig');
+
+        $this->assertStringContainsString('name="back" value="{{ choice.slug }}"', $choice);
+        $this->assertStringContainsString('name="_token"', $choice);
+        $this->assertStringContainsString("csrf_token('submit')", $choice);
+        $this->assertStringContainsString("format_currency(currency ?: config('shop-currency') ?: 'EUR')", $choice);
+        $this->assertStringContainsString('data-type="' . BackBasketItemProvider::KIND . '"', $this->read('templates/components/_back_buy.html.twig'));
+    }
+
+    // The controller registered under the name the component writes, the canvas left for a site's own to extend
     public function testTheBarrelRegistersTheBackController(): void
     {
         $this->assertStringContainsString("'card-back': () => import('./js/back.js')", $this->read('assets/controllers.js'));
-        $this->assertStringContainsString('from "./sky.js"', $this->read('assets/js/back.js'));
-        $this->assertStringContainsString('from "./audio.js"', $this->read('assets/js/back.js'));
+        $this->assertStringContainsString('paint(context, time)', $this->read('assets/js/back-canvas.js'));
     }
 
     // The layout loads the barrel and the compiled stylesheet, which must exist

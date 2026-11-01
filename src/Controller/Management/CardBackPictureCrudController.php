@@ -11,9 +11,9 @@
 namespace c975L\CardBundle\Controller\Management;
 
 use c975L\CardBundle\Entity\CardBackPicture;
+use c975L\CardBundle\Form\BackImageOptions;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
-use c975L\UiBundle\Form\VichImageOptions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -68,7 +68,7 @@ class CardBackPictureCrudController extends AbstractCrudController
         // Required on creation only, a row without a file holding its back and pack for nothing
         yield Field::new('imageFile', t('label.back_image', [], 'card'))
             ->setFormType(VichImageType::class)
-            ->setFormTypeOptions(VichImageOptions::default('10M'))
+            ->setFormTypeOptions(BackImageOptions::default())
             ->setRequired(Crud::PAGE_NEW === $pageName)
             ->setHelp(t('help.back_image', [], 'card'))
             ->onlyOnForms();

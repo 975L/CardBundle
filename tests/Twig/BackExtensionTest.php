@@ -11,7 +11,6 @@
 namespace c975L\CardBundle\Tests\Twig;
 
 use c975L\CardBundle\Entity\CardBack;
-use c975L\CardBundle\Enum\BackEffect;
 use c975L\CardBundle\Repository\CardBackPictureRepository;
 use c975L\CardBundle\Repository\CardBackRepository;
 use c975L\CardBundle\Twig\BackExtension;
@@ -28,7 +27,7 @@ class BackExtensionTest extends TestCase
     // The standard back as the component draws it, its picture for the pack asked when it has one
     public function testTheStandardBackIsDrawnWithItsPictureForThePack(): void
     {
-        $back = new CardBack()->setSlug('papa-calin')->setName('Papa Câlin')->setEffect(BackEffect::Stars)->setStandard(true);
+        $back = new CardBack()->setSlug('papa-calin')->setName('Papa Câlin')->setEffect('stars')->setStandard(true);
         new \ReflectionProperty(CardBack::class, 'id')->setValue($back, 7);
 
         $this->assertSame(['slug' => 'papa-calin', 'name' => 'Papa Câlin', 'label' => 'Papa Câlin', 'image' => null, 'effect' => 'stars', 'tone' => 'none'], $this->extension($back, [])->standard());

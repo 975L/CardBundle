@@ -12,8 +12,7 @@ namespace c975L\CardBundle\Tests\Controller\Management;
 
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
 use c975L\CardBundle\Entity\CardBack;
-use c975L\CardBundle\Enum\BackEffect;
-use c975L\CardBundle\Enum\BackTone;
+use c975L\CardBundle\Service\BackStyles;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,24 +49,14 @@ class CardBackCrudControllerTest extends TestCase
         $this->assertEquals(t('help.back_slug_locked', [], 'card'), $slug->getHelp());
     }
 
-    // No choices are given for the tone and the effect: EasyAdmin then reads the enum off the mapping and stores a case, never a string the setter would refuse
-    public function testToneAndEffectAreLeftToTheirEnum(): void
+    // The tone and the effect offer what the site draws, "none" alone on a site offering nothing
+    public function testToneAndEffectOfferWhatTheSiteDraws(): void
     {
         $fields = $this->fields(Crud::PAGE_NEW);
 
         foreach (['tone', 'effect'] as $property) {
-            $this->assertNull($fields[$property]->getAsDto()->getCustomOption(ChoiceField::OPTION_CHOICES));
+            $this->assertSame([CardBack::NO_STYLE], array_keys((array) $fields[$property]->getAsDto()->getCustomOption(ChoiceField::OPTION_CHOICES)));
         }
-    }
-
-    // The enum translates itself, which is how the form and the listing show its label
-    public function testToneAndEffectTranslateTheirOwnLabel(): void
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->expects($this->exactly(2))->method('trans')->willReturnCallback(static fn (string $key, array $parameters, string $domain, ?string $locale): string => $domain . ':' . $key . ':' . $locale);
-
-        $this->assertSame('card:label.back_tone_dawn:fr', BackTone::Dawn->trans($translator, 'fr'));
-        $this->assertSame('card:label.back_effect_snow:es', BackEffect::Snow->trans($translator, 'es'));
     }
 
     // One standard back per site: the one saved as such unmarks the others, flushed with it
@@ -110,6 +99,6 @@ class CardBackCrudControllerTest extends TestCase
 
     private function controller(): CardBackCrudController
     {
-        return new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class)));
+        return new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class)), new BackStyles([]));
     }
 }

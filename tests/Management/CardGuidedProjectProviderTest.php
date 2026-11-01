@@ -17,6 +17,7 @@ use c975L\CardBundle\Controller\Management\CardExportController;
 use c975L\CardBundle\Export\CardExporter;
 use c975L\CardBundle\Management\CardGuidedProjectProvider;
 use c975L\CardBundle\Management\MenuProvider;
+use c975L\CardBundle\Service\BackStyles;
 use c975L\CardBundle\Service\BackThumbnailMaker;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
@@ -58,7 +59,7 @@ class CardGuidedProjectProviderTest extends TestCase
     public function testEveryHighlightedFieldIsOnTheForm(): void
     {
         $arguments = [$this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class))];
-        foreach (['CardBack' => [new CardBackCrudController(...$arguments), 0], 'CardBackPicture' => [new CardBackPictureCrudController(...$arguments), 1]] as $entity => [$controller, $index]) {
+        foreach (['CardBack' => [new CardBackCrudController(...$arguments, backStyles: new BackStyles([])), 0], 'CardBackPicture' => [new CardBackPictureCrudController(...$arguments), 1]] as $entity => [$controller, $index]) {
             $properties = array_map(
                 static fn (FieldInterface $field): string => $field->getAsDto()->getProperty(),
                 array_filter([...$controller->configureFields(Crud::PAGE_NEW)], static fn (FieldInterface $field): bool => $field->getAsDto()->isDisplayedOn(Crud::PAGE_NEW)),

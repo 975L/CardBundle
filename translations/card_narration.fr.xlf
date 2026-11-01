@@ -16,7 +16,7 @@
             </trans-unit>
             <trans-unit id="c5hRw6a">
                 <source>narration.guided_step_card_back_effect</source>
-                <target>Choisissez maintenant son mouvement : un zoom lent, des étoiles, des braises.</target>
+                <target>Choisissez maintenant son mouvement, parmi ceux que le site propose.</target>
             </trans-unit>
             <trans-unit id="9HS.uSj">
                 <source>narration.guided_step_card_back_name</source>
@@ -84,7 +84,7 @@
             </trans-unit>
             <trans-unit id="BCB.qLq">
                 <source>narration.guided_step_card_back_tone</source>
-                <target>Choisissez la lumière posée sur l'image de chaque pack.</target>
+                <target>Choisissez la lumière posée sur l'image de chaque pack, parmi celles que le site propose.</target>
             </trans-unit>
             <trans-unit id="MCT0d76">
                 <source>narration.guided_step_card_export_follow</source>

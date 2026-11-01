@@ -1,10 +1,12 @@
-{# <twig:c975LCard:Back back="{{ back }}" [still] [class="..."]>the site's own content</twig:c975LCard:Back> - a card's back drawn and moving: the picture (an <img> the CSS stretches over it, the CSP refusing style=""), the light of its tone, the effect of its back drawn by back.js, the frame. "back" holds "image", "tone", "effect" (the enums or their values) and, optionally, "sky" (where a night's stars stop, in % of the height, read off the picture otherwise) and "label" (what a screen reader says). The phone leans it on a page showing a card alone, which marks it "data-card-lean"; "still" draws it without its controller, for paper. What the site lays over it - a crest, a name - is the content #}
-{% props back, still = false %}
-{% set effect = back.effect.value ?? back.effect ?? 'none' %}
-{% set tone = back.tone.value ?? back.tone ?? 'none' %}
+{# <twig:c975LCard:Back back="{{ back }}" [still] [plain] [format="square"] [controller="site-back"] [class="..."]>the site's own content</twig:c975LCard:Back> - a card's back: the picture (an <img> the CSS stretches over it, the CSP refusing style=""), a thin rule, the frame, leant by the pointer. "back" holds "image", "tone", "effect" and optionally "label" (what a screen reader says); its tone and effect become classes for the site to draw (see BackStyleProviderInterface), "controller" naming the site's own Stimulus controller when it draws on a canvas (see assets/js/back-canvas.js). "format": "card" (63/88, or "--back-ratio") or "square". "plain" keeps the shape alone, the site laying all it wants on it: no picture, rule, frame, lean nor controller. "still" draws it for paper, without any controller #}
+{% props back, still = false, plain = false, format = 'card', controller = null %}
+{% set effect = back.effect ?? 'none' %}
+{% set tone = back.tone ?? 'none' %}
 {# @symfony-lsp-ignore stimulus.unknown_controller (registered by CardBundle's controllers.js, which lsp:check does not read) #}
-<div {{ attributes.defaults({class: 'card-back card-back--' ~ effect ~ ' card-back--tone-' ~ tone, 'aria-label': back.label ?? null}) }}{% if not still %} data-controller="card-back"{% if back.sky ?? null %} data-card-back-sky-value="{{ back.sky }}"{% endif %}{% endif %}>
-	<div class="card-back__picture">{% if back.image ?? null %}<img src="{{ back.image }}" alt="" loading="lazy">{% endif %}</div>
-	<span class="card-back__rule"></span>
+<div {{ attributes.defaults({class: 'card-back card-back--' ~ effect ~ ' card-back--tone-' ~ tone ~ ('square' == format ? ' card-back--square') ~ (plain ? ' card-back--plain'), 'aria-label': back.label ?? null}) }}{% if not still and not plain %} data-controller="card-back{{ controller ? ' ' ~ controller }}"{% endif %}>
+	{% if not plain %}
+		<div class="card-back__picture">{% if back.image ?? null %}<img src="{{ back.image }}" alt="" loading="lazy">{% endif %}</div>
+		<span class="card-back__rule"></span>
+	{% endif %}
 	{% block content %}{% endblock %}
 </div>

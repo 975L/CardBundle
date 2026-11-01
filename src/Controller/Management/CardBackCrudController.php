@@ -11,9 +11,10 @@
 namespace c975L\CardBundle\Controller\Management;
 
 use c975L\CardBundle\Entity\CardBack;
+use c975L\CardBundle\Form\BackImageOptions;
+use c975L\CardBundle\Service\BackStyles;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
-use c975L\UiBundle\Form\VichImageOptions;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -40,6 +41,7 @@ class CardBackCrudController extends AbstractCrudController
         private readonly ConfigServiceInterface $configService,
         private readonly TranslatorInterface $translator,
         private readonly CardCatalog $cardCatalog,
+        private readonly BackStyles $backStyles,
     ) {
     }
 
@@ -73,17 +75,19 @@ class CardBackCrudController extends AbstractCrudController
             ->setHelp(t($isEdit ? 'help.back_slug_locked' : 'help.back_slug', [], 'card'))
             ->onlyOnForms();
 
-        // No choices given: EasyAdmin reads the enum off the mapping and the enum translates its own label
+        // What the site offers and draws, "none" alone on a site offering nothing
         yield ChoiceField::new('tone', t('label.back_tone', [], 'card'))
+            ->setTranslatableChoices($this->backStyles->tones())
             ->setHelp(t('help.back_tone', [], 'card'));
 
         yield ChoiceField::new('effect', t('label.back_effect', [], 'card'))
+            ->setTranslatableChoices($this->backStyles->effects())
             ->setHelp(t('help.back_effect', [], 'card'));
 
         // Its image on its own, where no pack draws it: the basket, the order emails, the invoice
         yield Field::new('imageFile', t('label.back_thumbnail', [], 'card'))
             ->setFormType(VichImageType::class)
-            ->setFormTypeOptions(VichImageOptions::default('10M'))
+            ->setFormTypeOptions(BackImageOptions::default())
             ->setHelp(t('help.back_thumbnail', [], 'card'))
             ->onlyOnForms();
 

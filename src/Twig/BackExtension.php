@@ -40,8 +40,8 @@ class BackExtension
             'name' => $back->getName(),
             'label' => $back->getName(),
             'image' => null === $image ? null : '/' . ltrim($image, '/'),
-            'effect' => $back->getEffect()->value,
-            'tone' => $back->getTone()->value,
+            'effect' => $back->getEffect(),
+            'tone' => $back->getTone(),
         ];
     }
 }

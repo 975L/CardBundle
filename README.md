@@ -32,7 +32,8 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 - A collection held under a key rather than an account: the token a device made up, then `u<id>` once a member connects it — a player collects on the first evening, before anyone signs up, and nothing is lost when they do
 - Three finishes (`CardFinish`: normal ●, shiny ◆, magic ✦), the finish being no other card; the ladder (shiny only over normal) is offered, never imposed
 - Card backs: variants held once for every pack, each with a tone, an effect, a picture per pack and a thumbnail of its own for the basket, given by a reward, a purchase or a code, one chosen for all the holder's cards
-- Card backs drawn by the bundle (`<twig:c975LCard:Back>`): picture, tone, effect and frame, moving on screen and still on paper, the site laying its own content over them; `c975l:config:check-importmap` adds `@c975l/card-bundle/controllers.js` to the site's importmap, the site declaring `@c975l/card-bundle/sky.js` or `@c975l/card-bundle/audio.js` itself if it uses them
+- Card backs drawn by the bundle (`<twig:c975LCard:Back>`): picture and frame, leant on screen and still on paper, the site laying its own content over them and drawing its own tones and effects (`BackStyleProviderInterface`); `c975l:config:check-importmap` adds `@c975l/card-bundle/controllers.js` to the site's importmap, the site declaring `@c975l/card-bundle/back-canvas.js` itself if it draws on a canvas
+- A back to choose (`<twig:c975LCard:BackChoice>`): chosen, held, or padlocked, seen large in a dialog and bought from its price
 - A standard back, the one every card wears until another is chosen: never sold nor given, one per site
 - The backs' thumbnails shot from the site's page showing each alone (`card:back-thumbnails`, or a dashboard tile where Chrome is installed)
 - Card backs for sale, in the app stores and on the site, through PaymentBundle (`InAppProductProviderInterface` and `BasketItemProviderInterface`), at one price
@@ -84,6 +85,10 @@ $this->addSql("INSERT INTO card_back_picture (back_id, pack, slug, image, modifi
 $this->addSql('UPDATE card_collected_back c LEFT JOIN (SELECT holder, MAX(id) AS id FROM card_collected_back WHERE chosen = 1 GROUP BY holder) k ON k.id = c.id SET c.chosen = 0 WHERE c.chosen = 1 AND k.id IS NULL');
 ```
 
+### Upgrading to v1.5
+
+`BackTone`, `BackEffect`, their styles and their drawing leave the bundle, which is public, and the stored values stay as they are, with no migration. A site using them moves them to its own code: a `BackStyleProviderInterface` listing every value its backs hold, since one it no longer lists shows empty in the listing and has to be chosen again on saving the back; the `card-back--tone-<value>` and `card-back--<value>` classes in its stylesheet; its canvas in a controller extending `@c975l/card-bundle/back-canvas.js`, named by `controller` on the component; its copy of `sky.js` and `audio.js`, if it uses them. `--back-rays` and the component's `sky` are gone with them, and `back.tone` and `back.effect` are now plain strings, no longer enums.
+
 ### Nothing to register by hand
 
 No route to import, no config key: the menu entry, the guided projects, the account export, the anonymization listener and the site's own implementations (see [what the site plugs in](#what-the-site-plugs-in)) are picked up by autoconfiguration. A back's picture goes through UiBundle's `block_media` upload mapping, under `public/medias/cards/backs/`.
@@ -110,7 +115,7 @@ Which card and which finish is the site's decision, taken before calling: a site
 
 A `CardBack` is a variant held once for every pack — the packs being the site's own keys: a castle's prefix, a set's slug — and only a published one is ever given. Earned or bought, it is the same back: `BackCollector::grant($holder, $back, $source)` gives it, `BackCollector::choose($holder, $back)` makes it the one all the holder's cards wear (`null` for the standard back), refusing a back not held or unpublished, and `BackCollector::chosen($holder)` returns it. Unpublishing a back withdraws it: it is no longer worn, the choice being kept so that republishing it puts it back. A back's slug is set on creation and locked afterwards, lowercase words joined by hyphens, and the backs are read by position, those given none last.
 
-A back's picture for a pack is a `CardBackPicture` — that castle at dawn — uploaded on its own screen, its back and pack locked once created and the pack key in letters, digits, dashes and underscores, removed with its back along with its files; `CardBackPictureRepository::findImagesOfPack($pack)` reads a pack's pictures in one query, and a pack with none draws its own picture in the back's tone. Any tone goes with any effect (`BackTone`, `BackEffect`). A site drawing its backs in the back office's listing as its app does overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig`, which shows nothing otherwise.
+A back's picture for a pack is a `CardBackPicture` — that castle at dawn — uploaded on its own screen, its back and pack locked once created and the pack key in letters, digits, dashes and underscores, removed with its back along with its files; `CardBackPictureRepository::findImagesOfPack($pack)` reads a pack's pictures in one query, and a pack with none draws its own picture in the back's tone. Any tone goes with any effect. A site drawing its backs in the back office's listing as its app does overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig`, which shows nothing otherwise.
 
 ### The standard back
 
@@ -118,7 +123,13 @@ The back marked standard is the one every card wears until its holder chooses an
 
 ### Drawing a back
 
-`<twig:c975LCard:Back back="{{ back }}">` draws a back as the bundle does on screen — its picture, the light of its tone, its effect moving (Stimulus controller `card-back`), its frame — the site laying its own content (a crest, a name) inside the tag; `still` draws it without its controller, for paper. `back` holds `image`, `tone`, `effect` and optionally `sky` and `label`; `card_back_standard(pack)` gives the standard back in that shape, null while there is none. The stylesheet and the controller are loaded by UiBundle's layout, the site setting the frame's colours through `--back-frame`, `--back-light`, `--back-shade` and `--back-rays`.
+`<twig:c975LCard:Back back="{{ back }}">` draws a back — its picture, its frame, its lean under the pointer (Stimulus controller `card-back`) — the site laying its own content (a crest, a name) inside the tag; `still` draws it without any controller, for paper. `back` holds `image`, `tone`, `effect` and optionally `label`; `card_back_standard(pack)` gives the standard back in that shape, null while there is none. The stylesheet and the controller are loaded by UiBundle's layout, the site setting the frame's colours through `--back-frame`, `--back-light` and `--back-shade`.
+
+`format="square"` (or `--back-ratio`) and `--card-width` size it, a memory game's tile for one; `plain` keeps the shape alone, without picture, rule, frame, lean nor controller, its look then all the site's.
+
+The tones and effects are the site's own, the bundle being public: a `BackStyleProviderInterface` lists those the back office offers, each value (10 characters at most, stored) becoming the classes `card-back--tone-<value>` and `card-back--<value>` for the site's stylesheet. To draw on a canvas, the site's Stimulus controller extends `@c975l/card-bundle/back-canvas.js`, writing `paint(context, time)`, and is named by `controller="..."` on the component; the site's `importmap.php` declares it: `'@c975l/card-bundle/back-canvas.js' => ['path' => '@c975l/card-bundle/js/back-canvas.js']`.
+
+`<twig:c975LCard:BackChoice choice="{{ choice }}" name="..." chooseUrl="...">` shows one back to choose from, the site's drawing of it in the tag, inside a `<div class="card-back-choices" data-controller="basket">`: chosen, held, or padlocked, seen large in a dialog and bought from its price, in the shop's currency unless `currency` names another. `choice` holds `slug`, `held`, `chosen` and, not held, `forSale`, `price` (in cents) and `id`; a tap on a held back posts `back` and `_token` to `chooseUrl`, for the site to check as the CSRF token `submit` and pass to `BackCollector::choose()`.
 
 ### The backs' thumbnails
 
@@ -165,7 +176,7 @@ It is idempotent: each item's fingerprint — its pages, and the date and size o
 
 ## What the site plugs in
 
-Five interfaces, each tagged by autoconfiguration — implementing one is all it takes:
+Six interfaces, each tagged by autoconfiguration — implementing one is all it takes:
 
 | Interface | What for | Without it |
 | --- | --- | --- |
@@ -174,6 +185,7 @@ Five interfaces, each tagged by autoconfiguration — implementing one is all it
 | `CardPackProviderInterface` | the packs a back can be made for | the pack is typed in the back office |
 | `CardExportSourceInterface` | the pages to export, paper and social (see [exports](#exports)) | no tile, `card:export` has nothing to do |
 | `CardBackPageProviderInterface` | the page showing a back alone (see [the backs' thumbnails](#the-backs-thumbnails)) | the thumbnails are uploaded by hand |
+| `BackStyleProviderInterface` | the tones and effects the back office offers, which the site draws (see [drawing a back](#drawing-a-back)) | a back has neither |
 
 ## Translations
 

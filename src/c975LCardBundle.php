@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 class c975LCardBundle extends AbstractBundle
 {
-    // The backs' controller, sounds and sky served by AssetMapper under "@c975l/card-bundle"
+    // The backs' controller and the canvas a site's own extends served by AssetMapper under "@c975l/card-bundle"
     public function prependExtension(ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void
     {
         $containerBuilder->prependExtensionConfig('framework', [

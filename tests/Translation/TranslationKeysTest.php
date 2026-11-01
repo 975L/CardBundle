@@ -10,8 +10,6 @@
 
 namespace c975L\CardBundle\Tests\Translation;
 
-use c975L\CardBundle\Enum\BackEffect;
-use c975L\CardBundle\Enum\BackTone;
 use c975L\CardBundle\Export\CardExporter;
 use c975L\CardBundle\Management\CardGuidedProjectProvider;
 use c975L\CardBundle\Service\BackThumbnailMaker;
@@ -61,8 +59,10 @@ class TranslationKeysTest extends TestCase
             preg_match_all("/'((?:label|help|description|narration|message|flash)\.[a-z_]+[a-z])'/", (string) file_get_contents((string) $file), $matches);
             $keys = [...$keys, ...$matches[1]];
         }
-        foreach ([...BackTone::cases(), ...BackEffect::cases()] as $case) {
-            $keys[] = $case->label();
+        // The templates name theirs with the domain beside them, other bundles' keys passing through too
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(\dirname(__DIR__, 2) . '/templates', \FilesystemIterator::SKIP_DOTS)) as $file) {
+            preg_match_all("/'(label\.[a-z_]+[a-z])'\|trans\((?:\{[^}]*\})?, 'card'\)/", (string) file_get_contents((string) $file), $matches);
+            $keys = [...$keys, ...$matches[1]];
         }
 
         $adminUrlGenerator = $this->createStub(AdminUrlGeneratorInterface::class);
