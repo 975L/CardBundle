@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.1
+
+Corrected stale ci.sh comment
+
+- Corrected `bin/ci.sh` comment and message: vendor stays at its composer.lock (02/11/2026)
+
 ## v1.5
 
 Card backs' tones and effects left to the sites
