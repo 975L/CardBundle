@@ -14,6 +14,8 @@ use c975L\CardBundle\Controller\Management\BackThumbnailsController;
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
 use c975L\CardBundle\Controller\Management\CardBackPictureCrudController;
 use c975L\CardBundle\Controller\Management\CardExportController;
+use c975L\CardBundle\Controller\Management\CardSkinCrudController;
+use c975L\CardBundle\Controller\Management\CardSkinPictureCrudController;
 use c975L\CardBundle\Export\CardExporter;
 use c975L\CardBundle\Service\BackThumbnailMaker;
 use c975L\ConfigBundle\Management\GuidedProjectProviderInterface;
@@ -40,6 +42,8 @@ class CardGuidedProjectProvider implements GuidedProjectProviderInterface
         return [
             $this->backProject(),
             $this->pictureProject(),
+            $this->skinProject(),
+            $this->skinPictureProject(),
             ...($this->cardExporter->isAvailable() ? [$this->exportProject()] : []),
             ...($this->backThumbnailMaker->isAvailable() ? [$this->thumbnailsProject()] : []),
         ];
@@ -60,6 +64,24 @@ class CardGuidedProjectProvider implements GuidedProjectProviderInterface
         return self::project('card_back_picture', 11015, (string) $this->configService->get('site-role-editor'), self::formSteps(
             $this->indexUrl(CardBackPictureCrudController::class),
             ['back' => '#CardBackPicture_back', 'pack' => '#CardBackPicture_pack', 'image' => '#CardBackPicture_imageFile_file'],
+        ));
+    }
+
+    // Making a skin of the card faces, which a player then wins or buys pack by pack and chooses for that pack's cards
+    private function skinProject(): array
+    {
+        return self::project('card_skin', 11030, (string) $this->configService->get('site-role-editor'), self::formSteps(
+            $this->indexUrl(CardSkinCrudController::class),
+            ['name' => '#CardSkin_name', 'thumbnail' => '#CardSkin_imageFile_file', 'price' => '#CardSkin_price', 'published' => '#CardSkin_published'],
+        ));
+    }
+
+    // Giving a skin its picture for one card, the packs it dresses being those its pictures are for
+    private function skinPictureProject(): array
+    {
+        return self::project('card_skin_picture', 11035, (string) $this->configService->get('site-role-editor'), self::formSteps(
+            $this->indexUrl(CardSkinPictureCrudController::class),
+            ['skin' => '#CardSkinPicture_skin', 'pack' => '#CardSkinPicture_pack', 'reference' => '#CardSkinPicture_reference', 'image' => '#CardSkinPicture_imageFile_file'],
         ));
     }
 

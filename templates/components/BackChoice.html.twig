@@ -1,5 +1,6 @@
-{# <twig:c975LCard:BackChoice choice="{{ choice }}" name="..." chooseUrl="..." [currency="USD"]><twig:c975LCard:Back .../></twig:c975LCard:BackChoice> - one back to choose from, inside a <div class="card-back-choices" data-controller="basket">: the site's own drawing of it given in the tag. "choice" holds "slug", "held", "chosen" and, not held, "forSale", "price" (in cents) and "id". Chosen it says so; held, a tap posts "back" and "_token" (the CSRF token "submit") to "chooseUrl"; not held it is greyed and padlocked, seen large in a dialog and bought from its price, there or beside "see", in "currency" or else the shop's own #}
-{% props choice, name, chooseUrl, currency = null %}
+{# <twig:c975LCard:BackChoice choice="{{ choice }}" name="..." chooseUrl="..." [currency="USD"] [kind="skin" pack="GOB"]><twig:c975LCard:Back .../></twig:c975LCard:BackChoice> - one back to choose from, inside a <div class="card-back-choices" data-controller="basket">: the site's own drawing of it given in the tag. "choice" holds "slug", "held", "chosen" and, not held, "forSale", "price" (in cents) and "id". Chosen it says so; held, a tap posts "back" and "_token" (the CSRF token "submit") to "chooseUrl"; not held it is greyed and padlocked, seen large in a dialog and bought from its price, there or beside "see", in "currency" or else the shop's own. A skin is chosen the same way for one pack: kind "skin" posts "skin" and "pack" instead, and buys under the "cardskin" kind, "id" being its store product id #}
+{% props choice, name, chooseUrl, currency = null, kind = 'back', pack = null %}
+{% set dialogId = kind ~ '-' ~ choice.slug ~ (pack ? '-' ~ pack|lower : '') %}
 {% set drawn %}{% block content %}{% endblock %}{% endset %}
 {% set price = (choice.forSale ?? false) ? (choice.price / 100)|format_currency(currency ?: config('shop-currency') ?: 'EUR') : null %}
 <div class="card-back-choice{{ choice.chosen ? ' is-chosen' }}{{ choice.held ? '' : ' is-locked' }}">
@@ -10,21 +11,22 @@
 	{% elseif choice.held %}
 		{# The button laid over the whole back, a button holding no block of its own #}
 		<form method="post" action="{{ chooseUrl }}">
-			<input type="hidden" name="back" value="{{ choice.slug }}">
+			<input type="hidden" name="{{ kind }}" value="{{ choice.slug }}">
+			{% if pack %}<input type="hidden" name="pack" value="{{ pack }}">{% endif %}
 			<input type="hidden" name="_token" data-controller="csrf-protection" value="{{ csrf_token('submit') }}">
-			<button type="submit" class="card-back-choice__pick" aria-label="{{ 'label.back_choose'|trans({'%name%': name}, 'card') }}"></button>
+			<button type="submit" class="card-back-choice__pick" aria-label="{{ kind == 'skin' ? 'label.skin_choose'|trans({'%name%': name}, 'card') : 'label.back_choose'|trans({'%name%': name}, 'card') }}"></button>
 		</form>
 	{% else %}
 		<div class="card-back-choice__actions">
-			<button type="button" class="btn btn-small" commandfor="back-{{ choice.slug }}" command="show-modal">{{ 'label.back_see'|trans({}, 'card') }}</button>
+			<button type="button" class="btn btn-small" commandfor="{{ dialogId }}" command="show-modal">{{ 'label.back_see'|trans({}, 'card') }}</button>
 			{% if price %}
-				{{ include('@c975LCard/components/_back_buy.html.twig', {'choice': choice, 'name': name, 'price': price, 'text': price}) }}
+				{{ include('@c975LCard/components/_back_buy.html.twig', {'choice': choice, 'name': name, 'price': price, 'text': price, 'kind': kind}) }}
 			{% endif %}
 		</div>
-		<twig:c975LUi:Dialog:Dialog id="back-{{ choice.slug }}" title="{{ name }}">
+		<twig:c975LUi:Dialog:Dialog id="{{ dialogId }}" title="{{ name }}">
 			<div class="card-back-choice__large">{{ drawn }}</div>
 			{% if price %}
-				{{ include('@c975LCard/components/_back_buy.html.twig', {'choice': choice, 'name': name, 'price': price, 'text': 'label.back_buy_for'|trans({'%price%': price}, 'card'), 'dialog': 'back-' ~ choice.slug}) }}
+				{{ include('@c975LCard/components/_back_buy.html.twig', {'choice': choice, 'name': name, 'price': price, 'text': 'label.back_buy_for'|trans({'%price%': price}, 'card'), 'dialog': dialogId, 'kind': kind}) }}
 			{% endif %}
 		</twig:c975LUi:Dialog:Dialog>
 	{% endif %}

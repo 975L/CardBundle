@@ -10,6 +10,14 @@
                 <source>narration.card_backs</source>
                 <target>Les dos des cartes : les variantes que les joueurs gagnent ou achètent pour tous les packs, puis choisissent pour toutes leurs cartes.</target>
             </trans-unit>
+            <trans-unit id="HQIoI_3">
+                <source>narration.card_skin_pictures</source>
+                <target>Les images des skins : celle de chaque skin pour chaque carte, rangée sous le pack de la carte.</target>
+            </trans-unit>
+            <trans-unit id="VFT1IDX">
+                <source>narration.card_skins</source>
+                <target>Les skins des cartes : ce que les joueurs gagnent ou achètent pack par pack, puis choisissent pour les cartes de ce pack.</target>
+            </trans-unit>
             <trans-unit id="riJ7JSH">
                 <source>narration.guided_step_card_back_done</source>
                 <target>Enregistrez. Une récompense, un achat ou un code donneront ce dos par son slug. Donnez-lui ensuite ses images pack par pack avec Illustrer un dos pour un pack.</target>
@@ -97,6 +105,62 @@
             <trans-unit id="UiTq7q1">
                 <source>narration.guided_step_card_export_run</source>
                 <target>Cliquez sur la tuile Exporter les cartes. L'export tourne en arrière-plan.</target>
+            </trans-unit>
+            <trans-unit id="G.TN_0L">
+                <source>narration.guided_step_card_skin_done</source>
+                <target>Enregistrez, puis donnez au skin ses images carte par carte.</target>
+            </trans-unit>
+            <trans-unit id="CilVNmc">
+                <source>narration.guided_step_card_skin_name</source>
+                <target>Donnez un nom au skin, par exemple Toon.</target>
+            </trans-unit>
+            <trans-unit id="BaAH2qO">
+                <source>narration.guided_step_card_skin_new</source>
+                <target>Cliquez sur le bouton de création pour ajouter un skin.</target>
+            </trans-unit>
+            <trans-unit id="mrEhSxq">
+                <source>narration.guided_step_card_skin_open</source>
+                <target>Ouvrez le menu Skins des cartes, dans la section Cartes de la colonne de gauche.</target>
+            </trans-unit>
+            <trans-unit id="O4fL5FL">
+                <source>narration.guided_step_card_skin_picture_done</source>
+                <target>Enregistrez : la carte porte désormais cette image sous ce skin.</target>
+            </trans-unit>
+            <trans-unit id="kzABnfN">
+                <source>narration.guided_step_card_skin_picture_image</source>
+                <target>Déposez l'image, au format d'une carte, en portrait.</target>
+            </trans-unit>
+            <trans-unit id="bUpuQu3">
+                <source>narration.guided_step_card_skin_picture_new</source>
+                <target>Cliquez sur le bouton de création pour ajouter une image.</target>
+            </trans-unit>
+            <trans-unit id="nMguXZW">
+                <source>narration.guided_step_card_skin_picture_open</source>
+                <target>Ouvrez le menu Images des skins, dans la section Cartes de la colonne de gauche.</target>
+            </trans-unit>
+            <trans-unit id="IrBR6GL">
+                <source>narration.guided_step_card_skin_picture_pack</source>
+                <target>Choisissez le pack de la carte.</target>
+            </trans-unit>
+            <trans-unit id="ZKgJ_uj">
+                <source>narration.guided_step_card_skin_picture_reference</source>
+                <target>Saisissez le numéro de la carte, par exemple GOB 01.</target>
+            </trans-unit>
+            <trans-unit id="QyvADTU">
+                <source>narration.guided_step_card_skin_picture_skin</source>
+                <target>Choisissez le skin que l'image illustre.</target>
+            </trans-unit>
+            <trans-unit id="loDr4g6">
+                <source>narration.guided_step_card_skin_price</source>
+                <target>Fixez son prix pour un pack s'il est en vente, ou laissez vide.</target>
+            </trans-unit>
+            <trans-unit id="JeewCqB">
+                <source>narration.guided_step_card_skin_published</source>
+                <target>Cochez Publié : seul un skin publié peut être donné.</target>
+            </trans-unit>
+            <trans-unit id="4HEbDp3">
+                <source>narration.guided_step_card_skin_thumbnail</source>
+                <target>Déposez sa vignette, le skin seul, au format d'une carte.</target>
             </trans-unit>
         </body>
     </file>

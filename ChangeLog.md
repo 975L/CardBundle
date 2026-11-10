@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.6.0
+
+Card skins held, chosen and sold pack by pack
+
+- `CardSkin`, `CardSkinPicture` and `CollectedSkin`: skins of the card faces, a picture per card, held pack by pack (10/11/2026)
+- `SkinCollector` gives, takes back and chooses a skin for one pack, `chosen()` reading every pack's in one query (10/11/2026)
+- A device's skins moved to the account and erased with it, the account's choice winning pack by pack (10/11/2026)
+- Skins sold per pack in the app stores (`SkinInAppProductProvider`) and on the site (`SkinBasketItemProvider`, kind `cardskin`) (10/11/2026)
+- `<twig:c975LCard:BackChoice kind="skin" pack="...">` offers a skin for one pack (10/11/2026)
+- Back-office screens for the skins and their pictures, each with its guided project (10/11/2026)
+- Skins in the member's data export (10/11/2026)
+- `CardCatalog::packName()` names a pack, its key when the site lists none (10/11/2026)
+
 ## v1.5.3
 
 Composer states why a PHP version failed to resolve

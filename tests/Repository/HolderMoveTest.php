@@ -12,6 +12,7 @@ namespace c975L\CardBundle\Tests\Repository;
 
 use c975L\CardBundle\Repository\CollectedBackRepository;
 use c975L\CardBundle\Repository\CollectedCardRepository;
+use c975L\CardBundle\Repository\CollectedSkinRepository;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 
@@ -53,15 +54,29 @@ class HolderMoveTest extends TestCase
         $this->assertStringEndsWith('SET a.chosen = 1 WHERE a.holder = :to AND taken.holder IS NULL', $statement);
     }
 
+    // A choice per pack: the device's choice carried to the account in each pack the account chose none in, then the duplicates of the same skin and pack dropped, then the device's choice cleared in each pack the account chose in
+    public function testTheSkinsCarryAndClearTheChoicePackByPack(): void
+    {
+        $statements = $this->statements(CollectedSkinRepository::class, 'moveHolder', ['abc', 'u1']);
+
+        $this->assertCount(4, $statements);
+        $this->assertStringContainsString('(SELECT DISTINCT d.skin_id, d.pack FROM card_collected_skin d WHERE d.holder = :from AND d.chosen = 1) carried ON carried.skin_id = a.skin_id AND carried.pack = a.pack', $statements[0]);
+        $this->assertStringEndsWith('taken ON taken.pack = a.pack SET a.chosen = 1 WHERE a.holder = :to AND taken.pack IS NULL', $statements[0]);
+        $this->assertStringContainsString('ON a.skin_id = d.skin_id AND a.pack = d.pack AND a.holder = :to WHERE d.holder = :from', $statements[1]);
+        $this->assertStringEndsWith('taken ON taken.pack = d.pack SET d.chosen = 0 WHERE d.holder = :from', $statements[2]);
+        $this->assertSame('UPDATE card_collected_skin SET holder = :to WHERE holder = :from', $statements[3]);
+    }
+
     public function testDeletingAHolderTouchesItsOwnTableOnly(): void
     {
         $this->assertSame(['DELETE FROM card_collected WHERE holder = :holder'], $this->statements(CollectedCardRepository::class, 'deleteByHolder', ['u1']));
         $this->assertSame(['DELETE FROM card_collected_back WHERE holder = :holder'], $this->statements(CollectedBackRepository::class, 'deleteByHolder', ['u1']));
+        $this->assertSame(['DELETE FROM card_collected_skin WHERE holder = :holder'], $this->statements(CollectedSkinRepository::class, 'deleteByHolder', ['u1']));
     }
 
     /**
-     * @param class-string<CollectedCardRepository|CollectedBackRepository> $class
-     * @param list<string>                                                  $arguments
+     * @param class-string<CollectedCardRepository|CollectedBackRepository|CollectedSkinRepository> $class
+     * @param list<string>                                                                          $arguments
      *
      * @return list<string>
      */

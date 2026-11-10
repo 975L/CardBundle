@@ -6,7 +6,7 @@ services:
 
     c975L\CardBundle\:
         resource: '../src/'
-        exclude: '../src/{Entity,Enum,Message,Export/ChromeSession.php,Export/ExportState.php,Export/PdfItem.php,Export/SocialItem.php}'
+        exclude: '../src/{Entity,Enum,Message,Export/ChromeSession.php,Export/ExportState.php,Export/PdfItem.php,Export/SocialItem.php,Payment/SkinItem.php}'
 
     # The backs' stylesheet and controller, drawn on public pages (see templates/components/Back.html.twig)
     c975L\CardBundle\Service\AssetProvider:

@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
-// What a back and its picture for a pack share: an image uploaded under UiBundle's "block_media" mapping, card-sized, the class naming its file (see VichMediaNamableInterface) and stamping $modification
+// What a back, a skin and their pictures share: an image uploaded under UiBundle's "block_media" mapping, card-sized, the class naming its file (see VichMediaNamableInterface) and stamping $modification
 trait BackImageTrait
 {
     #[ORM\Column(length: 255, nullable: true)]
@@ -53,7 +53,7 @@ trait BackImageTrait
         return $this;
     }
 
-    // A back is drawn no wider than a card
+    // Drawn no wider than a card
     public function getImageWidth(): int
     {
         return 800;

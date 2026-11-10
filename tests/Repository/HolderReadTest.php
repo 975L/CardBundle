@@ -14,6 +14,7 @@ use c975L\CardBundle\Entity\CollectedCard;
 use c975L\CardBundle\Enum\CardFinish;
 use c975L\CardBundle\Repository\CollectedBackRepository;
 use c975L\CardBundle\Repository\CollectedCardRepository;
+use c975L\CardBundle\Repository\CollectedSkinRepository;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -47,6 +48,7 @@ class HolderReadTest extends TestCase
     {
         yield 'cards' => [CollectedCardRepository::class, 'card_collected'];
         yield 'backs' => [CollectedBackRepository::class, 'card_collected_back'];
+        yield 'skins' => [CollectedSkinRepository::class, 'card_collected_skin'];
     }
 
     // Several finishes of a card gather under its reference, in the order they were read

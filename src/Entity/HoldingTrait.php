@@ -13,7 +13,7 @@ namespace c975L\CardBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-// What a card and a back held share: their row, when they were given, and the holder and source each takes in its constructor
+// What a card, a back and a skin held share: their row, when they were given, and the holder and source each takes in its constructor
 trait HoldingTrait
 {
     #[ORM\Id]

@@ -56,6 +56,16 @@ class CardCatalogTest extends TestCase
         $this->assertSame(['hur' => 'Hurlton'], $catalog->packs());
     }
 
+    // A pack named by the site, its key standing in for one the site does not list
+    public function testAPackIsNamedOrKeepsItsKey(): void
+    {
+        $castles = $this->createStub(CardPackProviderInterface::class);
+        $castles->method('getPacks')->willReturn(['hur' => 'Hurlton']);
+        $catalog = new CardCatalog([], [$castles], $this->createStub(ConfigServiceInterface::class));
+
+        $this->assertSame(['Hurlton', 'gob'], [$catalog->packName('hur'), $catalog->packName('gob')]);
+    }
+
     // The shop's currency, euros when the site set none
     public function testTheCurrencyFallsBackToEuros(): void
     {

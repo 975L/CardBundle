@@ -10,6 +10,14 @@
                 <source>narration.card_backs</source>
                 <target>Los reversos de las cartas: las variantes que los jugadores ganan o compran para todos los packs, y luego eligen para todas sus cartas.</target>
             </trans-unit>
+            <trans-unit id="HQIoI_3">
+                <source>narration.card_skin_pictures</source>
+                <target>Las imágenes de los skins: la de cada skin para cada carta, clasificada bajo el paquete de la carta.</target>
+            </trans-unit>
+            <trans-unit id="VFT1IDX">
+                <source>narration.card_skins</source>
+                <target>Los skins de las cartas: lo que los jugadores ganan o compran paquete por paquete y luego eligen para las cartas de ese paquete.</target>
+            </trans-unit>
             <trans-unit id="riJ7JSH">
                 <source>narration.guided_step_card_back_done</source>
                 <target>Guarde. Una recompensa, una compra o un código darán este reverso por su slug. Luego dele sus imágenes pack por pack con Ilustrar un reverso para un pack.</target>
@@ -97,6 +105,62 @@
             <trans-unit id="UiTq7q1">
                 <source>narration.guided_step_card_export_run</source>
                 <target>Haga clic en el mosaico Exportar las cartas. La exportación se ejecuta en segundo plano.</target>
+            </trans-unit>
+            <trans-unit id="G.TN_0L">
+                <source>narration.guided_step_card_skin_done</source>
+                <target>Guarde y luego dé al skin sus imágenes carta por carta.</target>
+            </trans-unit>
+            <trans-unit id="CilVNmc">
+                <source>narration.guided_step_card_skin_name</source>
+                <target>Dé un nombre al skin, por ejemplo Toon.</target>
+            </trans-unit>
+            <trans-unit id="BaAH2qO">
+                <source>narration.guided_step_card_skin_new</source>
+                <target>Haga clic en el botón de creación para añadir un skin.</target>
+            </trans-unit>
+            <trans-unit id="mrEhSxq">
+                <source>narration.guided_step_card_skin_open</source>
+                <target>Abra el menú Skins de las cartas, en la sección Cartas de la columna izquierda.</target>
+            </trans-unit>
+            <trans-unit id="O4fL5FL">
+                <source>narration.guided_step_card_skin_picture_done</source>
+                <target>Guarde: la carta lleva ahora esta imagen con este skin.</target>
+            </trans-unit>
+            <trans-unit id="kzABnfN">
+                <source>narration.guided_step_card_skin_picture_image</source>
+                <target>Suba la imagen, del tamaño de una carta, en vertical.</target>
+            </trans-unit>
+            <trans-unit id="bUpuQu3">
+                <source>narration.guided_step_card_skin_picture_new</source>
+                <target>Haga clic en el botón de creación para añadir una imagen.</target>
+            </trans-unit>
+            <trans-unit id="nMguXZW">
+                <source>narration.guided_step_card_skin_picture_open</source>
+                <target>Abra el menú Imágenes de los skins, en la sección Cartas de la columna izquierda.</target>
+            </trans-unit>
+            <trans-unit id="IrBR6GL">
+                <source>narration.guided_step_card_skin_picture_pack</source>
+                <target>Elija el paquete de la carta.</target>
+            </trans-unit>
+            <trans-unit id="ZKgJ_uj">
+                <source>narration.guided_step_card_skin_picture_reference</source>
+                <target>Escriba el número de la carta, por ejemplo GOB 01.</target>
+            </trans-unit>
+            <trans-unit id="QyvADTU">
+                <source>narration.guided_step_card_skin_picture_skin</source>
+                <target>Elija el skin que ilustra la imagen.</target>
+            </trans-unit>
+            <trans-unit id="loDr4g6">
+                <source>narration.guided_step_card_skin_price</source>
+                <target>Fije su precio para un paquete si está a la venta, o déjelo vacío.</target>
+            </trans-unit>
+            <trans-unit id="JeewCqB">
+                <source>narration.guided_step_card_skin_published</source>
+                <target>Marque Publicado: solo un skin publicado puede darse.</target>
+            </trans-unit>
+            <trans-unit id="4HEbDp3">
+                <source>narration.guided_step_card_skin_thumbnail</source>
+                <target>Suba su miniatura, el skin solo, del tamaño de una carta.</target>
             </trans-unit>
         </body>
     </file>

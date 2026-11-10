@@ -20,7 +20,6 @@ use c975L\ConfigBundle\Contract\UserInterface;
 use c975L\PaymentBundle\Contract\AccountBasketItemProviderInterface;
 use c975L\PaymentBundle\Contract\BasketItemProviderInterface;
 use c975L\PaymentBundle\Entity\Basket;
-use c975L\PaymentBundle\Service\VatCalculator;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,6 +27,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 // The backs on sale, in PaymentBundle's basket (see BasketItemProviderInterface): the site's own sale, beside the app stores'. A back lands on an account, so the visitor is asked to sign in at the checkout (see AccountBasketItemProviderInterface), and once paid it is given through BackCollector as "shop"
 class BackBasketItemProvider implements BasketItemProviderInterface, AccountBasketItemProviderInterface
 {
+    use CardBasketTrait;
+
     public const string KIND = 'cardback';
 
     // What a back bought on the site is given as, beside the stores' "apple" and "google"
@@ -83,12 +84,9 @@ class BackBasketItemProvider implements BasketItemProviderInterface, AccountBask
     // Asked again at the checkout: a back may have been withdrawn since, it needs an account to land on - the one signed in now when the basket was filled before signing in - and that account may have earned it in the meantime
     public function validateCheckout(Basket $basket, array $itemsOfThisKind): ?string
     {
-        if (null === $basket->getUser()) {
-            $user = $this->security->getUser();
-            if (!$user instanceof UserInterface) {
-                return $this->translator->trans('label.sign_in_required', [], 'card');
-            }
-            $basket->setUser($user);
+        $user = $this->accountOf($basket);
+        if (null === $user) {
+            return $this->translator->trans('label.sign_in_required', [], 'card');
         }
 
         foreach ($itemsOfThisKind as $id => $itemContent) {
@@ -99,7 +97,7 @@ class BackBasketItemProvider implements BasketItemProviderInterface, AccountBask
             if ((int) ($itemContent['quantity'] ?? 0) > 1) {
                 return $this->translator->trans('label.back_once', [], 'card');
             }
-            if ($this->holds($basket->getUser(), $back)) {
+            if ($this->holds($user, $back)) {
                 return $this->translator->trans('label.back_already_held', [], 'card');
             }
         }
@@ -107,45 +105,12 @@ class BackBasketItemProvider implements BasketItemProviderInterface, AccountBask
         return null;
     }
 
-    // The back as the basket stores it, under the card backs' heading, VAT included in its price
+    // The back as the basket stores it, under the card backs' heading
     public function toBasketData(object $item, int $quantity): array
     {
-        /** @var CardBack $item */
-        $total = $quantity * (int) $item->getPrice();
+        \assert($item instanceof CardBack);
 
-        return [
-            'item' => [
-                'id' => $item->getId(),
-                'title' => $item->getName(),
-                // Drawn by the basket row with no page to link to (see PaymentBundle's Basket:Item)
-                'media' => $item->getImage(),
-                'price' => $item->getPrice(),
-                'currency' => $this->cardCatalog->currency(),
-                'vat' => $item->getVat(),
-                'limitedQuantity' => 0,
-                'orderedQuantity' => 0,
-            ],
-            // No catalogue page of its own: a back is bought where the collection shows it
-            'parent' => [
-                'title' => $this->translator->trans('label.card_backs', [], 'card'),
-            ],
-            'type' => self::KIND,
-            'quantity' => $quantity,
-            'totalVat' => VatCalculator::included($total, $item->getVat()),
-            'total' => $total,
-        ];
-    }
-
-    // Digital content supplied at once on the account, which is what asks for the waiver of the right of withdrawal (see Basket::asksWithdrawalWaiver())
-    public function getContentFlags(array $itemData): int
-    {
-        return Basket::CONTENT_FLAG_DIGITAL;
-    }
-
-    // Nothing to ask at validation: the account is all a back needs
-    public function onBasketValidated(Basket $basket, array $itemsOfThisKind, array $requestData): array
-    {
-        return [];
+        return $this->basketData((int) $item->getId(), (string) $item->getName(), $item->getImage(), (int) $item->getPrice(), $item->getVat(), 'label.card_backs', $quantity);
     }
 
     // Gives each back to the account, validateCheckout() having made sure just before the payment that it was still on sale - one withdrawn since is given all the same, the purchase being owed, and one earned in the meantime is logged for the admin to refund

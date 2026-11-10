@@ -12,24 +12,27 @@ namespace c975L\CardBundle\Management;
 
 use c975L\CardBundle\Entity\CollectedBack;
 use c975L\CardBundle\Entity\CollectedCard;
+use c975L\CardBundle\Entity\CollectedSkin;
 use c975L\CardBundle\Repository\CollectedBackRepository;
 use c975L\CardBundle\Repository\CollectedCardRepository;
+use c975L\CardBundle\Repository\CollectedSkinRepository;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\CardBundle\Service\CardHolder;
 use c975L\ConfigBundle\Account\AccountDataProviderInterface;
 use c975L\ConfigBundle\Contract\UserInterface;
 
-// The cards part of a member's data export (ConfigBundle's /account/export): every card and every back held. The "Ma collection" section of the account page is the site's own, its count and its link being the site's collection
+// The cards part of a member's data export (ConfigBundle's /account/export): every card, every back and every skin held. The "Ma collection" section of the account page is the site's own, its count and its link being the site's collection
 class AccountDataProvider implements AccountDataProviderInterface
 {
     public function __construct(
         private readonly CollectedCardRepository $collectedCardRepository,
         private readonly CollectedBackRepository $collectedBackRepository,
+        private readonly CollectedSkinRepository $collectedSkinRepository,
         private readonly CardCatalog $cardCatalog,
     ) {
     }
 
-    // Under "cards" and "backs", oldest first, nothing at all for an account that holds none
+    // Under "cards", "backs" and "skins", oldest first, nothing at all for an account that holds none
     public function getAccountData(UserInterface $user): array
     {
         $holder = CardHolder::ofUser($user);
@@ -54,6 +57,17 @@ class AccountDataProvider implements AccountDataProviderInterface
                 'source' => $collected->getSource(),
                 'date' => $collected->getCreatedAt()->format(\DATE_ATOM),
             ], $backs);
+        }
+
+        $skins = $this->collectedSkinRepository->findByHolder($holder);
+        if ([] !== $skins) {
+            $data['skins'] = array_map(fn (CollectedSkin $collected): array => [
+                'skin' => $collected->getSkin()->getName(),
+                'pack' => $this->cardCatalog->packName($collected->getPack()),
+                'chosen' => $collected->isChosen(),
+                'source' => $collected->getSource(),
+                'date' => $collected->getCreatedAt()->format(\DATE_ATOM),
+            ], $skins);
         }
 
         return $data;

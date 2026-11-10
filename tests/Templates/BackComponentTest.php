@@ -11,6 +11,7 @@
 namespace c975L\CardBundle\Tests\Templates;
 
 use c975L\CardBundle\Payment\BackBasketItemProvider;
+use c975L\CardBundle\Payment\SkinBasketItemProvider;
 use c975L\CardBundle\Service\AssetProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -41,11 +42,22 @@ class BackComponentTest extends TestCase
     {
         $choice = $this->read('templates/components/BackChoice.html.twig');
 
-        $this->assertStringContainsString('name="back" value="{{ choice.slug }}"', $choice);
+        $this->assertStringContainsString("{% props choice, name, chooseUrl, currency = null, kind = 'back', pack = null %}", $choice);
+        $this->assertStringContainsString('name="{{ kind }}" value="{{ choice.slug }}"', $choice);
         $this->assertStringContainsString('name="_token"', $choice);
         $this->assertStringContainsString("csrf_token('submit')", $choice);
         $this->assertStringContainsString("format_currency(currency ?: config('shop-currency') ?: 'EUR')", $choice);
-        $this->assertStringContainsString('data-type="' . BackBasketItemProvider::KIND . '"', $this->read('templates/components/_back_buy.html.twig'));
+        $this->assertStringContainsString("'" . SkinBasketItemProvider::KIND . "' : '" . BackBasketItemProvider::KIND . "'", $this->read('templates/components/_back_buy.html.twig'));
+    }
+
+    // A skin is chosen for one pack: the pack posted beside it, and its dialog kept apart from the same skin's in another pack
+    public function testASkinChoicePostsItsPack(): void
+    {
+        $choice = $this->read('templates/components/BackChoice.html.twig');
+
+        $this->assertStringContainsString('{% if pack %}<input type="hidden" name="pack" value="{{ pack }}">{% endif %}', $choice);
+        $this->assertStringContainsString("{% set dialogId = kind ~ '-' ~ choice.slug ~ (pack ? '-' ~ pack|lower : '') %}", $choice);
+        $this->assertStringContainsString("kind == 'skin' ? 'label.skin_choose'|trans({'%name%': name}, 'card') : 'label.back_choose'|trans", $choice);
     }
 
     // The controller registered under the name the component writes, the canvas left for a site's own to extend

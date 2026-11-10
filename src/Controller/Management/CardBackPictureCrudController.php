@@ -17,9 +17,7 @@ use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
@@ -30,6 +28,7 @@ use function Symfony\Component\Translation\t;
 class CardBackPictureCrudController extends AbstractCrudController
 {
     use EditorCrudTrait;
+    use PackFieldTrait;
 
     public function __construct(
         private readonly ConfigServiceInterface $configService,
@@ -63,7 +62,7 @@ class CardBackPictureCrudController extends AbstractCrudController
             ->setDisabled($isLocked)
             ->setHelp(t('help.back_picture_back', [], 'card'));
 
-        yield $this->packField($pageName, $isLocked);
+        yield $this->packField($pageName, $isLocked, t('help.back_pack', [], 'card'), t('help.back_pack_typed', [], 'card'));
 
         // Required on creation only, a row without a file holding its back and pack for nothing
         yield Field::new('imageFile', t('label.back_image', [], 'card'))
@@ -72,27 +71,5 @@ class CardBackPictureCrudController extends AbstractCrudController
             ->setRequired(Crud::PAGE_NEW === $pageName)
             ->setHelp(t('help.back_image', [], 'card'))
             ->onlyOnForms();
-    }
-
-    // A list of the site's packs when it gives one (see CardPackProviderInterface), the key typed by hand otherwise. A disabled field is not submitted either, so a picture whose pack left the site's list still saves, and the list shows the raw key so that such a pack stays readable
-    private function packField(string $pageName, bool $isLocked): ChoiceField | TextField
-    {
-        $packs = Crud::PAGE_INDEX === $pageName ? [] : $this->cardCatalog->packs();
-        if ([] === $packs) {
-            return TextField::new('pack', t('label.back_pack', [], 'card'))
-                ->setDisabled($isLocked)
-                ->setHelp(t('help.back_pack_typed', [], 'card'));
-        }
-
-        // Its key beside its name, two packs of the same name staying apart
-        $choices = [];
-        foreach ($packs as $key => $name) {
-            $choices[$name . ' (' . $key . ')'] = $key;
-        }
-
-        return ChoiceField::new('pack', t('label.back_pack', [], 'card'))
-            ->setChoices($choices)
-            ->setDisabled($isLocked)
-            ->setHelp(t('help.back_pack', [], 'card'));
     }
 }

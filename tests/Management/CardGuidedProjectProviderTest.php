@@ -14,6 +14,8 @@ use c975L\CardBundle\Controller\Management\BackThumbnailsController;
 use c975L\CardBundle\Controller\Management\CardBackCrudController;
 use c975L\CardBundle\Controller\Management\CardBackPictureCrudController;
 use c975L\CardBundle\Controller\Management\CardExportController;
+use c975L\CardBundle\Controller\Management\CardSkinCrudController;
+use c975L\CardBundle\Controller\Management\CardSkinPictureCrudController;
 use c975L\CardBundle\Export\CardExporter;
 use c975L\CardBundle\Management\CardGuidedProjectProvider;
 use c975L\CardBundle\Management\MenuProvider;
@@ -59,7 +61,13 @@ class CardGuidedProjectProviderTest extends TestCase
     public function testEveryHighlightedFieldIsOnTheForm(): void
     {
         $arguments = [$this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class))];
-        foreach (['CardBack' => [new CardBackCrudController(...$arguments, backStyles: new BackStyles([])), 0], 'CardBackPicture' => [new CardBackPictureCrudController(...$arguments), 1]] as $entity => [$controller, $index]) {
+        $controllers = [
+            'CardBack' => [new CardBackCrudController(...$arguments, backStyles: new BackStyles([])), 0],
+            'CardBackPicture' => [new CardBackPictureCrudController(...$arguments), 1],
+            'CardSkin' => [new CardSkinCrudController(...$arguments), 2],
+            'CardSkinPicture' => [new CardSkinPictureCrudController(...$arguments), 3],
+        ];
+        foreach ($controllers as $entity => [$controller, $index]) {
             $properties = array_map(
                 static fn (FieldInterface $field): string => $field->getAsDto()->getProperty(),
                 array_filter([...$controller->configureFields(Crud::PAGE_NEW)], static fn (FieldInterface $field): bool => $field->getAsDto()->isDisplayedOn(Crud::PAGE_NEW)),
@@ -89,12 +97,23 @@ class CardGuidedProjectProviderTest extends TestCase
         $this->assertArrayHasKey('url', $project['steps'][0]);
     }
 
+    // The skins' two projects follow the backs', in the same block and for the same role, the skin before its pictures
+    public function testTheSkinProjectsFollowTheBacks(): void
+    {
+        [$skin, $picture] = \array_slice($this->projects(false), 2, 2);
+
+        $this->assertSame(['card-skin', 11030], [$skin['slug'], $skin['order']]);
+        $this->assertSame(['card-skin-picture', 11035], [$picture['slug'], $picture['order']]);
+        $this->assertSame(['ROLE_EDITOR', 'ROLE_EDITOR'], [$skin['role'], $picture['role']]);
+        $this->assertSame('label.guided_step_card_skin_picture_reference', $picture['steps'][4]['label']);
+    }
+
     // The export project follows its tile: offered where the export can run, to whoever the tile lets in, and nowhere else
     public function testTheExportProjectFollowsTheTile(): void
     {
-        $this->assertCount(2, $this->projects(false));
+        $this->assertCount(4, $this->projects(false));
 
-        $project = $this->projects(true)[2];
+        $project = $this->projects(true)[4];
         $this->assertSame('card-export', $project['slug']);
         $this->assertSame(11020, $project['order']);
         $this->assertSame(CardExportController::ROLE, $project['role']);
@@ -107,7 +126,7 @@ class CardGuidedProjectProviderTest extends TestCase
     {
         $this->assertNotContains('card-back-thumbnails', array_column($this->projects(true), 'slug'));
 
-        $project = $this->projects(true, true)[3];
+        $project = $this->projects(true, true)[5];
         $this->assertSame('card-back-thumbnails', $project['slug']);
         $this->assertSame(11025, $project['order']);
         $this->assertSame(BackThumbnailsController::ROLE, $project['role']);
@@ -125,6 +144,9 @@ class CardGuidedProjectProviderTest extends TestCase
         $this->assertSame('ROLE_EDITOR', $menus['card_back']['role']);
         $this->assertSame(CardBackPictureCrudController::class, $menus['card_back_picture']['controller']);
         $this->assertSame('ROLE_EDITOR', $menus['card_back_picture']['role']);
+        $this->assertSame(CardSkinCrudController::class, $menus['card_skin']['controller']);
+        $this->assertSame(CardSkinPictureCrudController::class, $menus['card_skin_picture']['controller']);
+        $this->assertSame(['ROLE_EDITOR', 'ROLE_EDITOR'], [$menus['card_skin']['role'], $menus['card_skin_picture']['role']]);
     }
 
     /** @return array<string, mixed> */

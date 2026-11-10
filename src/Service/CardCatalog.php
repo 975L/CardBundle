@@ -63,6 +63,12 @@ class CardCatalog implements ResetInterface
         return $this->packs;
     }
 
+    // A pack's name, its key when the site lists no such pack
+    public function packName(string $pack): string
+    {
+        return $this->packs()[$pack] ?? $pack;
+    }
+
     // The currency backs are sold in, the shop's own, euros when the site set none
     public function currency(): string
     {

@@ -1,6 +1,6 @@
 # CardBundle
 
-Symfony bundle for collectible cards on the c975L core — what each player holds and in which finish, kept on the device before any account exists, card backs to win or choose, and the plumbing of the mobile app's API. The catalogue stays the site's own.
+Symfony bundle for collectible cards on the c975L core — what each player holds and in which finish, kept on the device before any account exists, card backs to win or choose, skins of the card faces pack by pack, and the plumbing of the mobile app's API. The catalogue stays the site's own.
 
 [![GitHub](https://img.shields.io/github/license/975L/CardBundle)](https://github.com/975L/CardBundle/blob/main/LICENSE)
 [![Packagist Version](https://img.shields.io/packagist/v/c975l/card-bundle)](https://packagist.org/packages/c975l/card-bundle)
@@ -20,12 +20,12 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 
 ---
 
-> **TL;DR** — `CardCollector::grant()` gives a card in a finish, `CardHolder::resolve()` says whose collection a call is about (the device's token, then the account it is connected to), `BackCollector` gives and chooses card backs, `CardRequest` is the rate limit, token and private answer every app call starts with. The routes and their JSON stay the site's.
+> **TL;DR** — `CardCollector::grant()` gives a card in a finish, `CardHolder::resolve()` says whose collection a call is about (the device's token, then the account it is connected to), `BackCollector` gives and chooses card backs, `SkinCollector` the skins pack by pack, `CardRequest` is the rate limit, token and private answer every app call starts with. The routes and their JSON stay the site's.
 
 ## Contents
 
 - **Setup** — [requirements](#requirements) · [installation](#installation)
-- **Using it** — [the collection](#the-collection) · [card backs](#card-backs) · [the app's api](#the-apps-api) · [exports](#exports) · [what the site plugs in](#what-the-site-plugs-in) · [translations](#translations) · [guided projects](#guided-projects) · [what it does not contribute](#what-this-bundle-deliberately-does-not-contribute) · [AI agent skills](#ai-agent-skills)
+- **Using it** — [the collection](#the-collection) · [card backs](#card-backs) · [card skins](#card-skins) · [the app's api](#the-apps-api) · [exports](#exports) · [what the site plugs in](#what-the-site-plugs-in) · [translations](#translations) · [guided projects](#guided-projects) · [what it does not contribute](#what-this-bundle-deliberately-does-not-contribute) · [AI agent skills](#ai-agent-skills)
 
 ## Features
 
@@ -35,15 +35,16 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 - Card backs drawn by the bundle (`<twig:c975LCard:Back>`): picture and frame, leant on screen and still on paper, the site laying its own content over them and drawing its own tones and effects (`BackStyleProviderInterface`); `c975l:config:check-importmap` adds `@c975l/card-bundle/controllers.js` to the site's importmap, the site declaring `@c975l/card-bundle/back-canvas.js` itself if it draws on a canvas
 - A back to choose (`<twig:c975LCard:BackChoice>`): chosen, held, or padlocked, seen large in a dialog and bought from its price
 - A standard back, the one every card wears until another is chosen: never sold nor given, one per site
+- Card skins: the card faces in another style (toon), held, chosen and sold pack by pack, each with a picture per card, a card without one keeping its own; chosen with the same `<twig:c975LCard:BackChoice>`
 - The backs' thumbnails shot from the site's page showing each alone (`card:back-thumbnails`, or a dashboard tile where Chrome is installed)
 - Card backs for sale, in the app stores and on the site, through PaymentBundle (`InAppProductProviderInterface` and `BasketItemProviderInterface`), at one price
 - A device's collection handed over to the account on its first connected call, the account keeping its own where both hold the same card
 - Everything erased with the account (ConfigBundle's `UserAnonymizedEvent`), the site's own stores included
-- Every card and back in the member's data export (ConfigBundle's `/account/export`, through `AccountDataProviderInterface`)
+- Every card, back and skin in the member's data export (ConfigBundle's `/account/export`, through `AccountDataProviderInterface`)
 - One export of the cards, paper and social networks alike, that only redoes what changed since the last run (`card:export`, or a dashboard tile where Chrome is installed)
-- Two back-office screens contributed to the EasyAdmin dashboard (`MenuProviderInterface`): the card backs and their pictures, pack by pack
-- Guided projects (`GuidedProjectProviderInterface`): making a card back, giving it its picture for a pack, exporting the cards
-- A demo dataset (UiBundle's `DemoFixtureProviderInterface`): three card backs, their pictures over the site's first two packs, each illustrated by its own placeholder when the site declares one under `keyed_images['card/<slug>']` (`demo-dawn`, `demo-storm`, `demo-night`), one of the generic pool otherwise — no catalogue and no collection, both being a site's own
+- Four back-office screens contributed to the EasyAdmin dashboard (`MenuProviderInterface`): the card backs and their pictures pack by pack, the skins and their pictures card by card
+- Guided projects (`GuidedProjectProviderInterface`): making a card back, giving it its picture for a pack, making a skin, giving it its picture for a card, exporting the cards
+- A demo dataset (UiBundle's `DemoFixtureProviderInterface`): three card backs, their pictures over the site's first two packs, each illustrated by its own placeholder when the site declares one under `keyed_images['card/<slug>']` (`demo-dawn`, `demo-storm`, `demo-night`), one of the generic pool otherwise — no catalogue, no collection and no skin, a skin's picture needing a card reference only the site knows
 - Its own `card` translation catalogue, in English, French and Spanish
 - **A skill for coding agents**, shipped in the package and read straight from `vendor/` — see [AI agent skills](#ai-agent-skills)
 
@@ -71,7 +72,7 @@ php bin/console doctrine:migrations:diff
 php bin/console doctrine:migrations:migrate
 ```
 
-Four tables: `card_collected`, `card_back`, `card_back_picture` and `card_collected_back`. No foreign key ties a holding to an account: the key is `u<id>`, erased by the bundle when the account goes.
+Seven tables: `card_collected`, `card_back`, `card_back_picture`, `card_collected_back`, `card_skin`, `card_skin_picture` and `card_collected_skin`. No foreign key ties a holding to an account: the key is `u<id>`, erased by the bundle when the account goes.
 
 ### Upgrading to v1.3
 
@@ -89,9 +90,13 @@ $this->addSql('UPDATE card_collected_back c LEFT JOIN (SELECT holder, MAX(id) AS
 
 `BackTone`, `BackEffect`, their styles and their drawing leave the bundle, which is public, and the stored values stay as they are, with no migration. A site using them moves them to its own code: a `BackStyleProviderInterface` listing every value its backs hold, since one it no longer lists shows empty in the listing and has to be chosen again on saving the back; the `card-back--tone-<value>` and `card-back--<value>` classes in its stylesheet; its canvas in a controller extending `@c975l/card-bundle/back-canvas.js`, named by `controller` on the component; its copy of `sky.js` and `audio.js`, if it uses them. `--back-rays` and the component's `sky` are gone with them, and `back.tone` and `back.effect` are now plain strings, no longer enums.
 
+### Upgrading to v1.6
+
+The skins add three tables, `card_skin`, `card_skin_picture` and `card_collected_skin`, which `doctrine:migrations:diff` writes as they are: nothing to edit by hand. `<twig:c975LCard:BackChoice>` keeps posting `back` for a back, `kind` and `pack` being new and optional.
+
 ### Nothing to register by hand
 
-No route to import, no config key: the menu entry, the guided projects, the account export, the anonymization listener and the site's own implementations (see [what the site plugs in](#what-the-site-plugs-in)) are picked up by autoconfiguration. A back's picture goes through UiBundle's `block_media` upload mapping, under `public/medias/cards/backs/`.
+No route to import, no config key: the menu entry, the guided projects, the account export, the anonymization listener and the site's own implementations (see [what the site plugs in](#what-the-site-plugs-in)) are picked up by autoconfiguration. A back's or a skin's picture goes through UiBundle's `block_media` upload mapping, under `public/medias/cards/backs/` and `public/medias/cards/skins/`, at the size of a card face (800 px, its thumbnail 500).
 
 ---
 
@@ -142,6 +147,32 @@ A back given a price (in cents, VAT included, with its own VAT rate, none under 
 - **In the app**, `BackInAppProductProvider` is PaymentBundle's `InAppProductProviderInterface`: `c975l:payment:store:publish` creates the products from it, named « Card back “variant” » in each language (the variant alone past Apple's 30 characters), one product for all the packs, and a verified purchase gives the back through `BackCollector::grant()` under the store's name, `apple` or `google`. A refund takes it back through `BackCollector::revoke()`, which removes only what that store gave: the same back won in a quest stays. The site's own app endpoints still ask for the account token and send the proofs (see PaymentBundle's *selling in a mobile app*).
 - **On the site**, `BackBasketItemProvider` puts a back in PaymentBundle's basket under the `cardback` kind: once per back, refused when the account already holds it, the visitor asked to sign in at the checkout (`AccountBasketItemProviderInterface`). It is digital content supplied at once (`Basket::CONTENT_FLAG_DIGITAL`), which asks for the waiver of the right of withdrawal, and once paid it is given as `shop`. Where the site shows the button is its own: a back is bought where its collection shows it, adding `{kind: cardback, id}` to the basket.
 
+## Card skins
+
+A `CardSkin` dresses the card faces in another style — toon, sketch — and, unlike a back, is held pack by pack: a castle's skin dresses that castle's cards, and the next castle's is won or bought on its own. Its picture for one card is a `CardSkinPicture`, named by the card's reference (`GOB 01`) and filed under the card's pack, its skin, pack and card locked once created: the packs a skin dresses are those of its pictures, so the bundle never asks which pack a card belongs to. A card with no picture keeps its own, and a finish still changes the frame and the numbers, never the skin.
+
+```php
+use c975L\CardBundle\Service\SkinCollector;
+
+$this->skinCollector->grant($holder, $toon, 'GOB', 'quest'); // false: not published, held already, or no picture in that pack
+$this->skinCollector->choose($holder, 'GOB', $toon);         // that pack's cards wear it, the other packs keep theirs; null for their own pictures
+$chosen = $this->skinCollector->chosen($holder);             // ['GOB' => $toon], one query for the whole collection
+$images = $this->cardSkinPictureRepository->findImagesOfPack($toon, 'GOB'); // ['GOB 01' => 'medias/cards/skins/toon-gob-01.webp', ...]
+```
+
+A device's skins move to the account as its backs do, the account's choice winning pack by pack, and go with the account.
+
+### Choosing a skin
+
+`<twig:c975LCard:BackChoice kind="skin" pack="GOB" choice="{{ choice }}" name="..." chooseUrl="...">` offers a skin for one pack, as a back is offered: a tap on a held skin posts `skin`, `pack` and `_token` to `chooseUrl`, for the site to check as the CSRF token `submit` and pass to `SkinCollector::choose()`; one not held is seen large and bought, `choice.id` being its store product id.
+
+### Selling a skin
+
+A skin given a price and published is on sale in every pack it dresses, at that one price per pack. Its store product id is derived from its slug and the pack, `skin.<slug>.<pack>` in lowercase with underscores (`CardSkin::getProductId($pack)`, `skin.toon.gob`), never typed; `CardSkinRepository::findByProductId()` reads it back into the skin and the pack.
+
+- **In the app**, `SkinInAppProductProvider` publishes one product per skin and pack, named « Skin “Toon” Gobelins » in each language (the skin and the pack alone past Apple's 30 characters), and a verified purchase gives the skin for that pack under the store's name, even once its pictures there are gone, one that could not be given being logged; a refund takes back only what that store gave, found through the packs it was given in.
+- **On the site**, `SkinBasketItemProvider` puts a skin for one pack in the basket under the `cardskin` kind, its item id being the store product id: once per pack, refused when the account already holds it there, given as `shop` once paid.
+
 ## The app's api
 
 The routes and their JSON stay in the site's controllers — an app's api is what it is (an album and its Plumes, a collection and its packs) and its payload is what the app was built against. What every call shares is `CardRequest`:
@@ -180,9 +211,9 @@ Six interfaces, each tagged by autoconfiguration — implementing one is all it 
 
 | Interface | What for | Without it |
 | --- | --- | --- |
-| `HolderStoreInterface` | whatever else the site keeps under a holder's key (a child's Plumes), moved and erased with the cards | only the cards and the backs move |
+| `HolderStoreInterface` | whatever else the site keeps under a holder's key (a child's Plumes), moved and erased with the cards | only the cards, the backs and the skins move |
 | `CardCatalogInterface` | the name of a card, from its reference | the reference is shown |
-| `CardPackProviderInterface` | the packs a back can be made for | the pack is typed in the back office |
+| `CardPackProviderInterface` | the packs a back's or a skin's picture can be made for | the pack is typed in the back office |
 | `CardExportSourceInterface` | the pages to export, paper and social (see [exports](#exports)) | no tile, `card:export` has nothing to do |
 | `CardBackPageProviderInterface` | the page showing a back alone (see [the backs' thumbnails](#the-backs-thumbnails)) | the thumbnails are uploaded by hand |
 | `BackStyleProviderInterface` | the tones and effects the back office offers, which the site draws (see [drawing a back](#drawing-a-back)) | a back has neither |
@@ -195,7 +226,7 @@ Everything the back office shows is in the `card` domain, its spoken narrations 
 
 ## Guided projects
 
-The bundle contributes four guided projects, in the 11000 block `GuidedProjectProviderInterface` reserves it. `card-back` makes a variant of the backs: it opens on the card backs' listing, then walks the form field by field — the name, the tone, the effect, the thumbnail, the price when it is for sale — then the box that publishes it, a back being given only once published, the box marking it standard, and ends on the save button. `card-back-picture` gives a back its picture for one pack: the back, the pack, the picture, then the save button. Both are offered to `site-role-editor`, the role the screens themselves ask for.
+The bundle contributes six guided projects, in the 11000 block `GuidedProjectProviderInterface` reserves it. `card-back` makes a variant of the backs: it opens on the card backs' listing, then walks the form field by field — the name, the tone, the effect, the thumbnail, the price when it is for sale — then the box that publishes it, a back being given only once published, the box marking it standard, and ends on the save button. `card-back-picture` gives a back its picture for one pack: the back, the pack, the picture, then the save button. `card-skin` makes a skin the same way — the name, the thumbnail, the price, the box that publishes it — and `card-skin-picture` gives it its picture for one card: the skin, the pack, the card's reference, the picture. All four are offered to `site-role-editor`, the role the screens themselves ask for.
 
 `card-export` opens on the dashboard, highlights the export tile, then tells how to follow the run on the tile. Like the tile, it is offered only where the export can run, to `ROLE_SUPER_ADMIN`. `card-back-thumbnails` does the same for the thumbnails' tile, offered only where they can be made.
 

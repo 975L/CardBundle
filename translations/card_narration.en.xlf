@@ -10,6 +10,14 @@
                 <source>narration.card_backs</source>
                 <target>The card backs: the variants players win or buy for every pack, then choose for all their cards.</target>
             </trans-unit>
+            <trans-unit id="HQIoI_3">
+                <source>narration.card_skin_pictures</source>
+                <target>The skin pictures: each skin's for each card, filed under the card's pack.</target>
+            </trans-unit>
+            <trans-unit id="VFT1IDX">
+                <source>narration.card_skins</source>
+                <target>The card skins: what players win or buy pack by pack, then choose for that pack's cards.</target>
+            </trans-unit>
             <trans-unit id="riJ7JSH">
                 <source>narration.guided_step_card_back_done</source>
                 <target>Save. A reward, a purchase or a code will give this back by its slug. Then give it its pictures pack by pack with Illustrate a back for a pack.</target>
@@ -97,6 +105,62 @@
             <trans-unit id="UiTq7q1">
                 <source>narration.guided_step_card_export_run</source>
                 <target>Click the Export the cards tile. The export runs in the background.</target>
+            </trans-unit>
+            <trans-unit id="G.TN_0L">
+                <source>narration.guided_step_card_skin_done</source>
+                <target>Save, then give the skin its pictures card by card.</target>
+            </trans-unit>
+            <trans-unit id="CilVNmc">
+                <source>narration.guided_step_card_skin_name</source>
+                <target>Give the skin a name, Toon for instance.</target>
+            </trans-unit>
+            <trans-unit id="BaAH2qO">
+                <source>narration.guided_step_card_skin_new</source>
+                <target>Click the create button to add a skin.</target>
+            </trans-unit>
+            <trans-unit id="mrEhSxq">
+                <source>narration.guided_step_card_skin_open</source>
+                <target>Open the Card skins menu, in the Cards section of the left column.</target>
+            </trans-unit>
+            <trans-unit id="O4fL5FL">
+                <source>narration.guided_step_card_skin_picture_done</source>
+                <target>Save: the card now wears this picture under this skin.</target>
+            </trans-unit>
+            <trans-unit id="kzABnfN">
+                <source>narration.guided_step_card_skin_picture_image</source>
+                <target>Drop the picture, card-sized, in portrait.</target>
+            </trans-unit>
+            <trans-unit id="bUpuQu3">
+                <source>narration.guided_step_card_skin_picture_new</source>
+                <target>Click the create button to add a picture.</target>
+            </trans-unit>
+            <trans-unit id="nMguXZW">
+                <source>narration.guided_step_card_skin_picture_open</source>
+                <target>Open the Skin pictures menu, in the Cards section of the left column.</target>
+            </trans-unit>
+            <trans-unit id="IrBR6GL">
+                <source>narration.guided_step_card_skin_picture_pack</source>
+                <target>Choose the card's pack.</target>
+            </trans-unit>
+            <trans-unit id="ZKgJ_uj">
+                <source>narration.guided_step_card_skin_picture_reference</source>
+                <target>Type the card's number, GOB 01 for instance.</target>
+            </trans-unit>
+            <trans-unit id="QyvADTU">
+                <source>narration.guided_step_card_skin_picture_skin</source>
+                <target>Choose the skin the picture illustrates.</target>
+            </trans-unit>
+            <trans-unit id="loDr4g6">
+                <source>narration.guided_step_card_skin_price</source>
+                <target>Set its price for one pack if it is for sale, or leave it empty.</target>
+            </trans-unit>
+            <trans-unit id="JeewCqB">
+                <source>narration.guided_step_card_skin_published</source>
+                <target>Tick Published: only a published skin can be given.</target>
+            </trans-unit>
+            <trans-unit id="4HEbDp3">
+                <source>narration.guided_step_card_skin_thumbnail</source>
+                <target>Drop its thumbnail, the skin alone, card-sized.</target>
             </trans-unit>
         </body>
     </file>

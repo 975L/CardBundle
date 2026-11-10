@@ -18,6 +18,14 @@
                 <source>description.guided_project_card_export</source>
                 <target>Generar los PDF, las imágenes y los vídeos de las cartas desde el mosaico del panel: solo se rehace lo que ha cambiado desde la última exportación.</target>
             </trans-unit>
+            <trans-unit id="25Xzf8D">
+                <source>description.guided_project_card_skin</source>
+                <target>Cree un skin de las caras de las cartas, que los jugadores podrán ganar o comprar paquete por paquete y luego elegir para las cartas de ese paquete, y póngalo a la venta si lo desea.</target>
+            </trans-unit>
+            <trans-unit id="nq5C7Kx">
+                <source>description.guided_project_card_skin_picture</source>
+                <target>Dé a un skin su imagen para una carta: ese héroe en toon… Los paquetes que viste el skin son los de sus imágenes.</target>
+            </trans-unit>
             <trans-unit id="1lnvqC.">
                 <source>description.guided_step_card_back_done</source>
                 <target>El reverso está listo: una recompensa, una compra o un código lo dan por su slug. Dele sus imágenes pack por pack con «Ilustrar un reverso para un pack».</target>
@@ -106,6 +114,62 @@
                 <source>description.guided_step_card_export_run</source>
                 <target>Haga clic en el mosaico: la exportación pasa al worker de Messenger y recupera el control enseguida.</target>
             </trans-unit>
+            <trans-unit id="yEi5qUq">
+                <source>description.guided_step_card_skin_done</source>
+                <target>El skin está listo: una recompensa, una compra o un código lo dan por su slug, para un paquete. Dele sus imágenes carta por carta con « Ilustrar un skin para una carta ».</target>
+            </trans-unit>
+            <trans-unit id="wHNlswK">
+                <source>description.guided_step_card_skin_name</source>
+                <target>Su propio nombre, el mismo para todos los paquetes: « Toon ». El slug se deriva de él.</target>
+            </trans-unit>
+            <trans-unit id="qW79bBD">
+                <source>description.guided_step_card_skin_new</source>
+                <target>Un nuevo skin, que cada paquete tendrá por separado.</target>
+            </trans-unit>
+            <trans-unit id="PYMKPuR">
+                <source>description.guided_step_card_skin_open</source>
+                <target>La lista de skins, en su orden.</target>
+            </trans-unit>
+            <trans-unit id="NtJ2VUT">
+                <source>description.guided_step_card_skin_picture_done</source>
+                <target>La imagen viste ahora esa carta con este skin.</target>
+            </trans-unit>
+            <trans-unit id="jEZ5euv">
+                <source>description.guided_step_card_skin_picture_image</source>
+                <target>Del tamaño de una carta, en vertical.</target>
+            </trans-unit>
+            <trans-unit id="EjNyvK0">
+                <source>description.guided_step_card_skin_picture_new</source>
+                <target>Una imagen para un skin y una carta.</target>
+            </trans-unit>
+            <trans-unit id="pJRw8AR">
+                <source>description.guided_step_card_skin_picture_open</source>
+                <target>Las imágenes de cada skin, carta por carta.</target>
+            </trans-unit>
+            <trans-unit id="kfnQcWe">
+                <source>description.guided_step_card_skin_picture_pack</source>
+                <target>El paquete de la carta: el skin se gana y se compra para ese paquete.</target>
+            </trans-unit>
+            <trans-unit id="BXkazzU">
+                <source>description.guided_step_card_skin_picture_reference</source>
+                <target>El número de la carta tal como lo nombra el sitio: « GOB 01 ».</target>
+            </trans-unit>
+            <trans-unit id="ZM934fs">
+                <source>description.guided_step_card_skin_picture_skin</source>
+                <target>El skin que ilustra la imagen.</target>
+            </trans-unit>
+            <trans-unit id="hVrDbvm">
+                <source>description.guided_step_card_skin_price</source>
+                <target>El precio de un paquete, el mismo en el sitio y en la app, 1,00 € o 2,00 € por ejemplo. IVA incluido, su tipo justo debajo (0 en franquicia). Déjelo vacío para un skin solo regalado, ganado en un recorrido o con un código.</target>
+            </trans-unit>
+            <trans-unit id="lJIsTkY">
+                <source>description.guided_step_card_skin_published</source>
+                <target>Solo un skin publicado puede darse y elegirse.</target>
+            </trans-unit>
+            <trans-unit id="dqH_yxk">
+                <source>description.guided_step_card_skin_thumbnail</source>
+                <target>El skin solo, del tamaño de una carta, en vertical: así lo muestran la cesta, los correos del pedido y la factura.</target>
+            </trans-unit>
             <trans-unit id="F_kUhYO">
                 <source>flash.back_thumbnails_made</source>
                 <target>Miniaturas de los reversos hechas: %count%.</target>
@@ -177,6 +241,54 @@
             <trans-unit id="E9GkcBn">
                 <source>help.back_vat</source>
                 <target>El tipo de IVA incluido en el precio, 0 para un vendedor exento de IVA.</target>
+            </trans-unit>
+            <trans-unit id="CcIIuka">
+                <source>help.skin_image</source>
+                <target>Del tamaño de una carta, en vertical. Sin imagen, la carta conserva la suya con este skin.</target>
+            </trans-unit>
+            <trans-unit id="qW1RCV7">
+                <source>help.skin_name</source>
+                <target>El nombre del skin, el mismo para todos los paquetes: « Toon », « Boceto ».</target>
+            </trans-unit>
+            <trans-unit id="j3oINa6">
+                <source>help.skin_pack</source>
+                <target>El paquete de la carta: el skin se gana, se compra y se elige para él.</target>
+            </trans-unit>
+            <trans-unit id="lVUCCQk">
+                <source>help.skin_pack_typed</source>
+                <target>La clave del paquete de la carta tal como la nombra el sitio (el prefijo de un castillo, el slug de una serie), en letras, cifras y guiones: el skin se gana, se compra y se elige para él.</target>
+            </trans-unit>
+            <trans-unit id="jeecArp">
+                <source>help.skin_picture_skin</source>
+                <target>El skin que esta imagen ilustra para una carta.</target>
+            </trans-unit>
+            <trans-unit id="Q0.5aj9">
+                <source>help.skin_position</source>
+                <target>El orden de los skins.</target>
+            </trans-unit>
+            <trans-unit id="BV9MjiG">
+                <source>help.skin_price</source>
+                <target>El precio de un paquete IVA incluido, el mismo para cada paquete, en el sitio y en la app, donde fija el nivel de precio de las tiendas (1,00 € es uno). Vacío para un skin que no está a la venta, solo regalado.</target>
+            </trans-unit>
+            <trans-unit id="2J5SeLr">
+                <source>help.skin_published</source>
+                <target>Solo un skin publicado puede darse y elegirse.</target>
+            </trans-unit>
+            <trans-unit id="fw8qD0t">
+                <source>help.skin_reference</source>
+                <target>El número de la carta tal como lo nombra el sitio: « GOB 01 ».</target>
+            </trans-unit>
+            <trans-unit id="t9c3RBQ">
+                <source>help.skin_slug</source>
+                <target>Lo que nombran una recompensa, una compra o un código para dar este skin.</target>
+            </trans-unit>
+            <trans-unit id="IXNB0uT">
+                <source>help.skin_slug_locked</source>
+                <target>Fijado al crearlo: recompensas, códigos y tiendas lo conocen.</target>
+            </trans-unit>
+            <trans-unit id="yForm.n">
+                <source>help.skin_thumbnail</source>
+                <target>El skin solo, del tamaño de una carta, en vertical: lo que muestran la cesta, los correos del pedido y la factura.</target>
             </trans-unit>
             <trans-unit id="uxioU5s">
                 <source>label.back_already_held</source>
@@ -294,6 +406,22 @@
                 <source>label.card_backs</source>
                 <target>Reversos de las cartas</target>
             </trans-unit>
+            <trans-unit id="NbKpIgC">
+                <source>label.card_skin</source>
+                <target>Skin de carta</target>
+            </trans-unit>
+            <trans-unit id="UlMmKXw">
+                <source>label.card_skin_picture</source>
+                <target>Imagen de skin</target>
+            </trans-unit>
+            <trans-unit id="P7QqcxD">
+                <source>label.card_skin_pictures</source>
+                <target>Imágenes de los skins</target>
+            </trans-unit>
+            <trans-unit id="VkD1ra4">
+                <source>label.card_skins</source>
+                <target>Skins de las cartas</target>
+            </trans-unit>
             <trans-unit id="gTzWFQi">
                 <source>label.cards</source>
                 <target>Cartas</target>
@@ -353,6 +481,14 @@
             <trans-unit id="IzejoBX">
                 <source>label.guided_project_card_export</source>
                 <target>Exportar las cartas</target>
+            </trans-unit>
+            <trans-unit id="TjJFKai">
+                <source>label.guided_project_card_skin</source>
+                <target>Crear un skin de carta</target>
+            </trans-unit>
+            <trans-unit id="FwQnKvr">
+                <source>label.guided_project_card_skin_picture</source>
+                <target>Ilustrar un skin para una carta</target>
             </trans-unit>
             <trans-unit id="MavYpWS">
                 <source>label.guided_step_card_back_done</source>
@@ -442,6 +578,62 @@
                 <source>label.guided_step_card_export_run</source>
                 <target>Lance la exportación</target>
             </trans-unit>
+            <trans-unit id="v06V79L">
+                <source>label.guided_step_card_skin_done</source>
+                <target>Guarde</target>
+            </trans-unit>
+            <trans-unit id="XqXK_RV">
+                <source>label.guided_step_card_skin_name</source>
+                <target>Nombre el skin</target>
+            </trans-unit>
+            <trans-unit id="76LOOYx">
+                <source>label.guided_step_card_skin_new</source>
+                <target>Cree un skin</target>
+            </trans-unit>
+            <trans-unit id="NDoXBGT">
+                <source>label.guided_step_card_skin_open</source>
+                <target>Abra los skins de las cartas</target>
+            </trans-unit>
+            <trans-unit id="_q2RkyW">
+                <source>label.guided_step_card_skin_picture_done</source>
+                <target>Guarde</target>
+            </trans-unit>
+            <trans-unit id="otgX3Nh">
+                <source>label.guided_step_card_skin_picture_image</source>
+                <target>Añada la imagen</target>
+            </trans-unit>
+            <trans-unit id="daaPETf">
+                <source>label.guided_step_card_skin_picture_new</source>
+                <target>Añada una imagen</target>
+            </trans-unit>
+            <trans-unit id="gp1XfcD">
+                <source>label.guided_step_card_skin_picture_open</source>
+                <target>Abra las imágenes de los skins</target>
+            </trans-unit>
+            <trans-unit id="pwPusgS">
+                <source>label.guided_step_card_skin_picture_pack</source>
+                <target>Elija el paquete</target>
+            </trans-unit>
+            <trans-unit id="65.NJ8c">
+                <source>label.guided_step_card_skin_picture_reference</source>
+                <target>Escriba la carta</target>
+            </trans-unit>
+            <trans-unit id="TlcWnZi">
+                <source>label.guided_step_card_skin_picture_skin</source>
+                <target>Elija el skin</target>
+            </trans-unit>
+            <trans-unit id="jLGWIb_">
+                <source>label.guided_step_card_skin_price</source>
+                <target>Fije su precio, si está a la venta</target>
+            </trans-unit>
+            <trans-unit id="pa0VEsJ">
+                <source>label.guided_step_card_skin_published</source>
+                <target>Publíquelo</target>
+            </trans-unit>
+            <trans-unit id="NLaXNQO">
+                <source>label.guided_step_card_skin_thumbnail</source>
+                <target>Añada su miniatura</target>
+            </trans-unit>
             <trans-unit id="e8W.GdF">
                 <source>label.info_card_back_pictures</source>
                 <target>La imagen de cada reverso para cada pack: un castillo al alba es la imagen de ese castillo. Sin imagen para un pack, el reverso usa allí la del pack, con su tono.</target>
@@ -450,9 +642,49 @@
                 <source>label.info_card_backs</source>
                 <target>Las variantes del reverso de las cartas: un jugador las gana o las compra, cada una para todos los packs, y luego elige la que llevan todas sus cartas. Sin variante elegida, una carta conserva el reverso de su pack.</target>
             </trans-unit>
+            <trans-unit id="jsceDPO">
+                <source>label.info_card_skin_pictures</source>
+                <target>La imagen de cada skin para cada carta, clasificada bajo el paquete de la carta: un skin viste los paquetes de sus imágenes. Sin imagen, una carta conserva la suya con ese skin.</target>
+            </trans-unit>
+            <trans-unit id="uU25ECk">
+                <source>label.info_card_skins</source>
+                <target>Los skins de las caras de las cartas: un jugador los gana o los compra paquete por paquete y luego elige el que llevan las cartas de ese paquete. Sin skin elegido, una carta conserva su imagen.</target>
+            </trans-unit>
             <trans-unit id="yGOxphS">
                 <source>label.sign_in_required</source>
                 <target>Inicia sesión para recibir este reverso en tu cuenta.</target>
+            </trans-unit>
+            <trans-unit id="Q2yv5ga">
+                <source>label.sign_in_required_skin</source>
+                <target>Inicie sesión para recibir este skin en su cuenta.</target>
+            </trans-unit>
+            <trans-unit id="nglah2z">
+                <source>label.skin_already_held</source>
+                <target>Ya tiene este skin para este paquete.</target>
+            </trans-unit>
+            <trans-unit id="Ly4.SRZ">
+                <source>label.skin_choose</source>
+                <target>Elegir el skin %name%</target>
+            </trans-unit>
+            <trans-unit id="GFO8g2s">
+                <source>label.skin_once</source>
+                <target>Un skin solo se compra una vez por paquete.</target>
+            </trans-unit>
+            <trans-unit id="1wXsNoi">
+                <source>label.skin_product_description</source>
+                <target>Un skin para las cartas de un paquete</target>
+            </trans-unit>
+            <trans-unit id="miShM4u">
+                <source>label.skin_product_name</source>
+                <target>Skin «%name%» %pack%</target>
+            </trans-unit>
+            <trans-unit id="NVLHiz0">
+                <source>label.skin_reference</source>
+                <target>Carta</target>
+            </trans-unit>
+            <trans-unit id="qGVSOye">
+                <source>label.skin_unavailable</source>
+                <target>Este skin ya no está a la venta para este paquete.</target>
             </trans-unit>
         </body>
     </file>

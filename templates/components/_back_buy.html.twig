@@ -1,11 +1,11 @@
-{# A back's purchase, beside "see" or in its dialog ("dialog" its id, closed by the purchase so the basket's message shows). Offered to a visitor too, the sign-in being asked at the checkout (see BackBasketItemProvider) #}
+{# A back's purchase, or a skin's for one pack ("kind" being "skin"), beside "see" or in its dialog ("dialog" its id, closed by the purchase so the basket's message shows). Offered to a visitor too, the sign-in being asked at the checkout (see BackBasketItemProvider) #}
 {# @symfony-lsp-ignore stimulus.unknown_controller (registered by PaymentBundle's controllers.js, which lsp:check does not read) #}
 <button type="button" data-action="click->basket#addItem"
 		{% if dialog|default(false) %}commandfor="{{ dialog }}" command="close"{% endif %}
 		class="btn btn-primary btn-small"
 		aria-label="{{ 'label.back_buy'|trans({'%name%': name, '%price%': price}, 'card') }}"
 		data-item-id="{{ choice.id }}"
-		data-type="cardback"
+		data-type="{{ kind|default('back') == 'skin' ? 'cardskin' : 'cardback' }}"
 		data-quantity="1"
 		data-limited="0"
 		data-ordered="0"

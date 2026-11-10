@@ -1,7 +1,7 @@
 {
     "name": "c975l/card-bundle",
     "type": "symfony-bundle",
-    "description": "Symfony bundle for collectible cards on the c975L core — what each player holds and in which finish, kept on the device before any account exists, card backs to win or choose, and the plumbing of the mobile app's API. The catalogue stays the site's own.",
+    "description": "Symfony bundle for collectible cards on the c975L core — what each player holds and in which finish, kept on the device before any account exists, card backs to win or choose, skins of the card faces pack by pack, and the plumbing of the mobile app's API. The catalogue stays the site's own.",
     "keywords": [
         "symfony",
         "bundle",
