@@ -15,6 +15,7 @@ use c975L\CardBundle\Payment\BackInAppProductProvider;
 use c975L\CardBundle\Repository\CardBackRepository;
 use c975L\CardBundle\Service\BackCollector;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BackInAppProductProviderTest extends TestCase
@@ -55,6 +56,32 @@ class BackInAppProductProviderTest extends TestCase
         $provider->revoke('u1', 'back.orage', 'google');
     }
 
+    // A purchase that could not be given is logged for the admin, one restored on a holder already holding it is not
+    public function testAPurchaseNotGivenIsLogged(): void
+    {
+        $back = $this->back('orage', 'Orage');
+        $collector = $this->createStub(BackCollector::class);
+        $collector->method('grant')->willReturn(false);
+        $collector->method('holds')->willReturnOnConsecutiveCalls(false, true);
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())->method('warning');
+        $provider = $this->provider([], $back, $collector, $logger);
+
+        $provider->deliver('u1', 'back.orage', 'apple');
+        $provider->deliver('u1', 'back.orage', 'apple');
+    }
+
+    // A device's token is never given a store purchase: it moves to the account it signs in to, the refund then finding nothing
+    public function testAPurchaseOnADeviceIsRefusedAndLogged(): void
+    {
+        $collector = $this->createMock(BackCollector::class);
+        $collector->expects($this->never())->method('grant');
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())->method('warning');
+
+        $this->provider([], $this->back('orage', 'Orage'), $collector, $logger)->deliver(str_repeat('a1', 16), 'back.orage', 'apple');
+    }
+
     // Another provider's product is left alone
     public function testAnUnknownProductIsIgnored(): void
     {
@@ -69,7 +96,7 @@ class BackInAppProductProviderTest extends TestCase
     }
 
     /** @param list<CardBack> $forSale */
-    private function provider(array $forSale, ?CardBack $byProductId = null, ?BackCollector $collector = null): BackInAppProductProvider
+    private function provider(array $forSale, ?CardBack $byProductId = null, ?BackCollector $collector = null, ?LoggerInterface $logger = null): BackInAppProductProvider
     {
         $repository = $this->createStub(CardBackRepository::class);
         $repository->method('findForSale')->willReturn($forSale);
@@ -79,7 +106,7 @@ class BackInAppProductProviderTest extends TestCase
         $translator = $this->createStub(TranslatorInterface::class);
         $translator->method('trans')->willReturnCallback(static fn (string $key, array $parameters): string => isset($parameters['%name%']) ? 'Dos ' . $parameters['%name%'] : $key);
 
-        return new BackInAppProductProvider($repository, $collector ?? $this->createStub(BackCollector::class), $translator);
+        return new BackInAppProductProvider($repository, $collector ?? $this->createStub(BackCollector::class), $translator, $logger ?? $this->createStub(LoggerInterface::class));
     }
 
     private function back(string $slug, string $name): CardBack

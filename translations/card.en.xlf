@@ -290,6 +290,10 @@
                 <source>help.skin_thumbnail</source>
                 <target>The skin alone, card-sized, in portrait: what the basket, the order emails and the invoice show.</target>
             </trans-unit>
+            <trans-unit id="Cw5ufCW">
+                <source>label.account_not_found</source>
+                <target>The account of this order cannot be found.</target>
+            </trans-unit>
             <trans-unit id="uxioU5s">
                 <source>label.back_already_held</source>
                 <target>You already have this back.</target>
@@ -317,6 +321,10 @@
             <trans-unit id="0LjkTmi">
                 <source>label.back_effect_none</source>
                 <target>None</target>
+            </trans-unit>
+            <trans-unit id="VQrYQ0y">
+                <source>label.back_held_not_deleted</source>
+                <target>This back is held by players: it cannot be deleted, unpublish it to take it off sale.</target>
             </trans-unit>
             <trans-unit id="PUQJ_3g">
                 <source>label.back_image</source>
@@ -665,6 +673,10 @@
             <trans-unit id="Ly4.SRZ">
                 <source>label.skin_choose</source>
                 <target>Choose the skin %name%</target>
+            </trans-unit>
+            <trans-unit id="c.NA60f">
+                <source>label.skin_held_not_deleted</source>
+                <target>This skin is held by players: it cannot be deleted, unpublish it to take it off sale.</target>
             </trans-unit>
             <trans-unit id="GFO8g2s">
                 <source>label.skin_once</source>

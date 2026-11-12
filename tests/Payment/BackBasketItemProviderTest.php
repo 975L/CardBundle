@@ -19,6 +19,7 @@ use c975L\CardBundle\Service\BackCollector;
 use c975L\ConfigBundle\Contract\UserInterface;
 use c975L\PaymentBundle\Contract\AccountBasketItemProviderInterface;
 use c975L\PaymentBundle\Entity\Basket;
+use c975L\PaymentBundle\Enum\BasketStatus;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -68,6 +69,15 @@ class BackBasketItemProviderTest extends TestCase
         $user = $this->user();
         $this->assertNull($this->provider($user, $this->back())->validateCheckout($basket, [1 => ['quantity' => 1]]));
         $this->assertSame($user, $basket->getUser());
+    }
+
+    // An order already placed whose account is gone - a shared one paid by a third party - never lands on whoever is signed in
+    public function testASharedOrderWithoutItsAccountIsRefused(): void
+    {
+        $basket = new Basket()->setStatus(BasketStatus::Validated);
+
+        $this->assertSame('label.account_not_found', $this->provider($this->user(), $this->back())->validateCheckout($basket, [1 => ['quantity' => 1]]));
+        $this->assertNull($basket->getUser());
     }
 
     // A back withdrawn or earned since the basket was filled stops the checkout
@@ -125,6 +135,38 @@ class BackBasketItemProviderTest extends TestCase
         $logger->expects($this->once())->method('warning');
 
         $this->provider(null, $this->back(), false, $collector, $logger)->onBasketPaid(new Basket()->setUser($this->user()), [1 => ['quantity' => 1]], []);
+    }
+
+    // A back paid then gone since is logged all the same, for the admin to refund
+    public function testAPaidBackGoneIsLogged(): void
+    {
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())->method('warning');
+
+        $this->provider(null, null, false, null, $logger)->onBasketPaid(new Basket()->setUser($this->user()), [1 => ['quantity' => 1]], []);
+    }
+
+    // A basket in test mode gives nothing real, nor takes anything back
+    public function testATestBasketGivesAndTakesNothing(): void
+    {
+        $collector = $this->createMock(BackCollector::class);
+        $collector->expects($this->never())->method('grant');
+        $collector->expects($this->never())->method('revoke');
+        $basket = new Basket()->setUser($this->user())->setTestMode(true);
+        $provider = $this->provider(null, $this->back(), false, $collector);
+
+        $provider->onBasketPaid($basket, [1 => ['quantity' => 1]], []);
+        $provider->onBasketRefunded($basket, [1 => ['quantity' => 1]]);
+    }
+
+    // A full refund takes back the back the site sold, as "shop"
+    public function testARefundTakesTheBackBack(): void
+    {
+        $back = $this->back();
+        $collector = $this->createMock(BackCollector::class);
+        $collector->expects($this->once())->method('revoke')->with('u7', $back, BackBasketItemProvider::SOURCE);
+
+        $this->provider(null, $back, false, $collector)->onBasketRefunded(new Basket()->setUser($this->user()), [1 => ['quantity' => 1]]);
     }
 
     private function provider(?UserInterface $user, ?CardBack $found = null, bool $held = false, ?BackCollector $collector = null, ?LoggerInterface $logger = null): BackBasketItemProvider

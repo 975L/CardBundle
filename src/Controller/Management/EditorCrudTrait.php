@@ -11,6 +11,7 @@
 namespace c975L\CardBundle\Controller\Management;
 
 use c975L\ConfigBundle\Management\EasyAdminActionHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -43,10 +44,29 @@ trait EditorCrudTrait
     #[\Override]
     public function configureActions(Actions $actions): Actions
     {
+        return $this->editorActions($actions);
+    }
+
+    // The actions behind the editor role, for a screen narrowing them in its own configureActions()
+    private function editorActions(Actions $actions): Actions
+    {
         foreach ([Action::INDEX, Action::NEW, Action::EDIT, Action::DELETE] as $action) {
             $actions->setPermission($action, $this->roleNeeded());
         }
 
         return EasyAdminActionHelper::iconOnlyDefaults($actions, $this->translator);
+    }
+
+    // Deletes an article nobody holds, else flashes the refusal: its purchases would go with it in cascade, a restore then answering invalid_proof - unpublishing keeps them. Called from deleteEntity(), which EasyAdmin's batch delete also calls, that action being disabled all the same
+    /** @param class-string $collectedClass */
+    private function deleteUnlessHeld(EntityManagerInterface $entityManager, object $entity, string $collectedClass, string $field, string $refusal): void
+    {
+        if (0 < $entityManager->getRepository($collectedClass)->count([$field => $entity])) {
+            $this->addFlash('danger', $this->translator->trans($refusal, [], 'card'));
+
+            return;
+        }
+
+        parent::deleteEntity($entityManager, $entity);
     }
 }

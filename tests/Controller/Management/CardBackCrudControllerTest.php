@@ -17,10 +17,17 @@ use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function Symfony\Component\Translation\t;
@@ -88,6 +95,41 @@ class CardBackCrudControllerTest extends TestCase
         $this->controller()->updateEntity($entityManager, new CardBack());
     }
 
+    // A back someone holds is never deleted, its purchases going with it in cascade: the editor is told to unpublish it, the batch delete being gone
+    public function testABackHeldIsNotDeleted(): void
+    {
+        $repository = $this->createStub(EntityRepository::class);
+        $repository->method('count')->willReturn(1);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->method('getRepository')->willReturn($repository);
+        $entityManager->expects($this->never())->method('remove');
+        $session = new Session(new MockArraySessionStorage());
+        $request = new Request();
+        $request->setSession($session);
+        $requestStack = new RequestStack([$request]);
+        $container = new Container();
+        $container->set('request_stack', $requestStack);
+        $controller = $this->controller();
+        $controller->setContainer($container);
+
+        $controller->deleteEntity($entityManager, new CardBack());
+
+        $this->assertSame(['label.back_held_not_deleted'], $session->getFlashBag()->get('danger'));
+        $this->assertNull($controller->configureActions(Actions::new())->getAsDto(Crud::PAGE_INDEX)->getAction(Crud::PAGE_INDEX, Action::BATCH_DELETE));
+    }
+
+    // A back nobody holds is deleted as any content
+    public function testABackNobodyHoldsIsDeleted(): void
+    {
+        $repository = $this->createStub(EntityRepository::class);
+        $repository->method('count')->willReturn(0);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->method('getRepository')->willReturn($repository);
+        $entityManager->expects($this->once())->method('remove');
+
+        $this->controller()->deleteEntity($entityManager, new CardBack());
+    }
+
     // The fields a page shows, by property
     /**
      * @return array<string, FieldInterface>
@@ -99,6 +141,9 @@ class CardBackCrudControllerTest extends TestCase
 
     private function controller(): CardBackCrudController
     {
-        return new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $this->createStub(TranslatorInterface::class), new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class)), new BackStyles([]));
+        $translator = $this->createStub(TranslatorInterface::class);
+        $translator->method('trans')->willReturnArgument(0);
+
+        return new CardBackCrudController($this->createStub(ConfigServiceInterface::class), $translator, new CardCatalog([], [], $this->createStub(ConfigServiceInterface::class)), new BackStyles([]));
     }
 }

@@ -47,12 +47,14 @@ class CardBackPicture implements VichMediaNamableInterface, VichMultiSizeImageIn
 
     // Letters, digits, dashes and underscores only, as it goes into the slug and the file's path
     #[ORM\Column(length: 40)]
+    #[Assert\Length(max: 40)]
     #[Assert\NotBlank]
     #[Assert\Regex('/^[A-Za-z0-9_-]+$/')]
     private ?string $pack = null;
 
     // Its back's slug and its pack, never typed (see setSlugFromBackAndPack()): what a content sync between two sites matches it by, and what its file is named after
     #[ORM\Column(length: 130, unique: true)]
+    #[Assert\Length(max: 130)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]

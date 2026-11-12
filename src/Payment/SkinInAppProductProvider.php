@@ -13,6 +13,7 @@ namespace c975L\CardBundle\Payment;
 use c975L\CardBundle\Entity\CardSkin;
 use c975L\CardBundle\Repository\CardSkinRepository;
 use c975L\CardBundle\Service\CardCatalog;
+use c975L\CardBundle\Service\CardHolder;
 use c975L\CardBundle\Service\SkinCollector;
 use c975L\PaymentBundle\Contract\InAppProduct;
 use c975L\PaymentBundle\Contract\InAppProductProviderInterface;
@@ -35,18 +36,24 @@ class SkinInAppProductProvider implements InAppProductProviderInterface
     ) {
     }
 
-    // Every skin on sale in every pack it dresses, named and described in each store locale
+    // Every skin on sale in every pack it dresses, named and described in each store locale. Two packs whose keys give the same product id ("GOB" and "gob") stop the publishing, naming both: the buyer of one would receive the other
     public function getProducts(): iterable
     {
+        $packOf = [];
         foreach ($this->skinRepository->findForSale() as $skin) {
             foreach ($skin->getPacks() as $pack) {
+                $productId = (string) $skin->getProductId($pack);
+                if (isset($packOf[$productId])) {
+                    throw new \LogicException(\sprintf('Card skin product id "%s" given by both packs "%s" and "%s": rename one of the pack keys', $productId, $packOf[$productId], $pack));
+                }
+                $packOf[$productId] = $pack;
                 $names = $descriptions = [];
                 foreach (array_keys(InAppProduct::STORE_LOCALES) as $locale) {
                     $names[$locale] = $this->name($skin, $pack, $locale);
                     $descriptions[$locale] = mb_substr($this->translator->trans('label.skin_product_description', [], 'card', $locale), 0, self::DESCRIPTION_LENGTH);
                 }
 
-                yield new InAppProduct((string) $skin->getProductId($pack), (int) $skin->getPrice(), $names, $descriptions);
+                yield new InAppProduct($productId, (int) $skin->getPrice(), $names, $descriptions);
             }
         }
     }
@@ -60,6 +67,13 @@ class SkinInAppProductProvider implements InAppProductProviderInterface
     // Gives the bought skin for its pack under the store's name, even one unpublished since: the purchase is owed, and one that could not be given is logged for the admin, a purchase restored on a holder already holding it excepted
     public function deliver(string $holder, string $productId, string $store): void
     {
+        // Bought by an account only: a device's token moves to the account it signs in to, its store purchase then refunded on a key nobody holds any more
+        if (!CardHolder::isAccountKey($holder)) {
+            $this->logger->warning('Card skin {skin} bought on {store} by device {holder} and not given: a store purchase needs an account', ['skin' => $productId, 'store' => $store, 'holder' => $holder]);
+
+            return;
+        }
+
         [$skin, $pack] = $this->skinRepository->findByProductId($productId) ?? [null, ''];
         if (null !== $skin && !$this->skinCollector->grant($holder, $skin, $pack, $store, paid: true) && !$this->skinCollector->holds($holder, $skin, $pack)) {
             $this->logger->warning('Card skin {skin} bought on {store} but not given to {holder}', ['skin' => $productId, 'store' => $store, 'holder' => $holder]);
@@ -69,6 +83,13 @@ class SkinInAppProductProvider implements InAppProductProviderInterface
     // Takes back a refunded skin, only as the store gave it
     public function revoke(string $holder, string $productId, string $store): void
     {
+        // Bought by an account only: a device's token moves to the account it signs in to, its store purchase then refunded on a key nobody holds any more
+        if (!CardHolder::isAccountKey($holder)) {
+            $this->logger->warning('Card skin {skin} bought on {store} by device {holder} and not given: a store purchase needs an account', ['skin' => $productId, 'store' => $store, 'holder' => $holder]);
+
+            return;
+        }
+
         [$skin, $pack] = $this->skinRepository->findByProductId($productId) ?? [null, ''];
         if (null !== $skin) {
             $this->skinCollector->revoke($holder, $skin, $pack, $store);

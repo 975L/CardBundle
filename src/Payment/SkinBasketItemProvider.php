@@ -16,14 +16,14 @@ use c975L\CardBundle\Service\CardHolder;
 use c975L\CardBundle\Service\SkinCollector;
 use c975L\ConfigBundle\Contract\UserInterface;
 use c975L\PaymentBundle\Contract\AccountBasketItemProviderInterface;
-use c975L\PaymentBundle\Contract\BasketItemProviderInterface;
+use c975L\PaymentBundle\Contract\RefundableBasketItemProviderInterface;
 use c975L\PaymentBundle\Entity\Basket;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-// The skins on sale, pack by pack, in PaymentBundle's basket (see BasketItemProviderInterface), as BackBasketItemProvider sells the backs: an item is a skin for one pack, filed under its store product id ("skin.toon.gob"), landing on an account and given once paid through SkinCollector as "shop"
-class SkinBasketItemProvider implements BasketItemProviderInterface, AccountBasketItemProviderInterface
+// The skins on sale, pack by pack, in PaymentBundle's basket (see BasketItemProviderInterface), as BackBasketItemProvider sells the backs: an item is a skin for one pack, filed under its store product id ("skin.toon.gob"), landing on an account and given once paid through SkinCollector as "shop" and taken back on a full refund
+class SkinBasketItemProvider implements RefundableBasketItemProviderInterface, AccountBasketItemProviderInterface
 {
     use CardBasketTrait;
 
@@ -80,7 +80,7 @@ class SkinBasketItemProvider implements BasketItemProviderInterface, AccountBask
     {
         $user = $this->accountOf($basket);
         if (null === $user) {
-            return $this->translator->trans('label.sign_in_required_skin', [], 'card');
+            return $this->noAccount($basket, 'label.sign_in_required_skin');
         }
 
         foreach ($itemsOfThisKind as $id => $itemContent) {
@@ -101,18 +101,34 @@ class SkinBasketItemProvider implements BasketItemProviderInterface, AccountBask
         return $this->basketData($item->getId(), $item->skin->getName() . ' - ' . $this->cardCatalog->packName($item->pack), $item->skin->getImage(), (int) $item->skin->getPrice(), $item->skin->getVat(), 'label.card_skins', $quantity);
     }
 
-    // Gives each skin for its pack to the account, one withdrawn since given all the same, the purchase being owed, and one earned in the meantime logged for the admin to refund
+    // Gives each skin for its pack to the account, one withdrawn since given all the same, the purchase being owed, and one earned in the meantime or gone logged for the admin to refund. A basket in test mode gives nothing real
     public function onBasketPaid(Basket $basket, array $itemsOfThisKind, array $checkoutData): void
     {
         $user = $basket->getUser();
-        if (null === $user) {
+        if (null === $user || $basket->isTestMode()) {
             return;
         }
 
         foreach (array_keys($itemsOfThisKind) as $id) {
             $item = $this->item((string) $id);
-            if (null !== $item && !$this->skinCollector->grant(CardHolder::ofUser($user), $item->skin, $item->pack, BackBasketItemProvider::SOURCE, paid: true)) {
+            if (null === $item || !$this->skinCollector->grant(CardHolder::ofUser($user), $item->skin, $item->pack, BackBasketItemProvider::SOURCE, paid: true)) {
                 $this->logger->warning('Card skin {skin} paid in basket {basket} but not given to {holder}', ['skin' => $id, 'basket' => $basket->getId(), 'holder' => CardHolder::ofUser($user)]);
+            }
+        }
+    }
+
+    // A full refund takes back each skin the payment gave for its pack, the same one earned another way staying, a test basket having given none
+    public function onBasketRefunded(Basket $basket, array $itemsOfThisKind): void
+    {
+        $user = $basket->getUser();
+        if (null === $user || $basket->isTestMode()) {
+            return;
+        }
+
+        foreach (array_keys($itemsOfThisKind) as $id) {
+            $item = $this->item((string) $id);
+            if (null !== $item) {
+                $this->skinCollector->revoke(CardHolder::ofUser($user), $item->skin, $item->pack, BackBasketItemProvider::SOURCE);
             }
         }
     }

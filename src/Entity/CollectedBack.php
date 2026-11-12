@@ -12,6 +12,7 @@ namespace c975L\CardBundle\Entity;
 
 use c975L\CardBundle\Repository\CollectedBackRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 // A card back a holder has, for every pack, under the same key as their cards (see CollectedCard), and whether it is the one their cards wear: one chosen at most, none meaning each pack's own picture. The back is a relation and not a reference, a back being this bundle's own row
 #[ORM\Entity(repositoryClass: CollectedBackRepository::class)]
@@ -27,12 +28,14 @@ class CollectedBack
 
     public function __construct(
         #[ORM\Column(length: 40)]
+        #[Assert\Length(max: 40)]
         private string $holder,
         #[ORM\ManyToOne]
         #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
         private CardBack $back,
         // What gave it, in the site's own words, as for a card (see CollectedCard)
         #[ORM\Column(length: 20)]
+        #[Assert\Length(max: 20)]
         private string $source,
     ) {
         $this->createdAt = new \DateTimeImmutable();

@@ -56,6 +56,12 @@ class BackCollector
         return true;
     }
 
+    // Whether the holder has that back, whichever way they got it
+    public function holds(string $holder, CardBack $back): bool
+    {
+        return null !== $this->collectedBackRepository->findOneBy(['holder' => $holder, 'back' => $back]);
+    }
+
     // Makes a held back the one all the holder's cards wear, or none - the standard back - and says whether it was done: false for a back not held or not published
     public function choose(string $holder, ?CardBack $back): bool
     {

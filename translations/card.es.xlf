@@ -290,6 +290,10 @@
                 <source>help.skin_thumbnail</source>
                 <target>El skin solo, del tamaño de una carta, en vertical: lo que muestran la cesta, los correos del pedido y la factura.</target>
             </trans-unit>
+            <trans-unit id="Cw5ufCW">
+                <source>label.account_not_found</source>
+                <target>No se encuentra la cuenta de este pedido.</target>
+            </trans-unit>
             <trans-unit id="uxioU5s">
                 <source>label.back_already_held</source>
                 <target>Ya tienes este reverso.</target>
@@ -317,6 +321,10 @@
             <trans-unit id="0LjkTmi">
                 <source>label.back_effect_none</source>
                 <target>Ninguno</target>
+            </trans-unit>
+            <trans-unit id="VQrYQ0y">
+                <source>label.back_held_not_deleted</source>
+                <target>Este dorso lo tienen jugadores: no se puede eliminar, despublícalo para retirarlo de la venta.</target>
             </trans-unit>
             <trans-unit id="PUQJ_3g">
                 <source>label.back_image</source>
@@ -665,6 +673,10 @@
             <trans-unit id="Ly4.SRZ">
                 <source>label.skin_choose</source>
                 <target>Elegir el skin %name%</target>
+            </trans-unit>
+            <trans-unit id="c.NA60f">
+                <source>label.skin_held_not_deleted</source>
+                <target>Este skin lo tienen jugadores: no se puede eliminar, despublícalo para retirarlo de la venta.</target>
             </trans-unit>
             <trans-unit id="GFO8g2s">
                 <source>label.skin_once</source>

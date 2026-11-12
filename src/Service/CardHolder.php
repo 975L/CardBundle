@@ -50,6 +50,12 @@ class CardHolder
         return 'u' . $user->getId();
     }
 
+    // Whether a key is an account's rather than a device's token, which is hexadecimal
+    public static function isAccountKey(string $holder): bool
+    {
+        return 1 === preg_match('/^u\d+$/', $holder);
+    }
+
     // Whether the caller is signed in, the collection then being safe from a lost phone - an account not saved yet has no key, its collection still being the device's
     public function isAccount(): bool
     {

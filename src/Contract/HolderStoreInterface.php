@@ -19,7 +19,7 @@ interface HolderStoreInterface
     // Whether the holder has anything at all, read before a move that would otherwise lock the table for nothing
     public function hasHolder(string $holder): bool;
 
-    // Hands everything of $from over to $to, the account keeping its own where both hold the same thing
+    // Hands everything of $from over to $to, the account keeping its own where both hold the same thing. Whatever is capped per holder and per day (rewards, Plumes) is recounted against the account's own caps of the day, only what still fits being moved: any 32-hex string is a fresh device token, so the caps of a token are no cap at all
     public function moveHolder(string $from, string $to): void;
 
     // Forgets everything of the holder

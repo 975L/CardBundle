@@ -11,9 +11,13 @@
 namespace c975L\CardBundle\Controller\Management;
 
 use c975L\CardBundle\Entity\CardSkin;
+use c975L\CardBundle\Entity\CollectedSkin;
 use c975L\CardBundle\Form\BackImageOptions;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -93,5 +97,19 @@ class CardSkinCrudController extends AbstractCrudController
 
         yield BooleanField::new('published', t('label.back_published', [], 'card'))
             ->setHelp(t('help.skin_published', [], 'card'));
+    }
+
+    // The editor's actions, without the batch delete: one held among the selection would be refused, the others gone
+    #[\Override]
+    public function configureActions(Actions $actions): Actions
+    {
+        return $this->editorActions($actions)->disable(Action::BATCH_DELETE);
+    }
+
+    // A skin someone holds is refused, unpublishing it being what keeps the purchases
+    #[\Override]
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $this->deleteUnlessHeld($entityManager, $entityInstance, CollectedSkin::class, 'skin', 'label.skin_held_not_deleted');
     }
 }

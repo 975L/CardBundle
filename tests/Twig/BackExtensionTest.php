@@ -34,6 +34,25 @@ class BackExtensionTest extends TestCase
         $this->assertSame('/medias/cards/backs/papa-calin-axo.webp', $this->extension($back, [7 => 'medias/cards/backs/papa-calin-axo.webp'])->standard('axo')['image']);
     }
 
+    // A page drawing many cards reads the standard back once and each pack's pictures once, until reset() for the next message of a worker
+    public function testTheStandardBackIsReadOncePerRequest(): void
+    {
+        $back = new CardBack()->setSlug('catalog')->setName('Catalog')->setStandard(true);
+        new \ReflectionProperty(CardBack::class, 'id')->setValue($back, 7);
+        $backs = $this->createMock(CardBackRepository::class);
+        $backs->expects($this->exactly(2))->method('findStandard')->willReturn($back);
+        $pictures = $this->createMock(CardBackPictureRepository::class);
+        $pictures->expects($this->exactly(3))->method('findImagesOfPack')->willReturn([7 => 'item-1.webp']);
+        $extension = new BackExtension($backs, $pictures);
+
+        foreach (['pack-1', 'pack-1', 'pack-2', null] as $pack) {
+            $extension->standard($pack);
+        }
+        $extension->reset();
+
+        $this->assertSame('/item-1.webp', $extension->standard('pack-1')['image']);
+    }
+
     /** @param array<int, string> $images */
     private function extension(?CardBack $back, array $images): BackExtension
     {

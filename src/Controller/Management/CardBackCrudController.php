@@ -11,11 +11,14 @@
 namespace c975L\CardBundle\Controller\Management;
 
 use c975L\CardBundle\Entity\CardBack;
+use c975L\CardBundle\Entity\CollectedBack;
 use c975L\CardBundle\Form\BackImageOptions;
 use c975L\CardBundle\Service\BackStyles;
 use c975L\CardBundle\Service\CardCatalog;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -138,5 +141,19 @@ class CardBackCrudController extends AbstractCrudController
                 $other->setStandard(false);
             }
         }
+    }
+
+    // The editor's actions, without the batch delete: one held among the selection would be refused, the others gone
+    #[\Override]
+    public function configureActions(Actions $actions): Actions
+    {
+        return $this->editorActions($actions)->disable(Action::BATCH_DELETE);
+    }
+
+    // A back someone holds is refused, unpublishing it being what keeps the purchases
+    #[\Override]
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $this->deleteUnlessHeld($entityManager, $entityInstance, CollectedBack::class, 'back', 'label.back_held_not_deleted');
     }
 }

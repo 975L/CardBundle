@@ -18,6 +18,7 @@ use c975L\CardBundle\Repository\CardSkinRepository;
 use c975L\CardBundle\Service\SkinCollector;
 use c975L\ConfigBundle\Contract\UserInterface;
 use c975L\PaymentBundle\Entity\Basket;
+use c975L\PaymentBundle\Enum\BasketStatus;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -96,6 +97,47 @@ class SkinBasketItemProviderTest extends TestCase
         $basket->method('getUser')->willReturn($this->user());
 
         $this->provider([$this->skin()->setPrice(null), 'hur'], false, $collector, $logger)->onBasketPaid($basket, ['skin.toon.hur' => ['quantity' => 1]], []);
+    }
+
+    // A skin paid then gone since is logged all the same, for the admin to refund
+    public function testAPaidSkinGoneIsLogged(): void
+    {
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())->method('warning');
+
+        $this->provider(null, false, null, $logger)->onBasketPaid(new Basket()->setUser($this->user()), ['skin.toon.hur' => ['quantity' => 1]], []);
+    }
+
+    // A basket in test mode gives nothing real, nor takes anything back
+    public function testATestBasketGivesAndTakesNothing(): void
+    {
+        $collector = $this->createMock(SkinCollector::class);
+        $collector->expects($this->never())->method('grant');
+        $collector->expects($this->never())->method('revoke');
+        $basket = new Basket()->setUser($this->user())->setTestMode(true);
+        $provider = $this->provider([$this->skin(), 'hur'], false, $collector);
+
+        $provider->onBasketPaid($basket, ['skin.toon.hur' => ['quantity' => 1]], []);
+        $provider->onBasketRefunded($basket, ['skin.toon.hur' => ['quantity' => 1]]);
+    }
+
+    // A full refund takes back the skin the site sold for its pack, as "shop"
+    public function testARefundTakesTheSkinBack(): void
+    {
+        $skin = $this->skin();
+        $collector = $this->createMock(SkinCollector::class);
+        $collector->expects($this->once())->method('revoke')->with('u3', $skin, 'hur', 'shop');
+
+        $this->provider([$skin, 'hur'], false, $collector)->onBasketRefunded(new Basket()->setUser($this->user()), ['skin.toon.hur' => ['quantity' => 1]]);
+    }
+
+    // A shared order whose account is gone never lands on whoever is signed in
+    public function testASharedOrderWithoutItsAccountIsRefused(): void
+    {
+        $basket = new Basket()->setStatus(BasketStatus::Validated);
+
+        $this->assertSame('label.account_not_found', $this->provider([$this->skin(), 'hur'])->validateCheckout($basket, ['skin.toon.hur' => ['quantity' => 1]]));
+        $this->assertNull($basket->getUser());
     }
 
     /** @param array{CardSkin, string}|null $found */

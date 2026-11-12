@@ -12,12 +12,14 @@ namespace c975L\CardBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 // What a back, a skin and their pictures share: an image uploaded under UiBundle's "block_media" mapping, card-sized, the class naming its file (see VichMediaNamableInterface) and stamping $modification
 trait BackImageTrait
 {
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $image = null;
 
     // Never persisted: Vich converts the upload to webp and UiBundle cuts its "-thumb"/"-highres" siblings

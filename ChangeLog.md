@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.6.1
+
+Backs and skins taken back on refund, held ones never deleted
+
+- Backs and skins bought on the site taken back on a full refund, a test basket giving nothing (12/11/2026)
+- A shared order whose account is gone refused at the checkout instead of landing on the payer (12/11/2026)
+- A back or a skin someone holds refused at deletion, the batch delete removed (12/11/2026)
+- A store purchase given to an account only, never to a device's token (12/11/2026)
+- Two packs giving one skin product id stop the stores' publishing (12/11/2026)
+- A back or a skin paid but gone, or a store back not given, logged for the admin (12/11/2026)
+- `card_back_standard()` reads the standard back and each pack's picture once per request (12/11/2026)
+- `HolderStoreInterface::moveHolder()` recounts the daily caps against the account's (12/11/2026)
+- Requires c975l/core-bundle ^1.90 and c975l/payment-bundle ^6.26 (12/11/2026)
+
 ## v1.6.0
 
 Card skins held, chosen and sold pack by pack

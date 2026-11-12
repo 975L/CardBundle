@@ -49,19 +49,23 @@ class CardBack implements VichMediaNamableInterface, VichMultiSizeImageInterface
 
     // The variant's own name, the same for every pack: « À l'aube », « Coucher de soleil »
     #[ORM\Column(length: 60)]
+    #[Assert\Length(max: 60)]
     #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(length: 80, unique: true)]
+    #[Assert\Length(max: 80)]
     #[Assert\NotBlank]
     #[Assert\Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
     private ?string $slug = null;
 
     // How it moves and the light on its picture, values the site offers and draws (see BackStyleProviderInterface)
     #[ORM\Column(length: 10, options: ['default' => 'none'])]
+    #[Assert\Length(max: 10)]
     private string $effect = self::NO_STYLE;
 
     #[ORM\Column(length: 10, options: ['default' => 'none'])]
+    #[Assert\Length(max: 10)]
     private string $tone = self::NO_STYLE;
 
     // What it sells for, in cents and VAT included, the same in the app stores and on the site; null for a back that is not for sale, only ever given

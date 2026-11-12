@@ -46,10 +46,12 @@ class CardSkin implements VichMediaNamableInterface, VichMultiSizeImageInterface
 
     // The skin's own name, the same for every pack: « Toon », « Croquis »
     #[ORM\Column(length: 60)]
+    #[Assert\Length(max: 60)]
     #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(length: 80, unique: true)]
+    #[Assert\Length(max: 80)]
     #[Assert\NotBlank]
     #[Assert\Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
     private ?string $slug = null;

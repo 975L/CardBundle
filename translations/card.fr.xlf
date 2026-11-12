@@ -290,6 +290,10 @@
                 <source>help.skin_thumbnail</source>
                 <target>Le skin seul, au format d'une carte, en portrait : ce que montrent le panier, les mails de commande et la facture.</target>
             </trans-unit>
+            <trans-unit id="Cw5ufCW">
+                <source>label.account_not_found</source>
+                <target>Le compte de cette commande est introuvable.</target>
+            </trans-unit>
             <trans-unit id="uxioU5s">
                 <source>label.back_already_held</source>
                 <target>Vous avez déjà ce dos.</target>
@@ -317,6 +321,10 @@
             <trans-unit id="0LjkTmi">
                 <source>label.back_effect_none</source>
                 <target>Aucun</target>
+            </trans-unit>
+            <trans-unit id="VQrYQ0y">
+                <source>label.back_held_not_deleted</source>
+                <target>Ce dos est détenu par des joueurs : il ne peut pas être supprimé, dépubliez-le pour le retirer de la vente.</target>
             </trans-unit>
             <trans-unit id="PUQJ_3g">
                 <source>label.back_image</source>
@@ -665,6 +673,10 @@
             <trans-unit id="Ly4.SRZ">
                 <source>label.skin_choose</source>
                 <target>Choisir le skin %name%</target>
+            </trans-unit>
+            <trans-unit id="c.NA60f">
+                <source>label.skin_held_not_deleted</source>
+                <target>Ce skin est détenu par des joueurs : il ne peut pas être supprimé, dépubliez-le pour le retirer de la vente.</target>
             </trans-unit>
             <trans-unit id="GFO8g2s">
                 <source>label.skin_once</source>

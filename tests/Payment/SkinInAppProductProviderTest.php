@@ -72,6 +72,28 @@ class SkinInAppProductProviderTest extends TestCase
         $provider->deliver('u1', 'skin.toon.gob', 'apple');
     }
 
+    // Two pack keys giving the same product id stop the publishing, naming both: the buyer of one would receive the other
+    public function testTwoPacksGivingOneProductIdStopThePublishing(): void
+    {
+        $skin = $this->skin('Toon');
+        $skin->getPictures()->add(new CardSkinPicture()->setSkin($skin)->setPack('GOB')->setReference('GOB 02'));
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('"gob" and "GOB"');
+        iterator_to_array($this->provider([$skin])->getProducts(), false);
+    }
+
+    // A device's token is never given a store purchase: it moves to the account it signs in to, the refund then finding nothing
+    public function testAPurchaseOnADeviceIsRefusedAndLogged(): void
+    {
+        $collector = $this->createMock(SkinCollector::class);
+        $collector->expects($this->never())->method('grant');
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())->method('warning');
+
+        $this->provider([], [$this->skin('Toon'), 'gob'], $collector, $logger)->deliver(str_repeat('a1', 16), 'skin.toon.gob', 'apple');
+    }
+
     // Another provider's product is left alone
     public function testAnUnknownProductIsIgnored(): void
     {

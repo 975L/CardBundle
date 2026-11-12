@@ -12,6 +12,7 @@ namespace c975L\CardBundle\Payment;
 
 use c975L\ConfigBundle\Contract\UserInterface;
 use c975L\PaymentBundle\Entity\Basket;
+use c975L\PaymentBundle\Enum\BasketStatus;
 use c975L\PaymentBundle\Service\VatCalculator;
 
 // What the backs' and the skins' baskets share, the class holding $security, $cardCatalog and $translator: digital content landing on an account, one line per item, VAT included in its price
@@ -29,10 +30,10 @@ trait CardBasketTrait
         return [];
     }
 
-    // The account the basket lands on, the one signed in now when it was filled before signing in, null when none is
+    // The account the basket lands on, the one signed in now when it was filled before signing in, null when none is - or when it is already an order (a shared one paid by a third party) whose account is gone, a third party paying a shared order never receiving it
     private function accountOf(Basket $basket): ?UserInterface
     {
-        if (null === $basket->getUser()) {
+        if (null === $basket->getUser() && BasketStatus::New === $basket->getStatus()) {
             $user = $this->security->getUser();
             if (!$user instanceof UserInterface) {
                 return null;
@@ -41,6 +42,12 @@ trait CardBasketTrait
         }
 
         return $basket->getUser();
+    }
+
+    // Why a basket has no account to land on: nobody signed in while it is being filled, its account gone once it is an order
+    private function noAccount(Basket $basket, string $signIn): string
+    {
+        return $this->translator->trans(BasketStatus::New === $basket->getStatus() ? $signIn : 'label.account_not_found', [], 'card');
     }
 
     // An item as the basket stores it, under its kind's heading, with no catalogue page of its own: it is bought where the collection shows it, the basket row drawing its image without a link (see PaymentBundle's Basket:Item)

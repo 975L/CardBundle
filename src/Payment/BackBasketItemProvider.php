@@ -18,14 +18,14 @@ use c975L\CardBundle\Service\CardCatalog;
 use c975L\CardBundle\Service\CardHolder;
 use c975L\ConfigBundle\Contract\UserInterface;
 use c975L\PaymentBundle\Contract\AccountBasketItemProviderInterface;
-use c975L\PaymentBundle\Contract\BasketItemProviderInterface;
+use c975L\PaymentBundle\Contract\RefundableBasketItemProviderInterface;
 use c975L\PaymentBundle\Entity\Basket;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-// The backs on sale, in PaymentBundle's basket (see BasketItemProviderInterface): the site's own sale, beside the app stores'. A back lands on an account, so the visitor is asked to sign in at the checkout (see AccountBasketItemProviderInterface), and once paid it is given through BackCollector as "shop"
-class BackBasketItemProvider implements BasketItemProviderInterface, AccountBasketItemProviderInterface
+// The backs on sale, in PaymentBundle's basket (see BasketItemProviderInterface): the site's own sale, beside the app stores'. A back lands on an account, so the visitor is asked to sign in at the checkout (see AccountBasketItemProviderInterface), once paid it is given through BackCollector as "shop", and taken back on a full refund (see RefundableBasketItemProviderInterface)
+class BackBasketItemProvider implements RefundableBasketItemProviderInterface, AccountBasketItemProviderInterface
 {
     use CardBasketTrait;
 
@@ -86,7 +86,7 @@ class BackBasketItemProvider implements BasketItemProviderInterface, AccountBask
     {
         $user = $this->accountOf($basket);
         if (null === $user) {
-            return $this->translator->trans('label.sign_in_required', [], 'card');
+            return $this->noAccount($basket, 'label.sign_in_required');
         }
 
         foreach ($itemsOfThisKind as $id => $itemContent) {
@@ -113,18 +113,34 @@ class BackBasketItemProvider implements BasketItemProviderInterface, AccountBask
         return $this->basketData((int) $item->getId(), (string) $item->getName(), $item->getImage(), (int) $item->getPrice(), $item->getVat(), 'label.card_backs', $quantity);
     }
 
-    // Gives each back to the account, validateCheckout() having made sure just before the payment that it was still on sale - one withdrawn since is given all the same, the purchase being owed, and one earned in the meantime is logged for the admin to refund
+    // Gives each back to the account, validateCheckout() having made sure just before the payment that it was still on sale - one withdrawn since is given all the same, the purchase being owed, and one earned in the meantime or gone is logged for the admin to refund. A basket in test mode gives nothing real
     public function onBasketPaid(Basket $basket, array $itemsOfThisKind, array $checkoutData): void
     {
         $user = $basket->getUser();
-        if (null === $user) {
+        if (null === $user || $basket->isTestMode()) {
             return;
         }
 
         foreach (array_keys($itemsOfThisKind) as $id) {
             $back = $this->backRepository->find((int) $id);
-            if (null !== $back && !$this->backCollector->grant(CardHolder::ofUser($user), $back, self::SOURCE, paid: true)) {
-                $this->logger->warning('Card back {back} paid in basket {basket} but not given to {holder}', ['back' => $back->getSlug(), 'basket' => $basket->getId(), 'holder' => CardHolder::ofUser($user)]);
+            if (null === $back || !$this->backCollector->grant(CardHolder::ofUser($user), $back, self::SOURCE, paid: true)) {
+                $this->logger->warning('Card back {back} paid in basket {basket} but not given to {holder}', ['back' => $back?->getSlug() ?? $id, 'basket' => $basket->getId(), 'holder' => CardHolder::ofUser($user)]);
+            }
+        }
+    }
+
+    // A full refund takes back each back the payment gave, the same one earned another way staying, a test basket having given none
+    public function onBasketRefunded(Basket $basket, array $itemsOfThisKind): void
+    {
+        $user = $basket->getUser();
+        if (null === $user || $basket->isTestMode()) {
+            return;
+        }
+
+        foreach (array_keys($itemsOfThisKind) as $id) {
+            $back = $this->backRepository->find((int) $id);
+            if (null !== $back) {
+                $this->backCollector->revoke(CardHolder::ofUser($user), $back, self::SOURCE);
             }
         }
     }

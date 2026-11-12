@@ -48,17 +48,20 @@ class CardSkinPicture implements VichMediaNamableInterface, VichMultiSizeImageIn
 
     // Letters, digits, dashes and underscores only, as a back picture's pack
     #[ORM\Column(length: 40)]
+    #[Assert\Length(max: 40)]
     #[Assert\NotBlank]
     #[Assert\Regex('/^[A-Za-z0-9_-]+$/')]
     private ?string $pack = null;
 
     // The card's reference as the site names it ("GOB 01"), the same a CollectedCard holds
     #[ORM\Column(length: 80)]
+    #[Assert\Length(max: 80)]
     #[Assert\NotBlank]
     private ?string $reference = null;
 
     // Its skin's slug and its card's reference, never typed (see setSlugFromSkinAndReference()): what a content sync matches it by, and what its file is named after
     #[ORM\Column(length: 170, unique: true)]
+    #[Assert\Length(max: 170)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
