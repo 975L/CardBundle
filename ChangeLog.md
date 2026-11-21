@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.0
+
+Card backs and skins tools on the site's MCP endpoint
+
+- `CardMcpProvider`: an agent lists and reads the card backs and skins, adds an unpublished back and writes its name, tone and effect, with the rights of its token's account (21/11/2026)
+- Requires c975l/core-bundle ^1.96 (21/11/2026)
+
 ## v1.6.3
 
 CI replay leaves the CPU to composer qa

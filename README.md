@@ -25,7 +25,7 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 ## Contents
 
 - **Setup** — [requirements](#requirements) · [installation](#installation)
-- **Using it** — [the collection](#the-collection) · [card backs](#card-backs) · [card skins](#card-skins) · [the app's api](#the-apps-api) · [exports](#exports) · [what the site plugs in](#what-the-site-plugs-in) · [translations](#translations) · [guided projects](#guided-projects) · [what it does not contribute](#what-this-bundle-deliberately-does-not-contribute) · [AI agent skills](#ai-agent-skills)
+- **Using it** — [the collection](#the-collection) · [card backs](#card-backs) · [card skins](#card-skins) · [the app's api](#the-apps-api) · [exports](#exports) · [what the site plugs in](#what-the-site-plugs-in) · [translations](#translations) · [guided projects](#guided-projects) · [what it does not contribute](#what-this-bundle-deliberately-does-not-contribute) · [MCP tools](#mcp-tools) · [AI agent skills](#ai-agent-skills)
 
 ## Features
 
@@ -46,6 +46,7 @@ Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBun
 - Guided projects (`GuidedProjectProviderInterface`): making a card back, giving it its picture for a pack, making a skin, giving it its picture for a card, exporting the cards
 - A demo dataset (UiBundle's `DemoFixtureProviderInterface`): three card backs, their pictures over the site's first two packs, each illustrated by its own placeholder when the site declares one under `keyed_images['card/<slug>']` (`demo-dawn`, `demo-storm`, `demo-night`), one of the generic pool otherwise — no catalogue, no collection and no skin, a skin's picture needing a card reference only the site knows
 - Its own `card` translation catalogue, in English, French and Spanish
+- Tools for AI agents on the site's MCP endpoint (`CardMcpProvider`): the backs and skins listed and read, an unpublished back added and its name and style written — see [MCP tools](#mcp-tools)
 - **A skill for coding agents**, shipped in the package and read straight from `vendor/` — see [AI agent skills](#ai-agent-skills)
 
 ---
@@ -250,6 +251,20 @@ ConfigBundle and UiBundle expose a long list of contribution points, and not bra
 | Emails, sitemap, feeds | no public page and nothing to announce of its own |
 | Content translation | a back's name is short and the site's; translated catalogues are the site's |
 | Content import / export | a collection is what players did, not content |
+
+---
+
+## MCP tools
+
+The card backs and skins bring their tools to the site's MCP endpoint, `/api/mcp`, which c975l/core-bundle serves and opens (see its README, "Opening the site to AI agents"): `Mcp\CardMcpProvider`, under the `card` key of the agent tokens, for an account holding `site-role-editor` as on the back office.
+
+| Tool | Does |
+| --- | --- |
+| `card_back_list` | The card backs whose name holds the `search` words, every back without them, unpublished ones included, by name |
+| `card_back_get` | A `back`: name, slug, tone, effect, price, published, standard, the packs it has a picture for, and the tones and effects the site offers |
+| `card_back_create` | An unpublished back added, neither standard nor priced, with its `name` and an optional `tone` and `effect`, its slug made unique; pictures, price and publishing stay a human's |
+| `card_back_edit` | Only the `name`, `tone` or `effect` given of a `back` changed, its slug locked as on the back office |
+| `card_skin_list` | The skins whose name holds the `search` words, every skin without them, unpublished ones included, with the packs each dresses |
 
 ---
 
