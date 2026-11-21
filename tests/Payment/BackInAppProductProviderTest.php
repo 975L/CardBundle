@@ -77,9 +77,11 @@ class BackInAppProductProviderTest extends TestCase
         $collector = $this->createMock(BackCollector::class);
         $collector->expects($this->never())->method('grant');
         $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects($this->once())->method('warning');
+        $token = str_repeat('a1', 16);
+        // The device's token, the only credential of its collection, is logged as the start of its hash
+        $logger->expects($this->once())->method('warning')->with($this->anything(), $this->callback(static fn (array $context): bool => substr(hash('sha256', $token), 0, 12) === $context['holder']));
 
-        $this->provider([], $this->back('orage', 'Orage'), $collector, $logger)->deliver(str_repeat('a1', 16), 'back.orage', 'apple');
+        $this->provider([], $this->back('orage', 'Orage'), $collector, $logger)->deliver($token, 'back.orage', 'apple');
     }
 
     // Another provider's product is left alone

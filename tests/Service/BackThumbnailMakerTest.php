@@ -33,7 +33,7 @@ class BackThumbnailMakerTest extends TestCase
     public function testMakeWithoutABrowserThrows(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('No browser to shoot the backs.');
+        $this->expectExceptionMessageIsOrContains('No browser to shoot the backs.');
 
         $this->maker([$this->createStub(CardBackPageProviderInterface::class)], null)->make();
     }

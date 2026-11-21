@@ -56,6 +56,12 @@ class CardHolder
         return 1 === preg_match('/^u\d+$/', $holder);
     }
 
+    // The key as a log may carry it: an account's as it is, a device's token - the only credential of its collection - as the start of its hash, enough to tell two devices apart
+    public static function forLog(string $holder): string
+    {
+        return self::isAccountKey($holder) ? $holder : substr(hash('sha256', $holder), 0, 12);
+    }
+
     // Whether the caller is signed in, the collection then being safe from a lost phone - an account not saved yet has no key, its collection still being the device's
     public function isAccount(): bool
     {

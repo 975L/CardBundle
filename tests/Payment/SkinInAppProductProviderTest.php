@@ -79,7 +79,7 @@ class SkinInAppProductProviderTest extends TestCase
         $skin->getPictures()->add(new CardSkinPicture()->setSkin($skin)->setPack('GOB')->setReference('GOB 02'));
 
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('"gob" and "GOB"');
+        $this->expectExceptionMessageIsOrContains('"gob" and "GOB"');
         iterator_to_array($this->provider([$skin])->getProducts(), false);
     }
 
@@ -89,9 +89,23 @@ class SkinInAppProductProviderTest extends TestCase
         $collector = $this->createMock(SkinCollector::class);
         $collector->expects($this->never())->method('grant');
         $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects($this->once())->method('warning');
+        $token = str_repeat('a1', 16);
+        // The device's token, the only credential of its collection, is logged as the start of its hash
+        $logger->expects($this->once())->method('warning')->with($this->anything(), $this->callback(static fn (array $context): bool => substr(hash('sha256', $token), 0, 12) === $context['holder']));
 
-        $this->provider([], [$this->skin('Toon'), 'gob'], $collector, $logger)->deliver(str_repeat('a1', 16), 'skin.toon.gob', 'apple');
+        $this->provider([], [$this->skin('Toon'), 'gob'], $collector, $logger)->deliver($token, 'skin.toon.gob', 'apple');
+    }
+
+    // A refund on a device's token takes nothing back, and logs the token as the start of its hash only
+    public function testARefundOnADeviceIsLoggedWithoutItsToken(): void
+    {
+        $collector = $this->createMock(SkinCollector::class);
+        $collector->expects($this->never())->method('revoke');
+        $logger = $this->createMock(LoggerInterface::class);
+        $token = str_repeat('a1', 16);
+        $logger->expects($this->once())->method('warning')->with($this->anything(), $this->callback(static fn (array $context): bool => substr(hash('sha256', $token), 0, 12) === $context['holder']));
+
+        $this->provider([], [$this->skin('Toon'), 'gob'], $collector, $logger)->revoke($token, 'skin.toon.gob', 'apple');
     }
 
     // Another provider's product is left alone

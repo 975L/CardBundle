@@ -59,14 +59,14 @@ class BackInAppProductProvider implements InAppProductProviderInterface
     {
         // Bought by an account only: a device's token moves to the account it signs in to, its store purchase then refunded on a key nobody holds any more
         if (!CardHolder::isAccountKey($holder)) {
-            $this->logger->warning('Card back {back} bought on {store} by device {holder} and not given: a store purchase needs an account', ['back' => $productId, 'store' => $store, 'holder' => $holder]);
+            $this->logger->warning('Card back {back} bought on {store} by device {holder} and not given: a store purchase needs an account', ['back' => $productId, 'store' => $store, 'holder' => CardHolder::forLog($holder)]);
 
             return;
         }
 
         $back = $this->backRepository->findByProductId($productId);
         if (null !== $back && !$this->backCollector->grant($holder, $back, $store, paid: true) && !$this->backCollector->holds($holder, $back)) {
-            $this->logger->warning('Card back {back} bought on {store} but not given to {holder}', ['back' => $productId, 'store' => $store, 'holder' => $holder]);
+            $this->logger->warning('Card back {back} bought on {store} but not given to {holder}', ['back' => $productId, 'store' => $store, 'holder' => CardHolder::forLog($holder)]);
         }
     }
 

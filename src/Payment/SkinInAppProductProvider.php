@@ -69,14 +69,14 @@ class SkinInAppProductProvider implements InAppProductProviderInterface
     {
         // Bought by an account only: a device's token moves to the account it signs in to, its store purchase then refunded on a key nobody holds any more
         if (!CardHolder::isAccountKey($holder)) {
-            $this->logger->warning('Card skin {skin} bought on {store} by device {holder} and not given: a store purchase needs an account', ['skin' => $productId, 'store' => $store, 'holder' => $holder]);
+            $this->logger->warning('Card skin {skin} bought on {store} by device {holder} and not given: a store purchase needs an account', ['skin' => $productId, 'store' => $store, 'holder' => CardHolder::forLog($holder)]);
 
             return;
         }
 
         [$skin, $pack] = $this->skinRepository->findByProductId($productId) ?? [null, ''];
         if (null !== $skin && !$this->skinCollector->grant($holder, $skin, $pack, $store, paid: true) && !$this->skinCollector->holds($holder, $skin, $pack)) {
-            $this->logger->warning('Card skin {skin} bought on {store} but not given to {holder}', ['skin' => $productId, 'store' => $store, 'holder' => $holder]);
+            $this->logger->warning('Card skin {skin} bought on {store} but not given to {holder}', ['skin' => $productId, 'store' => $store, 'holder' => CardHolder::forLog($holder)]);
         }
     }
 
@@ -85,7 +85,7 @@ class SkinInAppProductProvider implements InAppProductProviderInterface
     {
         // Bought by an account only: a device's token moves to the account it signs in to, its store purchase then refunded on a key nobody holds any more
         if (!CardHolder::isAccountKey($holder)) {
-            $this->logger->warning('Card skin {skin} bought on {store} by device {holder} and not given: a store purchase needs an account', ['skin' => $productId, 'store' => $store, 'holder' => $holder]);
+            $this->logger->warning('Card skin {skin} bought on {store} by device {holder} and not given: a store purchase needs an account', ['skin' => $productId, 'store' => $store, 'holder' => CardHolder::forLog($holder)]);
 
             return;
         }

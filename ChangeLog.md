@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.2
+
+Device tokens kept out of the logs
+
+- `CardHolder::forLog()`: the in-app providers log a device's token as the start of its hash only (21/11/2026)
+
 ## v1.7.1
 
 php-http/discovery plugin allowed

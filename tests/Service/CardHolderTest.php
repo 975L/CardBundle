@@ -60,6 +60,15 @@ class CardHolderTest extends TestCase
         $this->assertSame('u42', CardHolder::ofUser($user));
     }
 
+    // A device's token never reaches a log, only the start of its hash - an account's key does, as it is
+    public function testTheKeyAsALogCarriesIt(): void
+    {
+        $token = str_repeat('a1', 16);
+
+        $this->assertSame(substr(hash('sha256', $token), 0, 12), CardHolder::forLog($token));
+        $this->assertSame('u42', CardHolder::forLog('u42'));
+    }
+
     // Signed in means one of the site's own accounts, saved already, not whatever other user a firewall may hold
     public function testIsAccountOnlyForAnAccountOfTheSite(): void
     {
