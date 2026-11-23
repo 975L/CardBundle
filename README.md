@@ -256,7 +256,7 @@ ConfigBundle and UiBundle expose a long list of contribution points, and not bra
 
 ## MCP tools
 
-The card backs and skins bring their tools to the site's MCP endpoint, `/api/mcp`, which c975l/core-bundle serves and opens (see its README, "Opening the site to AI agents"): `Mcp\CardMcpProvider`, under the `card` key of the agent tokens, for an account holding `site-role-editor` as on the back office.
+The card backs and skins bring their tools to the site's MCP endpoint, `/api/mcp`, which c975l/core-bundle serves and opens (see its README, "Opening the site to AI agents"): `Mcp\CardMcpProvider`, under the `card` key of the agent tokens, for an account holding `site-role-editor` as on the back office. An agent's edit of a card back already visible shows on the site at once, as an editor's would; what it adds stays hidden until a human publishes it.
 
 | Tool | Does |
 | --- | --- |

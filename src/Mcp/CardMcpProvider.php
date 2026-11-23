@@ -47,7 +47,7 @@ class CardMcpProvider implements McpToolProviderInterface
 
     public function getMcpInstructions(): string
     {
-        return 'Card backs are held once for every pack, skins pack by pack; the cards themselves are the site\'s own. A back added by an agent is unpublished, without price nor picture: a human adds its pictures, prices and publishes it from the back office.';
+        return 'Card backs are held once for every pack, skins pack by pack; the cards themselves are the site\'s own. A back added by an agent is unpublished, without price nor picture: a human adds its pictures, prices and publishes it from the back office. An edit of a back already published shows at once, to those who bought it too.';
     }
 
     public function getMcpTools(): iterable
@@ -55,7 +55,7 @@ class CardMcpProvider implements McpToolProviderInterface
         yield new McpTool('card_back_list', 'Card backs', 'The card backs whose name holds the search words, every back without them, unpublished ones included, by name.', $this->listBacks(...));
         yield new McpTool('card_back_get', 'Card back', 'A card back: name, slug, tone, effect, price in cents, published, standard, the packs it has a picture for, and the tones and effects the site offers.', $this->getBack(...));
         yield new McpTool('card_back_create', 'Add an unpublished card back', 'Adds a card back, unpublished and not for sale, with its name and an optional tone and effect among those the site offers.', $this->createBack(...), true);
-        yield new McpTool('card_back_edit', 'Write a card back', 'Changes only the name, tone or effect given of a card back, its slug staying as it is.', $this->editBack(...), true);
+        yield new McpTool('card_back_edit', 'Write a card back', 'Changes only the name, tone or effect given of a card back, its slug staying as it is; at once for everyone when it is published.', $this->editBack(...), true);
         yield new McpTool('card_skin_list', 'Card skins', 'The skins of the card faces whose name holds the search words, every skin without them, unpublished ones included, with the packs each dresses.', $this->listSkins(...));
     }
 

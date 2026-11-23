@@ -30,8 +30,10 @@ class CardMcpProviderTest extends TestCase
         $tools = iterator_to_array($this->provider()->getMcpTools(), false);
 
         $this->assertSame('card', $this->provider()->getMcpKey());
+        $this->assertStringContainsString('at once', $this->provider()->getMcpInstructions());
         $this->assertSame(['card_back_list', 'card_back_get', 'card_back_create', 'card_back_edit', 'card_skin_list'], array_map(static fn ($tool): string => $tool->name, $tools));
         $this->assertSame([false, false, true, true, false], array_map(static fn ($tool): bool => $tool->writes, $tools));
+        $this->assertStringContainsString('at once', $tools[3]->description);
     }
 
     // An unpublished back added, neither standard nor priced, with a slug kept unique, an empty name refused

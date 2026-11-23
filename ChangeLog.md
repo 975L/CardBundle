@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.3
+
+Agents told their card back edits are live
+
+- The MCP instructions and the edit tools say an edit of a card back already visible shows on the site at once (23/11/2026)
+
 ## v1.7.2
 
 Device tokens kept out of the logs
