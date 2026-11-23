@@ -1,31 +1,63 @@
 # CardBundle
 
-Symfony bundle for collectible cards on the c975L core — what each player holds and in which finish, kept on the device before any account exists, card backs to win or choose, skins of the card faces pack by pack, and the plumbing of the mobile app's API. The catalogue stays the site's own.
-
 [![GitHub](https://img.shields.io/github/license/975L/CardBundle)](https://github.com/975L/CardBundle/blob/main/LICENSE)
 [![Packagist Version](https://img.shields.io/packagist/v/c975l/card-bundle)](https://packagist.org/packages/c975l/card-bundle)
 [![PHP Version](https://img.shields.io/packagist/php-v/c975l/card-bundle)](https://packagist.org/packages/c975l/card-bundle)
+
+![CardBundle](.github/images/CardBundle.svg)
+
+**Collectible cards for your site: what each player holds and in which finish, card backs and skins to win or buy, and the plumbing of a mobile app's API.**
 
 **[Bundle page](https://bundles.975l.com/en/pages/card-bundle) · [Tutorials](https://bundles.975l.com/en/tutoriels/card-bundle) · [Live demo](https://bundles.975l.com/demo/) · [Demo back-office](https://bundles.975l.com/demo/login)**
 
 > **BUNDLE UNDER DEVELOPMENT — USE AT YOUR OWN RISK**
 
+> **TL;DR** — CardBundle keeps each player's card collection, first on their device and then on their account once they sign in, without ever owning the cards themselves: the catalogue stays the site's. It adds card backs and skins to win, choose or buy, and the plumbing a mobile app's API needs. It rests on CoreBundle; install it with Composer, then follow the installation steps.
+
+## What you get
+
+- A collection that starts on the device, before any account, and is kept when the player signs up
+- Three finishes for each card: normal, shiny and magic
+- Card backs to win, buy or redeem by code, one chosen for all the player's cards
+- Card skins dressing the card faces in another style, pack by pack
+- Card backs for sale in the app stores and on the site
+- Back-office screens for the card backs, the skins and their pictures
+- One export of the cards for paper and social networks, redoing only what changed
+- Everything erased with the account, and included in the member's data export
+
+## Quick start
+
+```bash
+composer require c975l/card-bundle
+```
+
+Then follow the full [installation](#installation) section below.
+
+## For AI agents
+
+- **Skills**, read straight from `vendor/c975l/card-bundle/skills/` by a coding agent (see [AI agent skills](#ai-agent-skills)):
+  - [c975l-card](skills/c975l-card/SKILL.md) — the services, entities and interfaces, as named in the sources, and the mistakes an agent makes about finishes, holders and enums
+- **MCP**: an AI agent works with the card backs and skins through the site's MCP endpoint (CoreBundle's `/api/mcp`), with its token account's rights — `card_back_list`, `card_back_get`, `card_back_create`, `card_back_edit`, `card_skin_list`; see [MCP tools](#mcp-tools).
+
+## Reference
+
+> **For developers** — `CardCollector::grant()` gives a card in a finish, `CardHolder::resolve()` says whose collection a call is about (the device's token, then the account it is connected to), `BackCollector` gives and chooses card backs, `SkinCollector` the skins pack by pack, `CardRequest` is the rate limit, token and private answer every app call starts with. The routes and their JSON stay the site's.
+
+<details>
+<summary>Contents</summary>
+
+- **Setup** — [requirements](#requirements) · [installation](#installation)
+- **Using it** — [the collection](#the-collection) · [card backs](#card-backs) · [card skins](#card-skins) · [the app's api](#the-apps-api) · [exports](#exports) · [what the site plugs in](#what-the-site-plugs-in) · [translations](#translations) · [guided projects](#guided-projects) · [what it does not contribute](#what-this-bundle-deliberately-does-not-contribute) · [MCP tools](#mcp-tools) · [AI agent skills](#ai-agent-skills)
+
+</details>
+
 ---
 
 ## Why CardBundle
 
-![CardBundle](.github/images/CardBundle.svg)
-
 Add CardBundle on top of the shared [CoreBundle](https://github.com/975L/CoreBundle) foundation when a site gives cards to collect — its own catalogue, whatever it is made of. The bundle holds the collection, never the cards: a card is named by its reference, so a site whose cards are its existing pages (the fiches of a universe) and a site with a catalogue of its own both plug in without a row being copied.
 
 ---
-
-> **TL;DR** — `CardCollector::grant()` gives a card in a finish, `CardHolder::resolve()` says whose collection a call is about (the device's token, then the account it is connected to), `BackCollector` gives and chooses card backs, `SkinCollector` the skins pack by pack, `CardRequest` is the rate limit, token and private answer every app call starts with. The routes and their JSON stay the site's.
-
-## Contents
-
-- **Setup** — [requirements](#requirements) · [installation](#installation)
-- **Using it** — [the collection](#the-collection) · [card backs](#card-backs) · [card skins](#card-skins) · [the app's api](#the-apps-api) · [exports](#exports) · [what the site plugs in](#what-the-site-plugs-in) · [translations](#translations) · [guided projects](#guided-projects) · [what it does not contribute](#what-this-bundle-deliberately-does-not-contribute) · [MCP tools](#mcp-tools) · [AI agent skills](#ai-agent-skills)
 
 ## Features
 

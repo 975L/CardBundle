@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.4
+
+README opened on a short overview
+
+- README opened on a short overview for humans, the reference folded below it (23/11/2026)
+
 ## v1.7.3
 
 Agents told their card back edits are live
