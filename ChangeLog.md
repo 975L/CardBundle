@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.5
+
+Markdownlint allows the README's folded reference
+
+- `.markdownlint.json` allows `<details>` and `<summary>`, which fold the README's reference (23/11/2026)
+
 ## v1.7.4
 
 README opened on a short overview
