@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.8.0
+
+Holder checks and back choice by slug shared with the sites
+
+- `CardRequest::requiredHolder()` refuses a call without a holder with a 400, its error named by the site (27/11/2026)
+- `CardRequest::accountHolder()` refuses a call from no signed-in caller with a 403 `account_required` (27/11/2026)
+- `BackCollector::chooseBySlug()` chooses a back from the slug an app sends, null for one no published back carries (27/11/2026)
+- `BackCollector` takes `CardBackRepository` as third constructor argument (27/11/2026)
+
 ## v1.7.6
 
 README banner centred, showcase film shown

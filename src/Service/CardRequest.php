@@ -40,6 +40,23 @@ class CardRequest
         return $this->cardHolder->resolve(\is_string($token) ? $token : null);
     }
 
+    // Whose cards a call is about, for a call that cannot go on without one - the limit's 429, or a 400 carrying the error the site's app reads
+    public function requiredHolder(Request $request, string $error = 'no_holder'): string | Response
+    {
+        return $this->holder($request) ?? new JsonResponse(['error' => $error], Response::HTTP_BAD_REQUEST);
+    }
+
+    // The caller's key when they are signed in - the limit's 429, or a 403 for a visitor or a device's token alone
+    public function accountHolder(Request $request): string | Response
+    {
+        $holder = $this->holder($request);
+        if ($holder instanceof Response) {
+            return $holder;
+        }
+
+        return null !== $holder && $this->cardHolder->isAccount() ? $holder : new JsonResponse(['error' => 'account_required'], Response::HTTP_FORBIDDEN);
+    }
+
     // The json body, empty when there is none or it does not parse: a call is then made as a visitor
     /** @return array<string, mixed> */
     public static function body(Request $request): array

@@ -12,6 +12,7 @@ namespace c975L\CardBundle\Tests\Service;
 
 use c975L\CardBundle\Entity\CardBack;
 use c975L\CardBundle\Entity\CollectedBack;
+use c975L\CardBundle\Repository\CardBackRepository;
 use c975L\CardBundle\Repository\CollectedBackRepository;
 use c975L\CardBundle\Service\BackCollector;
 use Doctrine\ORM\EntityManagerInterface;
@@ -61,7 +62,7 @@ class BackCollectorTest extends TestCase
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->expects($this->never())->method('persist');
 
-        $this->assertFalse(new BackCollector($repository, $entityManager)->grant('u1', $this->back('origin')->setStandard(true), 'apple', paid: true));
+        $this->assertFalse(new BackCollector($repository, $entityManager, $this->createStub(CardBackRepository::class))->grant('u1', $this->back('origin')->setStandard(true), 'apple', paid: true));
     }
 
     // A back not held is refused and nothing changes
@@ -91,7 +92,7 @@ class BackCollectorTest extends TestCase
         $repository->method('findOneBy')->willReturn(null);
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->expects($this->exactly(2))->method('persist');
-        $collector = new BackCollector($repository, $entityManager);
+        $collector = new BackCollector($repository, $entityManager, $this->createStub(CardBackRepository::class));
 
         $this->assertFalse($collector->grant('u1', $this->back('draft', false), 'quiz'));
         $this->assertTrue($collector->grant('u1', $this->back('dawn'), 'quiz'));
@@ -104,7 +105,7 @@ class BackCollectorTest extends TestCase
         $repository = $this->createStub(CollectedBackRepository::class);
         $repository->method('findOneBy')->willReturn(null);
 
-        $this->assertFalse(new BackCollector($repository, $this->entityManagerRefusingADuplicate())->grant('u1', $this->back('dawn'), 'quiz'));
+        $this->assertFalse(new BackCollector($repository, $this->entityManagerRefusingADuplicate(), $this->createStub(CardBackRepository::class))->grant('u1', $this->back('dawn'), 'quiz'));
     }
 
     // A refund takes back what its source gave, and says so; nothing held from that source, nothing is removed
@@ -115,7 +116,7 @@ class BackCollectorTest extends TestCase
         $repository->method('findOneBy')->willReturnCallback(static fn (array $criteria): ?CollectedBack => 'apple' === $criteria['source'] ? new CollectedBack('u1', $back, 'apple') : null);
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->expects($this->once())->method('remove');
-        $collector = new BackCollector($repository, $entityManager);
+        $collector = new BackCollector($repository, $entityManager, $this->createStub(CardBackRepository::class));
 
         $this->assertTrue($collector->revoke('u1', $back, 'apple'));
         $this->assertFalse($collector->revoke('u1', $back, 'google'));
@@ -148,13 +149,52 @@ class BackCollectorTest extends TestCase
         $this->assertSame($dawn, $collector->chosen('u1'));
     }
 
+    // A slug is read among the published backs: a held one is worn, null names the standard back
+    public function testChoosingBySlugWearsAPublishedBack(): void
+    {
+        $dawn = $this->back('dawn');
+        $held = [new CollectedBack('u1', $dawn, 'quiz')];
+        $backs = $this->createStub(CardBackRepository::class);
+        $backs->method('findPublishedBySlug')->willReturnMap([['dawn', $dawn]]);
+        $collector = $this->collector($held, $backs);
+
+        $this->assertTrue($collector->chooseBySlug('u1', 'dawn'));
+        $this->assertTrue($held[0]->isChosen());
+        $this->assertTrue($collector->chooseBySlug('u1', null));
+        $this->assertFalse($held[0]->isChosen());
+    }
+
+    // A slug no published back carries is told apart from a back not held
+    public function testChoosingAnUnknownSlugIsNull(): void
+    {
+        $storm = $this->back('storm');
+        $backs = $this->createStub(CardBackRepository::class);
+        $backs->method('findPublishedBySlug')->willReturnMap([['storm', $storm], ['hidden', null]]);
+        $collector = $this->collector([], $backs);
+
+        $this->assertNull($collector->chooseBySlug('u1', 'hidden'));
+        $this->assertFalse($collector->chooseBySlug('u1', 'storm'));
+    }
+
+    // A slug that is not a string is unknown, the choice left as it was rather than cleared
+    public function testChoosingByAMalformedSlugKeepsTheChoice(): void
+    {
+        $held = [new CollectedBack('u1', $this->back('dawn'), 'quiz')];
+        $held[0]->setChosen(true);
+        $collector = $this->collector($held);
+
+        $this->assertNull($collector->chooseBySlug('u1', 42));
+        $this->assertNull($collector->chooseBySlug('u1', ['dawn']));
+        $this->assertTrue($held[0]->isChosen());
+    }
+
     /** @param list<CollectedBack> $held */
-    private function collector(array $held): BackCollector
+    private function collector(array $held, ?CardBackRepository $backs = null): BackCollector
     {
         $repository = $this->createStub(CollectedBackRepository::class);
         $repository->method('findByHolder')->willReturn($held);
 
-        return new BackCollector($repository, $this->createStub(EntityManagerInterface::class));
+        return new BackCollector($repository, $this->createStub(EntityManagerInterface::class), $backs ?? $this->createStub(CardBackRepository::class));
     }
 
     private function back(string $slug, bool $published = true): CardBack

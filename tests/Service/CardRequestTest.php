@@ -85,6 +85,56 @@ class CardRequestTest extends TestCase
         $this->assertFalse($response->headers->hasCacheControlDirective('public'));
     }
 
+    // A call that cannot go on without a holder answers 400 with the error the site names, the limit's 429 passed on as it is
+    public function testARequiredHolderIsRefusedWithTheSiteError(): void
+    {
+        $cardHolder = $this->createStub(CardHolder::class);
+        $cardHolder->method('resolve')->willReturn(null);
+        $response = new CardRequest($cardHolder, $this->guard(true))->requiredHolder($this->request([]), 'token_required');
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertSame(['error' => 'token_required'], json_decode((string) $response->getContent(), true));
+        $this->assertSame(Response::HTTP_TOO_MANY_REQUESTS, new CardRequest($cardHolder, $this->guard(false))->requiredHolder($this->request([]))->getStatusCode());
+    }
+
+    public function testARequiredHolderIsReturnedWhenResolved(): void
+    {
+        $cardHolder = $this->createStub(CardHolder::class);
+        $cardHolder->method('resolve')->willReturn(self::TOKEN);
+
+        $this->assertSame(self::TOKEN, new CardRequest($cardHolder, $this->guard(true))->requiredHolder($this->request(['token' => self::TOKEN])));
+    }
+
+    // A device's token alone is no account: the call is refused 403, a signed-in caller going through
+    public function testAnAccountHolderNeedsASignedInCaller(): void
+    {
+        $device = $this->createStub(CardHolder::class);
+        $device->method('resolve')->willReturn(self::TOKEN);
+        $device->method('isAccount')->willReturn(false);
+        $refused = new CardRequest($device, $this->guard(true))->accountHolder($this->request(['token' => self::TOKEN]));
+
+        $this->assertInstanceOf(Response::class, $refused);
+        $this->assertSame(Response::HTTP_FORBIDDEN, $refused->getStatusCode());
+        $this->assertSame(['error' => 'account_required'], json_decode((string) $refused->getContent(), true));
+
+        $account = $this->createStub(CardHolder::class);
+        $account->method('resolve')->willReturn('u7');
+        $account->method('isAccount')->willReturn(true);
+        $this->assertSame('u7', new CardRequest($account, $this->guard(true))->accountHolder($this->request([])));
+    }
+
+    // Nobody to resolve is refused like a device, and the limit's 429 comes first
+    public function testAnAccountHolderRefusesAVisitorAndPassesTheLimitOn(): void
+    {
+        $cardHolder = $this->createStub(CardHolder::class);
+        $cardHolder->method('resolve')->willReturn(null);
+        $cardHolder->method('isAccount')->willReturn(true);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, new CardRequest($cardHolder, $this->guard(true))->accountHolder($this->request([]))->getStatusCode());
+        $this->assertSame(Response::HTTP_TOO_MANY_REQUESTS, new CardRequest($cardHolder, $this->guard(false))->accountHolder($this->request([]))->getStatusCode());
+    }
+
     private function guard(bool $accepted): RateLimiterGuard
     {
         $guard = $this->createStub(RateLimiterGuard::class);

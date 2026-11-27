@@ -160,7 +160,7 @@ Which card and which finish is the site's decision, taken before calling: a site
 
 ## Card backs
 
-A `CardBack` is a variant held once for every pack — the packs being the site's own keys: a castle's prefix, a set's slug — and only a published one is ever given. Earned or bought, it is the same back: `BackCollector::grant($holder, $back, $source)` gives it, `BackCollector::choose($holder, $back)` makes it the one all the holder's cards wear (`null` for the standard back), refusing a back not held or unpublished, and `BackCollector::chosen($holder)` returns it. Unpublishing a back withdraws it: it is no longer worn, the choice being kept so that republishing it puts it back. A back's slug is set on creation and locked afterwards, lowercase words joined by hyphens, and the backs are read by position, those given none last.
+A `CardBack` is a variant held once for every pack — the packs being the site's own keys: a castle's prefix, a set's slug — and only a published one is ever given. Earned or bought, it is the same back: `BackCollector::grant($holder, $back, $source)` gives it, `BackCollector::choose($holder, $back)` makes it the one all the holder's cards wear (`null` for the standard back), refusing a back not held or unpublished, and `BackCollector::chosen($holder)` returns it. An app sends a slug: `BackCollector::chooseBySlug($holder, $slug)` reads it among the published backs, `null` for a slug none carries or one that is not a string (the site's 404), `null` as slug naming the standard back. Unpublishing a back withdraws it: it is no longer worn, the choice being kept so that republishing it puts it back. A back's slug is set on creation and locked afterwards, lowercase words joined by hyphens, and the backs are read by position, those given none last.
 
 A back's picture for a pack is a `CardBackPicture` — that castle at dawn — uploaded on its own screen, its back and pack locked once created and the pack key in letters, digits, dashes and underscores, removed with its back along with its files; `CardBackPictureRepository::findImagesOfPack($pack)` reads a pack's pictures in one query, and a pack with none draws its own picture in the back's tone. Any tone goes with any effect. A site drawing its backs in the back office's listing as its app does overrides `templates/bundles/c975LCardBundle/management/field_card_back.html.twig`, which shows nothing otherwise.
 
@@ -234,7 +234,7 @@ public function collection(Request $request, CardRequest $cardRequest): Response
 }
 ```
 
-`CardRequest::body($request)` is the json body, empty when it does not parse.
+`CardRequest::body($request)` is the json body, empty when it does not parse. A call that cannot go on without a holder starts with `requiredHolder($request)` instead, a 400 `no_holder` (or the error the site's app reads, as second argument) for a caller with neither an account nor a usable token, and one reserved to a signed-in caller with `accountHolder($request)`, a 403 `account_required` otherwise; both pass the 429 on.
 
 ## Exports
 

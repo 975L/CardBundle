@@ -12,6 +12,7 @@ namespace c975L\CardBundle\Service;
 
 use c975L\CardBundle\Entity\CardBack;
 use c975L\CardBundle\Entity\CollectedBack;
+use c975L\CardBundle\Repository\CardBackRepository;
 use c975L\CardBundle\Repository\CollectedBackRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +23,7 @@ class BackCollector
     public function __construct(
         private readonly CollectedBackRepository $collectedBackRepository,
         private readonly EntityManagerInterface $entityManager,
+        private readonly CardBackRepository $cardBackRepository,
     ) {
     }
 
@@ -79,6 +81,17 @@ class BackCollector
         $this->entityManager->flush();
 
         return true;
+    }
+
+    // Chooses a back by the slug an app sends, null naming the standard one: whether it was worn as choose() says, null for a slug no published back carries - anything else than a string included, so that a malformed body never clears the choice
+    public function chooseBySlug(string $holder, mixed $slug): ?bool
+    {
+        $back = \is_string($slug) ? $this->cardBackRepository->findPublishedBySlug($slug) : null;
+        if (null !== $slug && null === $back) {
+            return null;
+        }
+
+        return $this->choose($holder, $back);
     }
 
     // The back the holder's cards wear, null for none chosen - or one unpublished since, worn again once republished, the choice being kept
