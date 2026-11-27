@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.8.1
+
+Ghostscript given time by the page on a long series
+
+- `CardExporter::imagesTimeout()` gives Ghostscript four seconds a page, 600 at least, instead of a fixed 600 (27/11/2026)
+- `PageRenderer::run()` takes the timeout as an optional second argument (27/11/2026)
+
 ## v1.8.0
 
 Holder checks and back choice by slug shared with the sites

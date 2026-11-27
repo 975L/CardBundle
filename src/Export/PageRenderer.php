@@ -87,10 +87,10 @@ class PageRenderer
 
     // One external program run to its end, its output told when it fails
     /** @param list<string> $command */
-    public function run(array $command): void
+    public function run(array $command, float $timeout = 600): void
     {
         // A series of illustrated cards in three finishes takes Chrome well past the default 60 seconds
-        $process = new Process($command, timeout: 600);
+        $process = new Process($command, timeout: $timeout);
         $process->run();
 
         if (!$process->isSuccessful()) {

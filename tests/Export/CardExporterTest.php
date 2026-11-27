@@ -153,6 +153,13 @@ class CardExporterTest extends TestCase
         $this->assertSame([$this->project . '/a-normal.jpg', $this->project . '/a-shiny.jpg'], glob($this->project . '/*.jpg'));
     }
 
+    // A short series keeps the floor, a long one gets time by the page
+    public function testTheImagesTimeoutFollowsThePages(): void
+    {
+        $this->assertSame(600.0, CardExporter::imagesTimeout(54));
+        $this->assertSame(1608.0, CardExporter::imagesTimeout(402));
+    }
+
     private function exporter(): CardExporter
     {
         $source = $this->createStub(CardExportSourceInterface::class);

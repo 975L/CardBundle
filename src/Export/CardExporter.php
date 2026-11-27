@@ -218,8 +218,14 @@ class CardExporter
         $this->filesystem->mkdir($directory);
 
         // The two alpha options: Ghostscript renders with no anti-aliasing unless told, and the text comes out with its edges in steps
-        $this->renderer->run([$ghostscript, '-q', '-dNOPAUSE', '-dBATCH', '-sDEVICE=jpeg', '-r600', '-dJPEGQ=95', '-dTextAlphaBits=4', '-dGraphicsAlphaBits=4', '-sOutputFile=' . $directory . '/page-%04d.jpg', $pdf]);
+        $this->renderer->run([$ghostscript, '-q', '-dNOPAUSE', '-dBATCH', '-sDEVICE=jpeg', '-r600', '-dJPEGQ=95', '-dTextAlphaBits=4', '-dGraphicsAlphaBits=4', '-sOutputFile=' . $directory . '/page-%04d.jpg', $pdf], self::imagesTimeout(\count($item->faces)));
         self::nameFaces($directory, $item->faces);
+    }
+
+    // Ghostscript draws a page at 600 dpi in about a second and a half: a series of several hundred cards outlasts any fixed limit, so the limit follows the pages
+    public static function imagesTimeout(int $pages): float
+    {
+        return max(600.0, 4.0 * $pages);
     }
 
     // Ghostscript numbers its pages and knows nothing of cards: the order is the PDF's, so the rank gives each face its name, a page past the faces or left null being dropped
